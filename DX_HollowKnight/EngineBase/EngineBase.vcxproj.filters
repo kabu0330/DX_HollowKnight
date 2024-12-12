@@ -11,6 +11,7 @@
     <ClInclude Include="PreCompile.h">
       <Filter>Precompile</Filter>
     </ClInclude>
+    <ClInclude Include="EngineDefine.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
