@@ -3,19 +3,24 @@
   <ItemGroup>
     <ClCompile Include="EngineMath.cpp" />
     <ClCompile Include="PreCompile.cpp">
-      <Filter>Precompile</Filter>
+      <Filter>00_Precompile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EngineMath.h" />
     <ClInclude Include="PreCompile.h">
-      <Filter>Precompile</Filter>
+      <Filter>00_Precompile</Filter>
     </ClInclude>
-    <ClInclude Include="EngineDefine.h" />
+    <ClInclude Include="EngineDefine.h">
+      <Filter>01_Define</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Precompile">
+    <Filter Include="00_Precompile">
       <UniqueIdentifier>{73dc3923-126f-452c-8924-5f2c7565df8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01_Define">
+      <UniqueIdentifier>{6fb7c196-a59f-4a0b-b2bc-34b9ef0811ae}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
