@@ -1,20 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="Player.h" />
     <ClInclude Include="PreCompile.h">
       <Filter>00_PreCompile</Filter>
     </ClInclude>
+    <ClInclude Include="ContentsCore.h">
+      <Filter>02_Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>04_Global</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PreCompile.cpp">
       <Filter>00_PreCompile</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsCore.cpp">
+      <Filter>02_Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>04_Global</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
       <UniqueIdentifier>{e77ec849-f508-4c7f-93bd-8088b5abd8c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01_Debug">
+      <UniqueIdentifier>{5eda3c6f-8d50-4a71-ae6f-500a6ba5d854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02_Core">
+      <UniqueIdentifier>{09ff3bdc-96dc-4229-8b75-39c1c3dc0dd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Global">
+      <UniqueIdentifier>{73895d3d-87b8-4ffd-a962-7cd03df8a97f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

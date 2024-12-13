@@ -1,18 +1,52 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="EngineMath.cpp" />
     <ClCompile Include="PreCompile.cpp">
       <Filter>00_Precompile</Filter>
     </ClCompile>
+    <ClCompile Include="EngineDebug.cpp">
+      <Filter>02_Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineDirectory.cpp">
+      <Filter>03_FileIO</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineFile.cpp">
+      <Filter>03_FileIO</Filter>
+    </ClCompile>
+    <ClCompile Include="EnginePath.cpp">
+      <Filter>03_FileIO</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineSerializer.cpp">
+      <Filter>03_FileIO</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineMath.cpp">
+      <Filter>04_Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EngineMath.h" />
     <ClInclude Include="PreCompile.h">
       <Filter>00_Precompile</Filter>
     </ClInclude>
     <ClInclude Include="EngineDefine.h">
       <Filter>01_Define</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineDebug.h">
+      <Filter>02_Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineDirectory.h">
+      <Filter>03_FileIO</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineFile.h">
+      <Filter>03_FileIO</Filter>
+    </ClInclude>
+    <ClInclude Include="EnginePath.h">
+      <Filter>03_FileIO</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineSerializer.h">
+      <Filter>03_FileIO</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineMath.h">
+      <Filter>04_Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -21,6 +55,15 @@
     </Filter>
     <Filter Include="01_Define">
       <UniqueIdentifier>{6fb7c196-a59f-4a0b-b2bc-34b9ef0811ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02_Debug">
+      <UniqueIdentifier>{20013f8a-19e7-4601-8677-77af0deb15f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03_FileIO">
+      <UniqueIdentifier>{52680d4e-ce7b-434b-bb79-c01dccef3d82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Math">
+      <UniqueIdentifier>{b4501ab0-e954-48b7-9614-c6ba2d787004}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -167,6 +167,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="Player.h">
       <SubType>
       </SubType>
@@ -174,6 +175,7 @@
     <ClInclude Include="PreCompile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="Player.cpp">
       <SubType>
       </SubType>

@@ -1,23 +1,28 @@
 #pragma once
 #include <EngineBase/EngineDefine.h>
+#include <EnginePlatform/EngineWindow.h>
+#include "IContentsCore.h"
+#include <memory>
 
-// 설명 :
+
+// 설명 : 루프를 돌려줄 게임 엔진
 class UEngineCore
 {
 public:
 	// constrcuter destructer
 	ENGINEAPI UEngineCore();
-	ENGINEAPI ~UEngineCore();
+	ENGINEAPI virtual ~UEngineCore() = 0;
 
-	// delete Function
-	UEngineCore(const UEngineCore& _Other) = delete;
-	UEngineCore(UEngineCore&& _Other) noexcept = delete;
-	UEngineCore& operator=(const UEngineCore& _Other) = delete;
-	UEngineCore& operator=(UEngineCore&& _Other) noexcept = delete;
+	ENGINEAPI static void EngineStart(HINSTANCE _Instance, std::string_view _DllName);
 
 protected:
 
 private:
+	static UEngineWindow MainWindow;
+	static HMODULE ContentsDLL;
+	static std::shared_ptr<IContentsCore> Core;
 
+	static void WindowInit(HINSTANCE _Instance);
+	static void LoadContents(std::string_view _DllName);
 };
 

@@ -1,20 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="EngineCore.h" />
     <ClInclude Include="PreCompile.h">
       <Filter>00_PreCompile</Filter>
     </ClInclude>
+    <ClInclude Include="IContentsCore.h">
+      <Filter>02_Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineCore.h">
+      <Filter>03_Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EngineCore.cpp" />
     <ClCompile Include="PreCompile.cpp">
       <Filter>00_PreCompile</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineCore.cpp">
+      <Filter>03_Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
       <UniqueIdentifier>{93badbb1-d9da-4d8b-a5c5-6b3fb32df970}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01_Debug">
+      <UniqueIdentifier>{c2a20759-58f5-42a3-a13b-f0fe46fb06b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02_Interface">
+      <UniqueIdentifier>{64defd88-9750-44ab-8174-4ba6bacdb78f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03_Core">
+      <UniqueIdentifier>{7e0ab060-2bfe-4b3d-8efe-299c0b52cab8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
