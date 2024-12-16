@@ -1,5 +1,7 @@
 #include "PreCompile.h"
 #include "ContentsCore.h"
+#include <EngineCore/Level.h>
+#include "TitleGameMode.h"
 
 // #define은 그냥 무조건 복붙
 CreateContentsCoreDefine(UContentsCore);
@@ -29,7 +31,9 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	_Data.WindowPos = { 400, 100 };
 	_Data.WindowSize = { 600, 600 };
 
-	// 윈도우 크기 지정
+	UEngineCore::CreateLevel<ATitleGameMode, APawn>("Titlelevel");
+	UEngineCore::OpenLevel("Titlelevel");
+
 }
 
 void UContentsCore::EngineTick(float _DeltaTime)

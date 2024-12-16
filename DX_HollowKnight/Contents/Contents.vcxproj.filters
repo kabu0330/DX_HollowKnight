@@ -10,6 +10,8 @@
     <ClInclude Include="Player.h">
       <Filter>04_Global</Filter>
     </ClInclude>
+    <ClInclude Include="TitleGameMode.h" />
+    <ClInclude Include="TitleLogo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -21,6 +23,8 @@
     <ClCompile Include="Player.cpp">
       <Filter>04_Global</Filter>
     </ClCompile>
+    <ClCompile Include="TitleGameMode.cpp" />
+    <ClCompile Include="TitleLogo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">

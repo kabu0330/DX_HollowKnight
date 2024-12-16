@@ -22,13 +22,16 @@
     <ClCompile Include="EngineMath.cpp">
       <Filter>04_Math</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>05_Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PreCompile.h">
       <Filter>00_Precompile</Filter>
     </ClInclude>
     <ClInclude Include="EngineDefine.h">
-      <Filter>01_Define</Filter>
+      <Filter>01_Header</Filter>
     </ClInclude>
     <ClInclude Include="EngineDebug.h">
       <Filter>02_Debug</Filter>
@@ -48,13 +51,13 @@
     <ClInclude Include="EngineMath.h">
       <Filter>04_Math</Filter>
     </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>05_Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_Precompile">
       <UniqueIdentifier>{73dc3923-126f-452c-8924-5f2c7565df8d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01_Define">
-      <UniqueIdentifier>{6fb7c196-a59f-4a0b-b2bc-34b9ef0811ae}</UniqueIdentifier>
     </Filter>
     <Filter Include="02_Debug">
       <UniqueIdentifier>{20013f8a-19e7-4601-8677-77af0deb15f1}</UniqueIdentifier>
@@ -64,6 +67,12 @@
     </Filter>
     <Filter Include="04_Math">
       <UniqueIdentifier>{b4501ab0-e954-48b7-9614-c6ba2d787004}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01_Header">
+      <UniqueIdentifier>{6fb7c196-a59f-4a0b-b2bc-34b9ef0811ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05_Object">
+      <UniqueIdentifier>{67c6cc72-c397-4b3b-b74b-0d94ae5ebdb2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

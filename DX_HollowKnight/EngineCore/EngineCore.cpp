@@ -3,10 +3,13 @@
 #include <EngineBase/EngineDebug.h>
 #include <EnginePlatform/EngineWindow.h>
 #include "IContentsCore.h"
+#include "Level.h"
 
 UEngineWindow UEngineCore::MainWindow;
 HMODULE UEngineCore::ContentsDLL = nullptr;
 std::shared_ptr<IContentsCore> UEngineCore::Core;
+
+std::map<std::string, std::shared_ptr<class ULevel>> UEngineCore::Levels;
 
 UEngineCore::UEngineCore()
 {
@@ -73,15 +76,18 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 
 	LoadContents(_DllName);
 
+	// 윈도우와는 무관합니다.
 	UEngineWindow::WindowMessageLoop(
 		[]()
 		{
+			// 어딘가에서 이걸 호출하면 콘솔창이 뜨고 그 뒤로는 std::cout 하면 그 콘솔창에 메세지가 뜰겁니다.
+			// UEngineDebug::StartConsole();
 			UEngineInitData Data;
 			Core->EngineStart(Data);
-
 			MainWindow.SetWindowPosAndScale(Data.WindowPos, Data.WindowSize);
-			// 시작할때 하고 싶은것
-			// 1. 윈도우창 크기 바꾸고 싶다.
+
+			
+
 		},
 		[]()
 		{
@@ -89,7 +95,42 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 		},
 		[]()
 		{
-			// 엔진이 끝났을때 하고 싶은것.
+			// static으로 하자고 했습니다.
+			// 이때 레벨이 다 delete가 되어야 한다.
+			// 레퍼런스 카운트로 관리되면 그 레퍼런스 카운트는 내가 세고 있어요.
+			EngineEnd();
 		});
 
+
+	// 게임 엔진이 시작되었다.
+	// 윈도우창은 엔진이 알아서 띄워줘야 하고.
+
+	// Window 띄워줘야 한다.
+
+	
+}
+
+// 헤더 순환 참조를 막기 위한 함수분리
+std::shared_ptr<ULevel> UEngineCore::NewLevelCreate(std::string_view _Name)
+{
+	// 만들기만 하고 보관을 안하면 앤 그냥 지워집니다. <= 
+	
+	// 만들면 맵에 넣어서 레퍼런스 카운트를 증가시킵니다.
+	// UObject의 기능이었습니다.
+	std::shared_ptr<ULevel> Ptr = std::make_shared<ULevel>();
+	Ptr->SetName(_Name);
+
+	Levels.insert({ _Name.data(), Ptr});
+
+	std::cout << "NewLevelCreate" << std::endl;
+
+	return Ptr;
+}
+
+void UEngineCore::EngineEnd()
+{
+	// 리소스 정리도 여기서 할겁니다.
+
+	Levels.clear();
+	UEngineDebug::EndConsole();
 }

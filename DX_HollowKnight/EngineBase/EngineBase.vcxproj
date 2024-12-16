@@ -173,6 +173,7 @@
     <ClCompile Include="EngineMath.cpp" />
     <ClCompile Include="EnginePath.cpp" />
     <ClCompile Include="EngineSerializer.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="PreCompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">PreCompile.h</PrecompiledHeaderFile>
@@ -192,6 +193,7 @@
     <ClInclude Include="EngineMath.h" />
     <ClInclude Include="EnginePath.h" />
     <ClInclude Include="EngineSerializer.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="PreCompile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
