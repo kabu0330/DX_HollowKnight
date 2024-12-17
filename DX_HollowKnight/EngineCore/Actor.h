@@ -1,5 +1,5 @@
 #pragma once
-#include "ActorComponent.h"
+#include "SceneComponent.h"
 
 // 설명 :
 class AActor : public UObject
@@ -25,7 +25,7 @@ public:
 
 
 	template<typename ComponentType>
-	void CreateDefaultSubObject()
+	inline std::shared_ptr<ComponentType> CreateDefaultSubObject()
 	{
 		static_assert(std::is_base_of_v<UActorComponent, ComponentType>, "액터 컴포넌트를 상속받지 않은 클래스를 CreateDefaultSubObject하려고 했습니다.");
 
@@ -44,11 +44,6 @@ public:
 
 		std::shared_ptr<ComponentType> NewCom(new(ComMemory) ComponentType());
 
-		// 내가 그냥 ActorComponent
-		// 내가 그냥 SceneComponent
-
-
-
 		if (std::is_base_of_v<USceneComponent, ComponentType>)
 		{
 			if (nullptr != RootComponent)
@@ -60,6 +55,7 @@ public:
 		}
 		else if (std::is_base_of_v<UActorComponent, ComponentType>)
 		{
+			ActorComponentList.push_back(NewCom);
 		}
 		else
 		{
@@ -69,7 +65,7 @@ public:
 		return NewCom;
 	}
 
-	ULevel* GetWorld()
+	class ULevel* GetWorld()
 	{
 		return World;
 	}
@@ -77,7 +73,7 @@ public:
 protected:
 
 private:
-	ULevel* World;
+	class ULevel* World;
 
 	std::shared_ptr<class USceneComponent> RootComponent;
 

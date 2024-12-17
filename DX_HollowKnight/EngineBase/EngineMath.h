@@ -4,15 +4,6 @@
 #include <functional>
 #include "EngineDefine.h"
 
-// FVector로 통일하겠습니다.
-// FVector xy
-// FVector3D xyz
-// FVector4D xyzw
-// FVector4D == FVector;
-
-// #include <DirectXMath.h>
-
-
 class UEngineMath
 {
 public:
@@ -194,12 +185,11 @@ public:
 	//          Rad 라디안을 넣어주면 
 	// 여기에서 나온 결과값이 리턴해줄수 있는건
 	// 길이가 1인 벡터이다.
-	// static입니까?
 	static FVector AngleToVectorRad(float _Angle)
 	{
 		// 특정 각도를 가리키는 벡터를 만들수 있다고 해죠?
 		// 벡터 길이와 방향을 생각해라.
-		// 방향은 정해졌는데 길이는 1인 벡터를 만들어내는 겁니다.
+		// 방향은 정해졌는데 길이는 1인 벡터
 
 		// 0도일때의 밑변      0도일대의 높이
 
@@ -207,14 +197,13 @@ public:
 		return { cosf(_Angle), sinf(_Angle) };
 	}
 
-	// 일반적으로 벡터와 행렬이 곱해지는 것을 트랜스폼이라고 부릅니다.
-	// 혹은 트랜슬레이션이라는 함수들이 있다.
+	// 일반적으로 벡터와 행렬이 곱해지는 것을 트랜스폼
 	static FVector Transform(const FVector& _Vector, const class FMatrix& _Matrix);
 
-	// 이동 적용할께
+	// 이동 적용
 	static FVector TransformCoord(const FVector& _Vector, const class FMatrix& _Matrix);
 
-	// 이동 적용하지 않을께.
+	// 이동 적용하지 않을게.
 	static FVector TransformNormal(const FVector& _Vector, const class FMatrix& _Matrix);
 
 	int iX() const
@@ -248,7 +237,7 @@ public:
 		return { X * 0.5f, Y * 0.5f };
 	}
 
-	// 빗변의 길이입니다.
+	// 빗변의 길이
 	float Length() const
 	{
 		return UEngineMath::Sqrt(X * X + Y * Y + Z * Z);
@@ -280,7 +269,6 @@ public:
 		return Result;
 	}
 
-	// 
 	void RotationXDeg(float _Angle)
 	{
 		RotationXRad(_Angle * UEngineMath::D2R);
@@ -305,7 +293,6 @@ public:
 		Result.Y = (Z * sinf(_Angle)) + (Y * cosf(_Angle));
 		return Result;
 	}
-
 
 	// 
 	void RotationYDeg(float _Angle)
@@ -359,6 +346,7 @@ public:
 		return Result;
 	}
 
+	//
 	float Dot(const FVector& other) const
 	{
 		return X * other.X + Y * other.Y;
@@ -389,7 +377,6 @@ public:
 		Y -= _Other.Y;
 		return *this;
 	}
-
 
 	FVector operator-(const FVector& _Other) const
 	{
@@ -424,7 +411,6 @@ public:
 		return Result;
 	}
 
-	// ture가 나오는 
 	bool operator==(const FVector& _Other) const
 	{
 		return X == _Other.X && Y == _Other.Y;
@@ -434,15 +420,8 @@ public:
 	// const가 붙은 함수에서는 const가 붙은 함수 호출할수 없다.
 	bool EqualToInt(FVector _Other) const
 	{
-		// const FVector* const Ptr;
-		// this = nullptr;
 		return iX() == _Other.iX() && iY() == _Other.iY();
 	}
-
-	//bool Compare(FVector _Other, float _limite = 0.0f) const
-	//{
-	//	return X == _Other.X && Y == _Other.Y;
-	//}
 
 	FVector& operator+=(const FVector& _Other)
 	{
@@ -468,7 +447,6 @@ public:
 		return *this;
 	}
 
-
 	std::string ToString()
 	{
 		std::string Stream;
@@ -487,7 +465,6 @@ public:
 
 };
 
-// 행렬 은 보통 매트릭스 라고 합니다.
 class FMatrix
 {
 public:
@@ -523,9 +500,6 @@ public:
 	{
 		Identity();
 	}
-
-	// 그래픽스 프로그래밍 모든 행렬들은 만들어질때
-	// 일단 항등행렬로 만듭니다.
 
 	// 정규화 항등행렬 만드는 함수
 	void Identity()
@@ -579,17 +553,11 @@ public:
 		FMatrix RotY;
 		FMatrix RotZ;
 
-		// 아래와 같이 만드는게 훨신더 빠르겠지만 안합니다.
-		/*Arr2D[1][1] = cosf(_Angle.X) * ;
-		Arr2D[1][2] = -sinf(_Angle.X);
-		Arr2D[2][1] = sinf(_Angle.X);
-		Arr2D[2][2] = cosf(_Angle.X) * cosf(_Angle.Y);*/
-
 		RotX.RotationXDeg(_Angle.X);
 		RotY.RotationYDeg(_Angle.Y);
 		RotZ.RotationZDeg(_Angle.Z);
 
-		// 순서를 바꿔줘야 할때가 있습니다.
+		// 순서를 바꿔줘야 할때가 있다.
 		// 짐벌락이라는 현상이 발생하기 때문에
 		// RotY * RotZ * RotX;
 		*this = RotX * RotY * RotZ;
@@ -609,19 +577,18 @@ public:
 
 	}
 
-	// View행렬의 인자입니다.
+	// View행렬
 	void View(const FVector& _Pos, const FVector& _Dir, const FVector& _Up)
 	{
-		// _Pos 카메라가 어디서 바라보고 있나요?
-		// _Dir 어딜보고 있나요?
-		// _Up 바라보는 방향과 수직으로 직교하는 벡터를 넣어주세요.
+		// _Pos 카메라가 어디서 바라보고 있나?
+		// _Dir 어딜보고 있나?
+		// _Up 바라보는 방향과 수직으로 직교하는 벡터
 
 		// -90
 		FVector Forward = _Dir.NormalizeReturn();
 		FVector Up = _Up.NormalizeReturn();
 		FVector Right = FVector::Cross(Up, Forward);
 		Right.Normalize();
-
 
 		ArrVector[2] = Forward;
 		ArrVector[1] = Up;
@@ -631,7 +598,6 @@ public:
 		ArrVector[1].W = 0.0f;
 		ArrVector[0].W = 0.0f;
 
-		// 나의 회전행렬 구했죠?
 		// 90 
 		Transpose();
 
@@ -649,49 +615,19 @@ public:
 		return;
 	}
 
-	// 여기서 왼손 오른 손 좌표계도 바꿀수 있습니다.
-	
-	// _Widht 너비와 <= 윈도우 크기 넣는게 일반적
-	// _Height 높의 화면을
-	// 
-	// 내 앞에있는 _Far거리 안에 있는 애들까지 보겠다.
-	// 내 앞에있는 _Near부터 보겠다. 
-
 	//                 
 	void OrthographicLH(float _Width, float _Height, float _Near, float _Far)
 	{
 		Identity();
-
-		// 1000;
-		// 250 * (2 / 1000);
-		// 크기를 바꾸는 행렬이다 
-		// 직교는 더더욱 
-		
-		//                      11      1      
+ 
 		float fRange = 1.0f / (_Far - _Near);
-
-		// [*][ ][ ][ ]
-		// [ ][*][ ][ ]
-		// [ ][ ][*][ ]
-		// [ ][ ][*][ ]
 
 		Arr2D[0][0] = 2.0f / _Width;
 		Arr2D[1][1] = 2.0f / _Height;
 		Arr2D[2][2] = fRange;
-
-		// Camera의 z와 near와 사이에 있는 존재들을 z -축으로 보내기 위해서 이다.
-		// 큰의미는 없다. 숫자가 너무 작어
 		Arr2D[3][2] = -fRange * _Near;
-		// 그만큼 앞으로 땡겨서 모니터에 딱 붙여주려고 하는것.
-		// 직교 투영은 -1~1사이의 값이 되게 만들어 줄겁니다.
-
 	}
 
-	// 인자중의 하나는 
-
-	// 화면의 크기를 정의하기 위한 _Width, _Height X
-	// 화면의 비율을 정의하기 위한 _Width, _Height O
-	// _FovAngle => x축에서 바라봤을대의 각도를 알려달라.
 	void PerspectiveFovDeg(float _FovAngle, float _Width, float _Height, float _Near, float _Far)
 	{
 		PerspectiveFovRad(_FovAngle * UEngineMath::D2R, _Width, _Height, _Near, _Far);
@@ -703,34 +639,15 @@ public:
 
 		float ScreenRatio = _Width / _Height;
 		float DivFov = _FovAngle / 2.0f;
-
-		// / z를 해야하니까.
-		// / z를 하기 전까지의 값은 추출해 낼수 있다.
 		
 		Arr2D[2][3] = 1.0f;
 		Arr2D[3][3] = 0.0f;
 		
-		// x * 1.0f / (tanf(DivFov) * ScreenRatio) / z
 		Arr2D[0][0] = 1.0f / (tanf(DivFov) * ScreenRatio);
-		// y * 1.0f / (tanf(DivFov) * ScreenRatio)
 		Arr2D[1][1] = 1.0f / tanf(DivFov);
-		// z값을 0, 1사이의 값으로 만드는 것이 목적이다.
-		// 여기에서 z * 가 되는 값이다.
 		Arr2D[2][2] = (_Far + _Near) / (_Far - _Near);
-		// 0~ 1사이의 값으로 만들수가 있나요?
-
 		Arr2D[3][2] = -2 * (_Near * _Far) / (_Far - _Near);
 	}
-
-	// 화면 확대 -1~1사이의 값이 됐으니까
-	// +좌표축 변경 중점 변경
-	// 화면의 정중앙을 0,0으로 만듭니다
-	// Y축 반전도 여기서 합니다.
-	// 뷰포트는 directx에서는 내가 곱해줄 필요가 없다. 다이렉에 넣어주면 다이렉트가 자동으로 해주는 것이다.
-	// directx::viewportsetting(ViewPort_desc);
-
-	// 위치와 크기 양쪽영향을 주는 행렬이다.
-	// 그것조차도 내마음대로 정할수 있어.
 	
 	//                 1280          720        640           360            누가 앞에 나오고 누가 뒤에 나올거냐
 	void ViewPort(float _Width, float _Height, float _Left, float _Top, float _ZMin, float _ZMax)
@@ -793,8 +710,6 @@ public:
 
 };
 
-
-
 enum class ECollisionType
 {
 	Point,
@@ -806,8 +721,6 @@ enum class ECollisionType
 	//OBB,
 };
 
-// 대부분 오브젝트에서 크기와 위치는 한쌍입니다.
-// 그래서 그 2가지를 모두 묶는 자료형을 만들어서 그걸 써요.
 class FTransform
 {
 private:
@@ -828,10 +741,8 @@ public:
 	static bool CirCleToCirCle(const FTransform& _Left, const FTransform& _Right);
 	static bool CirCleToRect(const FTransform& _Left, const FTransform& _Right);
 
-
 	FVector Scale;
 	FVector Location;
-
 
 	FVector CenterLeftTop() const
 	{
@@ -929,10 +840,7 @@ public:
 		Y += _Other.Y;
 		return *this;
 	}
-
-
 };
-
 
 class UColor
 {

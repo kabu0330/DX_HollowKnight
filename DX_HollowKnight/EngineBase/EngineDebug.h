@@ -15,6 +15,5 @@ namespace UEngineDebug
 	ENGINEAPI void StartConsole();
 
 	ENGINEAPI void EndConsole();
-
 }
 

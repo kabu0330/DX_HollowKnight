@@ -9,6 +9,8 @@
 // 설명 :
 class UActorComponent : public UObject
 {
+	friend class AActor;
+
 public:
 	// constrcuter destructer
 	UActorComponent();
@@ -20,15 +22,13 @@ public:
 	UActorComponent& operator=(const UActorComponent& _Other) = delete;
 	UActorComponent& operator=(UActorComponent&& _Other) noexcept = delete;
 
-	std::shared_ptr<class AActor> GetActor();
+	class AActor* GetActor();
+	ENGINEAPI virtual void InitializeComponent() {}
+	ENGINEAPI virtual void BeginPlay() {}
 
 protected:
 
 private:
-
-	// 액터에 들어갈수 있다. 개념
-	// std::shared_ptr<class AActor> 
-	// std::weak_ptr
 	class AActor* Actor;
 };
 

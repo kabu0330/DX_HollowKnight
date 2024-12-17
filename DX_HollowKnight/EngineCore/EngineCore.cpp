@@ -5,6 +5,7 @@
 #include "IContentsCore.h"
 #include "Level.h"
 
+UEngineGraphicDevice UEngineCore::Device;
 UEngineWindow UEngineCore::MainWindow;
 HMODULE UEngineCore::ContentsDLL = nullptr;
 std::shared_ptr<IContentsCore> UEngineCore::Core;
@@ -86,9 +87,10 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 			// 어딘가에서 이걸 호출하면 콘솔창이 뜨고 그 뒤로는 std::cout 하면 그 콘솔창에 메세지가 뜰겁니다.
 			// UEngineDebug::StartConsole();
 			UEngineInitData Data;
+			Device.CreateDeviceAndContext();
 			Core->EngineStart(Data);
 			MainWindow.SetWindowPosAndScale(Data.WindowPos, Data.WindowSize);
-
+			Device.CreateBackBuffer(MainWindow);
 			
 
 		},
@@ -156,8 +158,8 @@ void UEngineCore::EngineFrame()
 	}
 
 	CurLevel->Tick(0.0f);
+	CurLevel->Render(0.0f);
 
-	// tick
 }
 
 void UEngineCore::EngineEnd()

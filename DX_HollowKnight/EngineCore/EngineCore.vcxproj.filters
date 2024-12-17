@@ -7,14 +7,32 @@
     <ClInclude Include="EngineCore.h">
       <Filter>03_Core</Filter>
     </ClInclude>
-    <ClInclude Include="Actor.h" />
-    <ClInclude Include="Level.h" />
-    <ClInclude Include="SceneComponent.h" />
-    <ClInclude Include="ActorComponent.h" />
-    <ClInclude Include="GameMode.h" />
-    <ClInclude Include="Pawn.h" />
     <ClInclude Include="IContentsCore.h">
       <Filter>02_Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>04_Object\Component\Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent.h">
+      <Filter>04_Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneComponent.h">
+      <Filter>04_Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>04_Object</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMode.h">
+      <Filter>04_Object\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Pawn.h">
+      <Filter>04_Object\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>04_Object</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineGraphicDevice.h">
+      <Filter>05_Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -24,12 +42,30 @@
     <ClCompile Include="EngineCore.cpp">
       <Filter>03_Core</Filter>
     </ClCompile>
-    <ClCompile Include="Actor.cpp" />
-    <ClCompile Include="Level.cpp" />
-    <ClCompile Include="SceneComponent.cpp" />
-    <ClCompile Include="ActorComponent.cpp" />
-    <ClCompile Include="GameMode.cpp" />
-    <ClCompile Include="Pawn.cpp" />
+    <ClCompile Include="Renderer.cpp">
+      <Filter>04_Object\Component\Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorComponent.cpp">
+      <Filter>04_Object\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneComponent.cpp">
+      <Filter>04_Object\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <Filter>04_Object</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMode.cpp">
+      <Filter>04_Object\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Pawn.cpp">
+      <Filter>04_Object\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>04_Object</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineGraphicDevice.cpp">
+      <Filter>05_Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
@@ -43,6 +79,21 @@
     </Filter>
     <Filter Include="03_Core">
       <UniqueIdentifier>{7e0ab060-2bfe-4b3d-8efe-299c0b52cab8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Object">
+      <UniqueIdentifier>{e6558d85-b9f5-46d1-8664-a932494e6f3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Object\Actor">
+      <UniqueIdentifier>{a8db7a7a-14ee-49be-9386-830b52517ce0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Object\Component">
+      <UniqueIdentifier>{d536e0a4-84b7-4214-bda7-87f281f6a958}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Object\Component\Contents">
+      <UniqueIdentifier>{09853dd8-b1c0-4862-aff3-0846b792b761}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05_Graphics">
+      <UniqueIdentifier>{0022a7e8-d2e3-43df-853e-a96ac8c511be}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
