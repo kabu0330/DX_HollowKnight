@@ -2,7 +2,7 @@
 
 #include <EnginePlatform/PreCompile.h>
 
-#include "EngineCore.h"
+//#include "EngineCore.h"
 #include "Pawn.h"
 #include "GameMode.h"
 

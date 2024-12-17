@@ -1,8 +1,7 @@
 #pragma once
 
 #include <EngineBase/Object.h>
-
-#include "EngineCore.h"
+#include <EngineBase/EngineDebug.h>
 
 // 설명 :
 class ULevel : public UObject
@@ -29,12 +28,23 @@ public:
 	template<typename ActorType>
 	std::shared_ptr<ActorType> SpawnActor()
 	{
-		// AMonster : public AActor
-		// SpawnActor<AMonster>();
+		static_assert(std::is_base_of_v<AActor, ActorType>, "액터를 상속받지 않은 클래스를 SpawnActor하려고 했습니다.");
 
-		std::shared_ptr<ActorType> NewActor = std::make_shared<ActorType>();
+		if (false == std::is_base_of_v<AActor, ActorType>)
+		{
+			MSGASSERT("액터를 상속받지 않은 클래스를 SpawnActor하려고 했습니다.");
+			return nullptr;
+		}
 
-		//컴파일러는 그걸 모른다.
+		char* ActorMemory = new char[sizeof(ActorType)];
+
+		AActor* ActorPtr = reinterpret_cast<ActorType*>(ActorMemory);
+		ActorPtr->World = this;
+
+		ActorType* NewPtr = reinterpret_cast<ActorType*>(ActorMemory);
+
+		std::shared_ptr<ActorType> NewActor(NewPtr = new(ActorMemory) ActorType());
+
 		BeginPlayList.push_back(NewActor);
 
 		return NewActor;

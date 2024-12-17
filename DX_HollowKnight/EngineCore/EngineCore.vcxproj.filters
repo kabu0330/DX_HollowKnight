@@ -4,9 +4,6 @@
     <ClInclude Include="PreCompile.h">
       <Filter>00_PreCompile</Filter>
     </ClInclude>
-    <ClInclude Include="IContentsCore.h">
-      <Filter>02_Interface</Filter>
-    </ClInclude>
     <ClInclude Include="EngineCore.h">
       <Filter>03_Core</Filter>
     </ClInclude>
@@ -16,6 +13,9 @@
     <ClInclude Include="ActorComponent.h" />
     <ClInclude Include="GameMode.h" />
     <ClInclude Include="Pawn.h" />
+    <ClInclude Include="IContentsCore.h">
+      <Filter>02_Interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">

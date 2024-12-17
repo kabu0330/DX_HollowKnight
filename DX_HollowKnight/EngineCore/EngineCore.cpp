@@ -9,7 +9,10 @@ UEngineWindow UEngineCore::MainWindow;
 HMODULE UEngineCore::ContentsDLL = nullptr;
 std::shared_ptr<IContentsCore> UEngineCore::Core;
 
-std::map<std::string, std::shared_ptr<class ULevel>> UEngineCore::Levels;
+std::shared_ptr<class ULevel> UEngineCore::NextLevel;
+std::shared_ptr<class ULevel> UEngineCore::CurLevel = nullptr;
+
+std::map<std::string, std::shared_ptr<class ULevel>> UEngineCore::LevelMap;
 
 UEngineCore::UEngineCore()
 {
@@ -91,6 +94,7 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 		},
 		[]()
 		{
+			EngineFrame();
 			// 엔진이 돌아갈때 하고 싶은것
 		},
 		[]()
@@ -113,24 +117,53 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 // 헤더 순환 참조를 막기 위한 함수분리
 std::shared_ptr<ULevel> UEngineCore::NewLevelCreate(std::string_view _Name)
 {
-	// 만들기만 하고 보관을 안하면 앤 그냥 지워집니다. <= 
-	
-	// 만들면 맵에 넣어서 레퍼런스 카운트를 증가시킵니다.
-	// UObject의 기능이었습니다.
+	// ULevel의 존재를 헤더에서 알기 싫어서 분리했는데, 결국 헤더에서 Level.h를 추가해서 cpp로 분리한 의미가 사라졌다.
 	std::shared_ptr<ULevel> Ptr = std::make_shared<ULevel>();
 	Ptr->SetName(_Name);
 
-	Levels.insert({ _Name.data(), Ptr});
+	LevelMap.insert({ _Name.data(), Ptr});
 
 	std::cout << "NewLevelCreate" << std::endl;
 
 	return Ptr;
 }
 
+void UEngineCore::OpenLevel(std::string_view _Name)
+{
+	if (false == LevelMap.contains(_Name.data()))
+	{
+		MSGASSERT("만들지 않은 레벨로 변경하려고 했습니다." + std::string(_Name));
+		return;
+	}
+	
+
+	NextLevel = LevelMap[_Name.data()];
+}
+
+void UEngineCore::EngineFrame()
+{
+	if (nullptr != NextLevel)
+	{
+		if (nullptr != CurLevel)
+		{
+			CurLevel->LevelChangeEnd();
+		}
+
+		CurLevel = NextLevel;
+
+		CurLevel->LevelChangeStart();
+		NextLevel = nullptr;
+	}
+
+	CurLevel->Tick(0.0f);
+
+	// tick
+}
+
 void UEngineCore::EngineEnd()
 {
 	// 리소스 정리도 여기서 할겁니다.
 
-	Levels.clear();
+	LevelMap.clear();
 	UEngineDebug::EndConsole();
 }

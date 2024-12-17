@@ -1,10 +1,7 @@
 #pragma once
-#include <EngineBase/Object.h>
+#include "ActorComponent.h"
 
-
-// 기하구조를 이야기해 봅시다.
 // 설명 :
-// 언리얼에서 Actor는 절대 트랜스폼을 가지지 않는다.
 class AActor : public UObject
 {
 	friend class ULevel;
@@ -27,10 +24,49 @@ public:
 	virtual void LevelChangeEnd() {}
 
 
-	// 이녀석 꽤 많이 
+	template<typename ComponentType>
 	void CreateDefaultSubObject()
 	{
+		static_assert(std::is_base_of_v<UActorComponent, ComponentType>, "액터 컴포넌트를 상속받지 않은 클래스를 CreateDefaultSubObject하려고 했습니다.");
 
+		if (false == std::is_base_of_v<UActorComponent, ComponentType>)
+		{
+			MSGASSERT("액터 컴포넌트를 상속받지 않은 클래스를 CreateDefaultSubObject하려고 했습니다.");
+			return nullptr;
+		}
+
+		char* ComMemory = new char[sizeof(ComponentType)];
+
+		UActorComponent* ComPtr = reinterpret_cast<ComponentType*>(ComMemory);
+		ComPtr->Actor = this;
+
+		ComponentType* NewPtr = reinterpret_cast<ComponentType*>(ComMemory);
+
+		std::shared_ptr<ComponentType> NewCom(new(ComMemory) ComponentType());
+
+		// 내가 그냥 ActorComponent
+		// 내가 그냥 SceneComponent
+
+
+
+		if (std::is_base_of_v<USceneComponent, ComponentType>)
+		{
+			if (nullptr != RootComponent)
+			{
+				MSGASSERT("아직 기하구조를 만들지 않았습니다.");
+			}
+
+			RootComponent = NewCom;
+		}
+		else if (std::is_base_of_v<UActorComponent, ComponentType>)
+		{
+		}
+		else
+		{
+			MSGASSERT("말도 안됨");
+		}
+
+		return NewCom;
 	}
 
 	ULevel* GetWorld()
@@ -41,15 +77,10 @@ public:
 protected:
 
 private:
-	// 초기화 하면 안됩니다.
 	ULevel* World;
 
-	// std::list<std::shared_ptr<class UActorComponent>>
 	std::shared_ptr<class USceneComponent> RootComponent;
-	// std::list<std::shared_ptr<class USceneComponent>> SceneComponentLists;
 
-	// 이제 처음으로 만드는 SceneComponent 무조건 Root가 됩니다.
-	// 온리 ActorComponent만 분리할거냐.
 	std::list<std::shared_ptr<class UActorComponent>> ActorComponentList;
 };
 
