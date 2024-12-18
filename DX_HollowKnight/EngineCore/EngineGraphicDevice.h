@@ -30,7 +30,23 @@ public:
 
 	void CreateBackBuffer(const UEngineWindow& _Window);
 
-	void GetHighPerFormanceAdapter();
+	IDXGIAdapter* GetHighPerFormanceAdapter();
+
+	void Release();
+
+	void RenderStart();
+
+	void RenderEnd();
+
+	ENGINEAPI ID3D11Device* GetDevice()
+	{
+		return Device;
+	}
+
+	ENGINEAPI ID3D11DeviceContext* GetContext()
+	{
+		return Context;
+	}
 
 protected:
 
@@ -38,5 +54,12 @@ private:
 	ID3D11Device* Device = nullptr;
 
 	ID3D11DeviceContext* Context = nullptr;
+
+	IDXGISwapChain* SwapChain = nullptr;
+
+	IDXGIAdapter* MainAdapter = nullptr;
+
+	ID3D11Texture2D* DXBackBufferTexture = nullptr;
+	ID3D11RenderTargetView* RTV = nullptr;
 };
 

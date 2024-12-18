@@ -14,7 +14,7 @@ HINSTANCE UEngineWindow::hInstance = nullptr;
 std::map<std::string, WNDCLASSEXA> UEngineWindow::WindowClasss;
 int WindowCount = 0;
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK UEngineWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
@@ -32,6 +32,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     break;
     case WM_DESTROY:
         --WindowCount;
+        if (0 >= WindowCount)
+        {
+            UEngineWindow::LoopActive = false;
+        }
         break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
@@ -77,7 +81,7 @@ int UEngineWindow::WindowMessageLoop(std::function<void()> _StartFunction, std::
         return 0;
     }
 
-    while (0 != WindowCount)
+    while (true == LoopActive)
     {
         if(0 != PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
         {

@@ -1,5 +1,20 @@
 #pragma once
 #include "SceneComponent.h"
+#include "EngineGraphicDevice.h"
+
+struct EngineVertex
+{
+public:
+	// 점의 위치
+	FVector Pos;
+
+	// 점의 색상
+	FVector Color;
+
+	// FVector UV;
+
+	// FVector AnimationRatio;
+};
 
 // 설명 :
 class URenderer : public USceneComponent
@@ -24,6 +39,11 @@ protected:
 
 private:
 	virtual void Render(float _DeltaTime);
+
+public:
+	ID3D11Buffer* VertexBuffer = nullptr;
+	void InputAssembler1Init();
+	void InputAssembler1Setting();
 
 };
 
