@@ -1,7 +1,7 @@
 struct EngineVertex
 {
-    float4 COLOR : COLOR;
     float4 POSITION : POSITION;
+    float4 COLOR : COLOR;
 };
 
 // 버텍스 쉐이더는 무조건 리턴값이 있어야 합니다.
@@ -23,4 +23,9 @@ VertexShaderOutPut VertexToWorld(EngineVertex _Vertex)
     OutPut.COLOR = _Vertex.COLOR;
 
     return OutPut;
+}
+
+float4 PixelToWorld(VertexShaderOutPut _Vertex) : SV_Target0
+{
+    return float4(1.0f, 0.0f, 0.5f, 1.0f);
 }
