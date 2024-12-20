@@ -1,6 +1,8 @@
 #pragma once
 #include "ActorComponent.h"
 
+// #include "PreCompile.h"
+
 // Ό³Έν :
 class USceneComponent : public UActorComponent
 {
@@ -15,10 +17,33 @@ public:
 	USceneComponent& operator=(const USceneComponent& _Other) = delete;
 	USceneComponent& operator=(USceneComponent&& _Other) noexcept = delete;
 
+	void AddLocation(const FVector& _Value)
+	{
+		Transform.Location += _Value;
+		Transform.TransformUpdate();
+	}
+
+	void SetRelativeScale3D(const FVector& _Value)
+	{
+		Transform.Scale = _Value;
+		Transform.TransformUpdate();
+	}
+
+	void SetLocation(const FVector& _Value)
+	{
+		Transform.Location = _Value;
+		Transform.TransformUpdate();
+	}
+
+	FTransform& GetTransformRef()
+	{
+		return Transform;
+	}
+
 protected:
+	FTransform Transform;
 
 private:
-	FTransform Transform;
 
 	USceneComponent* Parent;
 	std::list<std::shared_ptr<USceneComponent>> Childs;

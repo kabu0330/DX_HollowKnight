@@ -2,9 +2,27 @@
 #include <Windows.h>
 #include <string>
 #include <functional>
+
+#include <DirectXMath.h>
+#include <DirectXCollision.h>
+
 #include "EngineDefine.h"
 
-class UEngineMath
+// FVector로 통일하겠습니다.
+// FVector xy
+// FVector3D xyz
+// FVector4D xyzw
+// FVector4D == FVector;
+
+// #include <DirectXMath.h>
+
+// directx는 SIMD연산을 위해서
+// directx는 아예 자료형을 새로 만들었습니다.
+// xmmatrix
+// xmvector
+
+
+class ENGINEAPI  UEngineMath
 {
 public:
 	// 상수 정의
@@ -63,6 +81,7 @@ public:
 	static const FVector FORWARD;
 	static const FVector BACK;
 
+
 public:
 	union
 	{
@@ -76,6 +95,8 @@ public:
 
 		float Arr2D[1][4];
 		float Arr1D[4];
+		// 다이렉트 simd 연산 전용 벡터.
+		DirectX::XMVECTOR DirectVector;
 	};
 
 
@@ -95,13 +116,13 @@ public:
 
 	}
 
-	ENGINEAPI FVector(float _X, float _Y, float _Z, float _W) : X(_X), Y(_Y), Z(_Z), W(_W)
+	FVector(float _X, float _Y, float _Z, float _W) : X(_X), Y(_Y), Z(_Z), W(_W)
 	{
 
 	}
 
 
-	ENGINEAPI FVector(int _X, int _Y) : X(static_cast<float>(_X)), Y(static_cast<float>(_Y)), Z(0.0f), W(1.0f)
+	FVector(int _X, int _Y) : X(static_cast<float>(_X)), Y(static_cast<float>(_Y)), Z(0.0f), W(1.0f)
 	{
 
 	}
@@ -185,11 +206,12 @@ public:
 	//          Rad 라디안을 넣어주면 
 	// 여기에서 나온 결과값이 리턴해줄수 있는건
 	// 길이가 1인 벡터이다.
+	// static입니까?
 	static FVector AngleToVectorRad(float _Angle)
 	{
 		// 특정 각도를 가리키는 벡터를 만들수 있다고 해죠?
 		// 벡터 길이와 방향을 생각해라.
-		// 방향은 정해졌는데 길이는 1인 벡터
+		// 방향은 정해졌는데 길이는 1인 벡터를 만들어내는 겁니다.
 
 		// 0도일때의 밑변      0도일대의 높이
 
@@ -197,13 +219,14 @@ public:
 		return { cosf(_Angle), sinf(_Angle) };
 	}
 
-	// 일반적으로 벡터와 행렬이 곱해지는 것을 트랜스폼
+	// 일반적으로 벡터와 행렬이 곱해지는 것을 트랜스폼이라고 부릅니다.
+	// 혹은 트랜슬레이션이라는 함수들이 있다.
 	static FVector Transform(const FVector& _Vector, const class FMatrix& _Matrix);
 
-	// 이동 적용
+	// 이동 적용할께
 	static FVector TransformCoord(const FVector& _Vector, const class FMatrix& _Matrix);
 
-	// 이동 적용하지 않을게.
+	// 이동 적용하지 않을께.
 	static FVector TransformNormal(const FVector& _Vector, const class FMatrix& _Matrix);
 
 	int iX() const
@@ -237,7 +260,7 @@ public:
 		return { X * 0.5f, Y * 0.5f };
 	}
 
-	// 빗변의 길이
+	// 빗변의 길이입니다.
 	float Length() const
 	{
 		return UEngineMath::Sqrt(X * X + Y * Y + Z * Z);
@@ -269,6 +292,7 @@ public:
 		return Result;
 	}
 
+	// 
 	void RotationXDeg(float _Angle)
 	{
 		RotationXRad(_Angle * UEngineMath::D2R);
@@ -293,6 +317,7 @@ public:
 		Result.Y = (Z * sinf(_Angle)) + (Y * cosf(_Angle));
 		return Result;
 	}
+
 
 	// 
 	void RotationYDeg(float _Angle)
@@ -346,7 +371,6 @@ public:
 		return Result;
 	}
 
-	//
 	float Dot(const FVector& other) const
 	{
 		return X * other.X + Y * other.Y;
@@ -368,8 +392,9 @@ public:
 		return Result;
 	}
 
-	FVector operator*(const class FMatrix& _Matrix) const;
-	FVector& operator*=(const class FMatrix& _Matrix);
+	// 선언과 구현이 분리된 녀석들만 붙여줘면 된다.
+	ENGINEAPI FVector operator*(const class FMatrix& _Matrix) const;
+	ENGINEAPI FVector& operator*=(const class FMatrix& _Matrix);
 
 	FVector& operator-=(const FVector& _Other)
 	{
@@ -377,6 +402,7 @@ public:
 		Y -= _Other.Y;
 		return *this;
 	}
+
 
 	FVector operator-(const FVector& _Other) const
 	{
@@ -411,6 +437,7 @@ public:
 		return Result;
 	}
 
+	// ture가 나오는 
 	bool operator==(const FVector& _Other) const
 	{
 		return X == _Other.X && Y == _Other.Y;
@@ -420,8 +447,15 @@ public:
 	// const가 붙은 함수에서는 const가 붙은 함수 호출할수 없다.
 	bool EqualToInt(FVector _Other) const
 	{
+		// const FVector* const Ptr;
+		// this = nullptr;
 		return iX() == _Other.iX() && iY() == _Other.iY();
 	}
+
+	//bool Compare(FVector _Other, float _limite = 0.0f) const
+	//{
+	//	return X == _Other.X && Y == _Other.Y;
+	//}
 
 	FVector& operator+=(const FVector& _Other)
 	{
@@ -447,6 +481,7 @@ public:
 		return *this;
 	}
 
+
 	std::string ToString()
 	{
 		std::string Stream;
@@ -465,6 +500,9 @@ public:
 
 };
 
+using float4 = FVector;
+
+// 행렬 은 보통 매트릭스 라고 합니다.
 class FMatrix
 {
 public:
@@ -473,6 +511,7 @@ public:
 		float Arr2D[4][4] = { 0, };
 		FVector ArrVector[4];
 		float Arr1D[16];
+		DirectX::XMMATRIX DirectMatrix;
 
 		struct
 		{
@@ -501,13 +540,13 @@ public:
 		Identity();
 	}
 
+	// 그래픽스 프로그래밍 모든 행렬들은 만들어질때
+	// 일단 항등행렬로 만듭니다.
+
 	// 정규화 항등행렬 만드는 함수
 	void Identity()
 	{
-		Arr2D[0][0] = 1.0f;
-		Arr2D[1][1] = 1.0f;
-		Arr2D[2][2] = 1.0f;
-		Arr2D[3][3] = 1.0f;
+		DirectMatrix = DirectX::XMMatrixIdentity();
 	}
 
 	FVector GetFoward()
@@ -531,37 +570,28 @@ public:
 		return Dir;
 	}
 
-	FMatrix operator*(const FMatrix& _Value);
+	ENGINEAPI FMatrix operator*(const FMatrix& _Value);
 
 	void Scale(const FVector& _Value)
 	{
-		Arr2D[0][0] = _Value.X;
-		Arr2D[1][1] = _Value.Y;
-		Arr2D[2][2] = _Value.Z;
+		DirectMatrix = DirectX::XMMatrixScalingFromVector(_Value.DirectVector);
 	}
 
 	void Position(const FVector& _Value)
 	{
-		Arr2D[3][0] = _Value.X;
-		Arr2D[3][1] = _Value.Y;
-		Arr2D[3][2] = _Value.Z;
+		DirectMatrix = DirectX::XMMatrixTranslationFromVector(_Value.DirectVector);
 	}
 
 	void RotationDeg(const FVector& _Angle)
 	{
-		FMatrix RotX;
-		FMatrix RotY;
-		FMatrix RotZ;
-
-		RotX.RotationXDeg(_Angle.X);
-		RotY.RotationYDeg(_Angle.Y);
-		RotZ.RotationZDeg(_Angle.Z);
-
-		// 순서를 바꿔줘야 할때가 있다.
-		// 짐벌락이라는 현상이 발생하기 때문에
-		// RotY * RotZ * RotX;
-		*this = RotX * RotY * RotZ;
+		RotationRad(_Angle * UEngineMath::D2R);
 	}
+
+	void RotationRad(const FVector& _Angle)
+	{
+		DirectMatrix = DirectX::XMMatrixRotationRollPitchYawFromVector(_Angle.DirectVector);
+	}
+
 
 	void Transpose()
 	{
@@ -577,55 +607,18 @@ public:
 
 	}
 
-	// View행렬
+	// View행렬의 인자입니다.
 	void View(const FVector& _Pos, const FVector& _Dir, const FVector& _Up)
 	{
-		// _Pos 카메라가 어디서 바라보고 있나?
-		// _Dir 어딜보고 있나?
-		// _Up 바라보는 방향과 수직으로 직교하는 벡터
-
-		// -90
-		FVector Forward = _Dir.NormalizeReturn();
-		FVector Up = _Up.NormalizeReturn();
-		FVector Right = FVector::Cross(Up, Forward);
-		Right.Normalize();
-
-		ArrVector[2] = Forward;
-		ArrVector[1] = Up;
-		ArrVector[0] = Right;
-
-		ArrVector[2].W = 0.0f;
-		ArrVector[1].W = 0.0f;
-		ArrVector[0].W = 0.0f;
-
-		// 90 
-		Transpose();
-
-		FMatrix OrginRot = *this;
-
-		FVector NPos = -_Pos;
-
-		ArrVector[3].X = FVector::Dot(Right, NPos);
-		ArrVector[3].Y = FVector::Dot(Up, NPos);
-		ArrVector[3].Z = FVector::Dot(Forward, NPos);
-
-		FVector Move = ArrVector[3];
-		FVector OriginMove = NPos * OrginRot;
-
+		Identity();
+		DirectMatrix = DirectX::XMMatrixLookToLH(_Pos.DirectVector, _Dir.DirectVector, _Up.DirectVector);
 		return;
 	}
 
-	//                 
 	void OrthographicLH(float _Width, float _Height, float _Near, float _Far)
 	{
 		Identity();
- 
-		float fRange = 1.0f / (_Far - _Near);
-
-		Arr2D[0][0] = 2.0f / _Width;
-		Arr2D[1][1] = 2.0f / _Height;
-		Arr2D[2][2] = fRange;
-		Arr2D[3][2] = -fRange * _Near;
+		DirectMatrix = DirectX::XMMatrixOrthographicLH(_Width, _Height, _Near, _Far);
 	}
 
 	void PerspectiveFovDeg(float _FovAngle, float _Width, float _Height, float _Near, float _Far)
@@ -637,17 +630,19 @@ public:
 	{
 		Identity();
 
-		float ScreenRatio = _Width / _Height;
-		float DivFov = _FovAngle / 2.0f;
-		
-		Arr2D[2][3] = 1.0f;
-		Arr2D[3][3] = 0.0f;
-		
-		Arr2D[0][0] = 1.0f / (tanf(DivFov) * ScreenRatio);
-		Arr2D[1][1] = 1.0f / tanf(DivFov);
-		Arr2D[2][2] = (_Far + _Near) / (_Far - _Near);
-		Arr2D[3][2] = -2 * (_Near * _Far) / (_Far - _Near);
+		Identity();
+		DirectMatrix = DirectX::XMMatrixPerspectiveFovLH(_FovAngle, _Width / _Height, _Near, _Far);
 	}
+
+	// 화면 확대 -1~1사이의 값이 됐으니까
+	// +좌표축 변경 중점 변경
+	// 화면의 정중앙을 0,0으로 만듭니다
+	// Y축 반전도 여기서 합니다.
+	// 뷰포트는 directx에서는 내가 곱해줄 필요가 없다. 다이렉에 넣어주면 다이렉트가 자동으로 해주는 것이다.
+	// directx::viewportsetting(ViewPort_desc);
+
+	// 위치와 크기 양쪽영향을 주는 행렬이다.
+	// 그것조차도 내마음대로 정할수 있어.
 	
 	//                 1280          720        640           360            누가 앞에 나오고 누가 뒤에 나올거냐
 	void ViewPort(float _Width, float _Height, float _Left, float _Top, float _ZMin, float _ZMax)
@@ -710,6 +705,9 @@ public:
 
 };
 
+using float4x4 = FMatrix;
+
+
 
 enum class ECollisionType
 {
@@ -722,8 +720,34 @@ enum class ECollisionType
 	//OBB,
 };
 
-class FTransform
+// 대부분 오브젝트에서 크기와 위치는 한쌍입니다.
+// 그래서 그 2가지를 모두 묶는 자료형을 만들어서 그걸 써요.
+struct FTransform
 {
+	// transformupdate는 
+	// 아래의 값들을 다 적용해서
+	// WVP를 만들어내는 함수이다.
+	float4 Scale;
+	float4 Rotation;
+	float4 Location;
+
+	float4x4 ScaleMat;
+	float4x4 RotationMat;
+	float4x4 LocationMat;
+	float4x4 World;
+	float4x4 View;
+	float4x4 Projection;
+	float4x4 WVP;
+
+	FTransform()
+		: Scale({ 1.0f, 1.0f, 1.0f, 1.0f })
+	{
+
+	}
+
+public:
+	ENGINEAPI void TransformUpdate();
+
 private:
 	friend class CollisionFunctionInit;
 
@@ -742,15 +766,12 @@ public:
 	static bool CirCleToCirCle(const FTransform& _Left, const FTransform& _Right);
 	static bool CirCleToRect(const FTransform& _Left, const FTransform& _Right);
 
-	FVector Scale;
-	FVector Location;
-
-	FVector CenterLeftTop() const
+	FVector ZAxisCenterLeftTop() const
 	{
 		return Location - Scale.Half();
 	}
 
-	FVector CenterLeftBottom() const
+	FVector ZAxisCenterLeftBottom() const
 	{
 		FVector Result;
 		Result.X = Location.X - Scale.hX();
@@ -758,17 +779,17 @@ public:
 		return Result;
 	}
 
-	float CenterLeft() const
+	float ZAxisCenterLeft() const
 	{
 		return Location.X - Scale.hX();
 	}
 
-	float CenterTop() const
+	float ZAxisCenterTop() const
 	{
 		return Location.Y - Scale.hY();
 	}
 
-	FVector CenterRightTop() const
+	FVector ZAxisCenterRightTop() const
 	{
 		FVector Result;
 		Result.X = Location.X + Scale.hX();
@@ -776,17 +797,17 @@ public:
 		return Result;
 	}
 
-	FVector CenterRightBottom() const
+	FVector ZAxisCenterRightBottom() const
 	{
 		return Location + Scale.Half();
 	}
 
-	float CenterRight() const
+	float ZAxisCenterRight() const
 	{
 		return Location.X + Scale.hX();
 	}
 
-	float CenterBottom() const
+	float ZAxisCenterBottom() const
 	{
 		return Location.Y + Scale.hY();
 	}
@@ -841,7 +862,10 @@ public:
 		Y += _Other.Y;
 		return *this;
 	}
+
+
 };
+
 
 class UColor
 {
@@ -880,4 +904,3 @@ public:
 	}
 };
 
-using float4 = FVector;

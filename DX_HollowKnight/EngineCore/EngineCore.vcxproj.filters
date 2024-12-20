@@ -34,6 +34,15 @@
     <ClInclude Include="EngineGraphicDevice.h">
       <Filter>05_Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="CameraActor.h">
+      <Filter>04_Object\Component\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineCamera.h">
+      <Filter>04_Object\Component\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\DirectxTex\Inc\DirectXTex.h">
+      <Filter>06_ThirdParty\DirectxTex\Inc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -66,6 +75,12 @@
     <ClCompile Include="EngineGraphicDevice.cpp">
       <Filter>05_Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="CameraActor.cpp">
+      <Filter>04_Object\Component\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineCamera.cpp">
+      <Filter>04_Object\Component\Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
@@ -95,5 +110,33 @@
     <Filter Include="05_Graphics">
       <UniqueIdentifier>{0022a7e8-d2e3-43df-853e-a96ac8c511be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04_Object\Component\Render">
+      <UniqueIdentifier>{05426816-4eab-4608-a200-e5943dd6607e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06_ThirdParty">
+      <UniqueIdentifier>{afc4023c-aedd-46d3-bbbe-e92c8bf9a94e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06_ThirdParty\DirectxTex">
+      <UniqueIdentifier>{47b06ae0-2753-4175-91cc-d3663f217a79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06_ThirdParty\DirectxTex\Inc">
+      <UniqueIdentifier>{804a1782-9e97-472b-a54f-34e3797f8f44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06_ThirdParty\DirectxTex\Debug">
+      <UniqueIdentifier>{f87fd847-91eb-4215-8330-3252167a30bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06_ThirdParty\DirectxTex\Release">
+      <UniqueIdentifier>{6fad4dca-b645-447a-b936-362c15932b8b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="ThirdParty\DirectxTex\Debug\DirectXTex.lib">
+      <Filter>06_ThirdParty\DirectxTex\Debug</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ThirdParty\DirectxTex\Inc\DirectXTex.inl">
+      <Filter>06_ThirdParty\DirectxTex\Inc</Filter>
+    </None>
   </ItemGroup>
 </Project>

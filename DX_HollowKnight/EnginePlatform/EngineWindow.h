@@ -10,6 +10,9 @@
 // user header
 #include <EngineBase/EngineMath.h>
 
+
+// 정신 잘 붙
+
 // 설명 :
 class UEngineWindow
 {
@@ -31,7 +34,7 @@ public:
 	ENGINEAPI void Create(std::string_view _TitleName, std::string_view _ClassName = "Default");
 	ENGINEAPI void Open(std::string_view _TitleName = "Window");
 
-	inline FVector GetWindowSize() const
+	ENGINEAPI inline FVector GetWindowSize() const
 	{
 		return WindowSize;
 	}
@@ -45,7 +48,7 @@ public:
 
 	ENGINEAPI FVector GetMousePos();
 
-	ENGINEAPI void static ApplicationOff()
+	ENGINEAPI static void ApplicationOff()
 	{
 		LoopActive = false;
 	}
@@ -59,9 +62,16 @@ protected:
 
 private:
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+	// static HINSTANCE hInstance; 있을거야
+	// 진짜는 cpp안에 있어.
+
 	ENGINEAPI static HINSTANCE hInstance;
-	ENGINEAPI static std::map<std::string, WNDCLASSEXA> WindowClasss;
+
+	// 헤더쪽에서 초기화하는 방법
 	inline static bool LoopActive = true;
+
+	ENGINEAPI static std::map<std::string, WNDCLASSEXA> WindowClasss;
 
 	FVector WindowSize;
 	HWND WindowHandle = nullptr;

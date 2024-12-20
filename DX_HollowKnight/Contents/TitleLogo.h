@@ -6,8 +6,8 @@ class ATitleLogo : public AActor
 {
 public:
 	// constrcuter destructer
-	ENGINEAPI ATitleLogo();
-	ENGINEAPI ~ATitleLogo();
+	ATitleLogo();
+	~ATitleLogo();
 
 	// delete Function
 	ATitleLogo(const ATitleLogo& _Other) = delete;
@@ -20,6 +20,6 @@ protected:
 	void Tick(float _DeltaTime) override;
 
 private:
-
+	std::shared_ptr<class URenderer> LogoRenderer;
 };
 

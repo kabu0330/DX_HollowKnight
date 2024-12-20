@@ -26,32 +26,64 @@ public:
 	void Tick(float _DeltaTime);
 	void Render(float _DeltaTime);
 
+	std::shared_ptr<class ACameraActor> GetMainCamera()
+	{
+		return GetCamera(0);
+	}
+
+	std::shared_ptr<class ACameraActor> GetCamera(int _Order)
+	{
+		if (false == Cameras.contains(_Order))
+		{
+			MSGASSERT("존재하지 않는 카메라를 사용하려고 했습니다.");
+		}
+
+		return Cameras[_Order];
+	}
+
+	template<typename EnumType>
+	std::shared_ptr<class ACameraActor> SpawnCamera(EnumType _Order)
+	{
+		return SpawnCamera(static_cast<int>(_Order));
+	}
+
+	std::shared_ptr<class ACameraActor> SpawnCamera(int _Order);
+
 	template<typename ActorType>
 	std::shared_ptr<ActorType> SpawnActor()
 	{
+		// AMonster : public AActor
+		// SpawnActor<AMonster>();
+		// std::shared_ptr<AMonster>
+
 		static_assert(std::is_base_of_v<AActor, ActorType>, "액터를 상속받지 않은 클래스를 SpawnActor하려고 했습니다.");
 
 		if (false == std::is_base_of_v<AActor, ActorType>)
 		{
 			MSGASSERT("액터를 상속받지 않은 클래스를 SpawnActor하려고 했습니다.");
 			return nullptr;
+			// static_assert
 		}
 
 		char* ActorMemory = new char[sizeof(ActorType)];
+
 
 		AActor* ActorPtr = reinterpret_cast<ActorType*>(ActorMemory);
 		ActorPtr->World = this;
 
 		ActorType* NewPtr = reinterpret_cast<ActorType*>(ActorMemory);
-
+		// 레벨먼저 세팅하고
+		// 플레이스먼트 new 
 		std::shared_ptr<ActorType> NewActor(NewPtr = new(ActorMemory) ActorType());
 
+		//컴파일러는 그걸 모른다.
 		BeginPlayList.push_back(NewActor);
 
 		return NewActor;
 	}
 
-	void ChangeRenderGroup(int _PrevGroupOrder, std::shared_ptr<class URenderer> _Renderer);
+	//                           0              100그룹
+	void ChangeRenderGroup(int _CameraOrder, int _PrevGroupOrder, std::shared_ptr<class URenderer> _Renderer);
 
 protected:
 
@@ -60,7 +92,9 @@ private:
 
 	std::list<std::shared_ptr<class AActor>> AllActorList;
 
-	std::map<int, std::list<std::shared_ptr<class URenderer>>> Renderers;
+	// 0번에 mainamera라고 불리는 애를 만든다.
+	std::map<int, std::shared_ptr<class ACameraActor>> Cameras;
 
+	// std::map<int, std::list<std::shared_ptr<class URenderer>>> Renderers;
 };
 

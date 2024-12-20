@@ -9,11 +9,17 @@ UEngineGraphicDevice UEngineCore::Device;
 UEngineWindow UEngineCore::MainWindow;
 HMODULE UEngineCore::ContentsDLL = nullptr;
 std::shared_ptr<IContentsCore> UEngineCore::Core;
+UEngineInitData UEngineCore::Data;
 
 std::shared_ptr<class ULevel> UEngineCore::NextLevel;
 std::shared_ptr<class ULevel> UEngineCore::CurLevel = nullptr;
 
 std::map<std::string, std::shared_ptr<class ULevel>> UEngineCore::LevelMap;
+
+FVector UEngineCore::GetScreenScale()
+{
+	return Data.WindowSize;
+}
 
 UEngineCore::UEngineCore()
 {
@@ -86,11 +92,12 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 		{
 			// 어딘가에서 이걸 호출하면 콘솔창이 뜨고 그 뒤로는 std::cout 하면 그 콘솔창에 메세지가 뜰겁니다.
 			// UEngineDebug::StartConsole();
-			UEngineInitData Data;
 			Device.CreateDeviceAndContext();
 			Core->EngineStart(Data);
 			MainWindow.SetWindowPosAndScale(Data.WindowPos, Data.WindowSize);
 			Device.CreateBackBuffer(MainWindow);
+			// 디바이스가 만들어지지 않으면 리소스 로드도 할수가 없다.
+			// 여기부터 리소스 로드가 가능하다.
 			
 
 		},
@@ -119,7 +126,10 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 // 헤더 순환 참조를 막기 위한 함수분리
 std::shared_ptr<ULevel> UEngineCore::NewLevelCreate(std::string_view _Name)
 {
-	// ULevel의 존재를 헤더에서 알기 싫어서 분리했는데, 결국 헤더에서 Level.h를 추가해서 cpp로 분리한 의미가 사라졌다.
+	// 만들기만 하고 보관을 안하면 앤 그냥 지워집니다. <= 
+	
+	// 만들면 맵에 넣어서 레퍼런스 카운트를 증가시킵니다.
+	// UObject의 기능이었습니다.
 	std::shared_ptr<ULevel> Ptr = std::make_shared<ULevel>();
 	Ptr->SetName(_Name);
 
@@ -160,6 +170,7 @@ void UEngineCore::EngineFrame()
 	CurLevel->Tick(0.0f);
 	CurLevel->Render(0.0f);
 
+	// tick
 }
 
 void UEngineCore::EngineEnd()
@@ -172,4 +183,5 @@ void UEngineCore::EngineEnd()
 	LevelMap.clear();
 
 	UEngineDebug::EndConsole();
+
 }
