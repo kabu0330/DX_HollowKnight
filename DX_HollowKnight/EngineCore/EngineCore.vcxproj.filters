@@ -43,6 +43,18 @@
     <ClInclude Include="ThirdParty\DirectxTex\Inc\DirectXTex.h">
       <Filter>06_ThirdParty\DirectxTex\Inc</Filter>
     </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>04_Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineResources.h">
+      <Filter>07_Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineTexture.h">
+      <Filter>07_Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineSprite.h">
+      <Filter>04_Object\Component\Contents</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -80,6 +92,18 @@
     </ClCompile>
     <ClCompile Include="EngineCamera.cpp">
       <Filter>04_Object\Component\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>04_Object\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineResources.cpp">
+      <Filter>07_Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineTexture.cpp">
+      <Filter>07_Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineSprite.cpp">
+      <Filter>04_Object\Component\Contents</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,9 +152,15 @@
     <Filter Include="06_ThirdParty\DirectxTex\Release">
       <UniqueIdentifier>{6fad4dca-b645-447a-b936-362c15932b8b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07_Resources">
+      <UniqueIdentifier>{f44ad2df-9292-4705-aa1f-9cca10d1056d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="ThirdParty\DirectxTex\Debug\DirectXTex.lib">
+    <Library Include="ThirdParty\DirectxTex\Release\DirectXTex_Release.lib">
+      <Filter>06_ThirdParty\DirectxTex\Release</Filter>
+    </Library>
+    <Library Include="ThirdParty\DirectxTex\Debug\DirectXTex_Debug.lib">
       <Filter>06_ThirdParty\DirectxTex\Debug</Filter>
     </Library>
   </ItemGroup>
