@@ -85,6 +85,7 @@
     <ClInclude Include="EngineGUIWindow.h">
       <Filter>08_GUI</Filter>
     </ClInclude>
+    <ClInclude Include="DefaultSceneComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -159,6 +160,7 @@
     <ClCompile Include="EngineGUIWindow.cpp">
       <Filter>08_GUI</Filter>
     </ClCompile>
+    <ClCompile Include="DefaultSceneComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
