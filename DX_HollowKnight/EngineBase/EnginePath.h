@@ -17,7 +17,7 @@ public:
 	//UEnginePath& operator=(const UEnginePath& _Other) = delete;
 	//UEnginePath& operator=(UEnginePath&& _Other) noexcept = delete;
 
-	bool IsExists();
+	ENGINEAPI bool IsExists();
 	ENGINEAPI void MoveParent();
 
 	ENGINEAPI std::string GetPathToString();
@@ -36,9 +36,9 @@ public:
 
 	ENGINEAPI bool Move(std::string_view _Path);
 
-	bool IsDirectory();
+	ENGINEAPI bool IsDirectory();
 
-	bool IsFile();
+	ENGINEAPI bool IsFile();
 
 	ENGINEAPI void Append(std::string_view _AppendName);
 

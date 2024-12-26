@@ -9,7 +9,7 @@
 // Ό³Έν :
 class UActorComponent : public UObject
 {
-	friend class AActor;
+	friend AActor;
 
 public:
 	// constrcuter destructer

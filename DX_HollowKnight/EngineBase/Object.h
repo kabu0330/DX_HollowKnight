@@ -25,16 +25,6 @@ public:
 		return std::static_pointer_cast<ChildPtrType>(shared_from_this());
 	}
 
-	int GetOrder()
-	{
-		return Order;
-	}
-
-	virtual void SetOrder(int _Order)
-	{
-		Order = _Order;
-	}
-
 	std::string GetName() const
 	{
 		return Name;
@@ -62,6 +52,7 @@ public:
 		return IsDestroyValue;
 	}
 
+	// 바로 죽겠죠?
 	// _Time 시간후에 죽어라.
 	void Destroy(float _Time = 0.0f)
 	{
@@ -93,6 +84,7 @@ public:
 
 	virtual void ReleaseCheck(float _DeltaTime)
 	{
+
 	}
 
 	// 모든 기능 정지.
@@ -125,6 +117,16 @@ public:
 	void DebugSwitch()
 	{
 		IsDebugValue = !IsDebugValue;
+	}
+
+	int GetOrder()
+	{
+		return Order;
+	}
+
+	virtual void SetOrder(int _Order)
+	{
+		Order = _Order;
 	}
 
 protected:

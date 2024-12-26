@@ -28,6 +28,9 @@
     <ClCompile Include="EngineString.cpp">
       <Filter>06_Shader</Filter>
     </ClCompile>
+    <ClCompile Include="EngineTimer.cpp">
+      <Filter>07_Time</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PreCompile.h">
@@ -60,6 +63,9 @@
     <ClInclude Include="EngineString.h">
       <Filter>06_Shader</Filter>
     </ClInclude>
+    <ClInclude Include="EngineTimer.h">
+      <Filter>07_Time</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_Precompile">
@@ -82,6 +88,9 @@
     </Filter>
     <Filter Include="06_Shader">
       <UniqueIdentifier>{8cb8d0a6-7860-4bf7-b7a9-54335ff7e5ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07_Time">
+      <UniqueIdentifier>{16dd6aed-6008-4925-86d4-ac7d497b77fc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

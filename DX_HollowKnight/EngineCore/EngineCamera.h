@@ -27,7 +27,7 @@ public:
 
 	void BeginPlay() override;
 
-	ENGINEAPI void Render(float _DetlaTime);
+	void Render(float _DetlaTime);
 
 	void Tick(float _DetlaTime);
 

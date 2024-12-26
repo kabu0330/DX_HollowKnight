@@ -1,11 +1,11 @@
 #include "PreCompile.h"
 #include "Player.h"
 
-APlayer::APlayer()
+Player::Player()
 {
 }
 
-APlayer::~APlayer()
+Player::~Player()
 {
 }
 

@@ -55,6 +55,36 @@
     <ClInclude Include="EngineSprite.h">
       <Filter>04_Object\Component\Contents</Filter>
     </ClInclude>
+    <ClInclude Include="EngineGUI.h">
+      <Filter>08_GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_truetype.h">
+      <Filter>08_GUI\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imconfig.h">
+      <Filter>08_GUI\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui.h">
+      <Filter>08_GUI\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_dx11.h">
+      <Filter>08_GUI\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_win32.h">
+      <Filter>08_GUI\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_internal.h">
+      <Filter>08_GUI\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_rectpack.h">
+      <Filter>08_GUI\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_textedit.h">
+      <Filter>08_GUI\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineGUIWindow.h">
+      <Filter>08_GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -105,6 +135,30 @@
     <ClCompile Include="EngineSprite.cpp">
       <Filter>04_Object\Component\Contents</Filter>
     </ClCompile>
+    <ClCompile Include="EngineGUI.cpp">
+      <Filter>08_GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>08_GUI\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>08_GUI\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_dx11.cpp">
+      <Filter>08_GUI\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_win32.cpp">
+      <Filter>08_GUI\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_tables.cpp">
+      <Filter>08_GUI\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>08_GUI\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineGUIWindow.cpp">
+      <Filter>08_GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
@@ -154,6 +208,12 @@
     </Filter>
     <Filter Include="07_Resources">
       <UniqueIdentifier>{f44ad2df-9292-4705-aa1f-9cca10d1056d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08_GUI">
+      <UniqueIdentifier>{52de7838-98ca-4a71-b8a2-6382f149fa19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08_GUI\IMGUI">
+      <UniqueIdentifier>{c0b47a39-820e-475e-bfcc-7d5022a970c2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
