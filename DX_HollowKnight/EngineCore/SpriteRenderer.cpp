@@ -105,7 +105,6 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 
 
 		CurIndex = Indexs[CurAnimation->CurIndex];
-
 		if (true == CurAnimation->IsAutoScale)
 		{
 			FVector Scale = CurAnimation->Sprite->GetSpriteScaleToReal(CurIndex);

@@ -57,6 +57,7 @@ cbuffer FSpriteData : register(b1)
 {
 	float4 CuttingPos;
 	float4 CuttingSize;
+	float4 Pivot; // 0.5 0.0f
 };
 
 // 버텍스쉐이더를 다 만들었다.
@@ -69,14 +70,19 @@ VertexShaderOutPut VertexToWorld(EngineVertex _Vertex)
 	// float4x4 WVP;
 	
 	VertexShaderOutPut OutPut;
-	// _Vertex 0.5, 0.5
+	
+	
+	// Pivot.x = '0.5f' => 0.0f
+	// Pivot.y = '0.0f' => 0.5f
+	
+	// Pivot.x = '0.5f' => 0.0f
+	// Pivot.y = '0.5f' => 0.0f
+	
+	//                     1.0f - 0.5           
+	_Vertex.POSITION.x += (1.0f - Pivot.x) - 0.5f;
+	_Vertex.POSITION.y += (1.0f - Pivot.y) - 0.5f;
+	
 	OutPut.SVPOSITION = mul(_Vertex.POSITION, WVP);
-	
-	// 00 10 => 0.3 0.3  0.7 0.3
-	// 01 11 => 0.3 0.7  0.7 0.7
-	
-	// CuttingPos 0.3 0.3
-	// CuttingSize 0.4 0.4 
 	
 	OutPut.UV.x = (_Vertex.UV.x * CuttingSize.x) + CuttingPos.x;
 	OutPut.UV.y = (_Vertex.UV.y * CuttingSize.y) + CuttingPos.y;
@@ -86,6 +92,13 @@ VertexShaderOutPut VertexToWorld(EngineVertex _Vertex)
 	OutPut.COLOR = _Vertex.COLOR;
 	return OutPut;
 }
+
+// 상수버퍼는 아무것도 세팅해주지 않으면 기본값이 0으로 채워집니다.
+cbuffer MatColor : register(b1)
+{
+	float4 Albedo;
+};
+
 
 // 텍스처 1장과 
 Texture2D ImageTexture : register(t0);

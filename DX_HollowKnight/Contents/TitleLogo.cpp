@@ -38,6 +38,7 @@ ATitleLogo::ATitleLogo()
 	LogoRenderer->SetupAttachment(RootComponent);
 
 
+
 	//Child = CreateDefaultSubObject<USpriteRenderer>();
 	//Child->SetSprite("Player.png", 2);
 	//// 부모의 스케일이 나에게 영향을 주면서 나는 100이 아닐수가 있다

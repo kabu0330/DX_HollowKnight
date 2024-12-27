@@ -200,6 +200,10 @@ void UEngineGraphicDevice::CreateDeviceAndContext()
         return;
     }
     // 초기화 종료
+
+    // 디바이스가 초기화 되면 기본 리소스들을 만들기 시작할 것이다.
+    // Box Rect Default 레스터라이저
+    DefaultResourcesInit();
 }
 
 void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)

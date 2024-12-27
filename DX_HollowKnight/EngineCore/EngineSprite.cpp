@@ -48,7 +48,7 @@ std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToMeta(std::string_vie
 	while (true)
 	{
 		size_t RectIndex = Text.find("rect:", StartPosition);
-		size_t AligIndex = Text.find("alignment:", RectIndex);
+		size_t AligIndex = Text.find("outline:", RectIndex);
 
 		if (RectIndex == std::string::npos || AligIndex == std::string::npos)
 		{
@@ -91,6 +91,17 @@ std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToMeta(std::string_vie
 			std::string Number = UEngineString::InterString(Text, "height:", "\n", Start);
 			SpriteData.CuttingSize.Y = static_cast<float>(atof(Number.c_str()));
 		}
+
+		{
+			std::string Number = UEngineString::InterString(Text, "x:", ",", Start);
+			SpriteData.Pivot.X = static_cast<float>(atof(Number.c_str()));
+		}
+
+		{
+			std::string Number = UEngineString::InterString(Text, "y:", "}", Start);
+			SpriteData.Pivot.Y = static_cast<float>(atof(Number.c_str()));
+		}
+
 
 
 		SpriteData.CuttingPos.Y = TexSize.Y - SpriteData.CuttingPos.Y - SpriteData.CuttingSize.Y;

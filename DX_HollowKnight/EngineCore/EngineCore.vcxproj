@@ -182,6 +182,7 @@
     <ClInclude Include="EngineResources.h" />
     <ClInclude Include="EngineSprite.h" />
     <ClInclude Include="EngineTexture.h" />
+    <ClInclude Include="EngineVertex.h" />
     <ClInclude Include="GameMode.h" />
     <ClInclude Include="IContentsCore.h" />
     <ClInclude Include="imconfig.h" />
@@ -192,7 +193,9 @@
     <ClInclude Include="imstb_rectpack.h" />
     <ClInclude Include="imstb_textedit.h" />
     <ClInclude Include="imstb_truetype.h" />
+    <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="PreCompile.h" />
     <ClInclude Include="Renderer.h" />
@@ -213,6 +216,7 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="EngineGraphicDevice.cpp" />
+    <ClCompile Include="EngineGraphicDevice_Resources.cpp" />
     <ClCompile Include="EngineGUI.cpp" />
     <ClCompile Include="EngineGUIWindow.cpp" />
     <ClCompile Include="EngineResources.cpp" />
@@ -225,7 +229,9 @@
     <ClCompile Include="imgui_impl_win32.cpp" />
     <ClCompile Include="imgui_tables.cpp" />
     <ClCompile Include="imgui_widgets.cpp" />
+    <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="PreCompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -244,8 +250,20 @@
     <ClCompile Include="VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="ThirdParty\DirectxTex\Debug\DirectXTex_Debug.lib" />
-    <Library Include="ThirdParty\DirectxTex\Release\DirectXTex_Release.lib" />
+    <CopyFileToFolders Include="ThirdParty\DirectxTex\Debug\DirectXTex_Debug.lib">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="ThirdParty\DirectxTex\Release\DirectXTex_Release.lib">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <None Include="ThirdParty\DirectxTex\Inc\DirectXTex.inl" />

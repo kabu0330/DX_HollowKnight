@@ -90,6 +90,9 @@
     </ClInclude>
     <ClInclude Include="RenderUnit.h" />
     <ClInclude Include="VertexBuffer.h" />
+    <ClInclude Include="EngineVertex.h" />
+    <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="Mesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -169,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="RenderUnit.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
+    <ClCompile Include="EngineGraphicDevice_Resources.cpp" />
+    <ClCompile Include="IndexBuffer.cpp" />
+    <ClCompile Include="Mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
@@ -230,16 +236,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="ThirdParty\DirectxTex\Release\DirectXTex_Release.lib">
-      <Filter>06_ThirdParty\DirectxTex\Release</Filter>
-    </Library>
-    <Library Include="ThirdParty\DirectxTex\Debug\DirectXTex_Debug.lib">
-      <Filter>06_ThirdParty\DirectxTex\Debug</Filter>
-    </Library>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="ThirdParty\DirectxTex\Inc\DirectXTex.inl">
       <Filter>06_ThirdParty\DirectxTex\Inc</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="ThirdParty\DirectxTex\Release\DirectXTex_Release.lib">
+      <Filter>06_ThirdParty\DirectxTex\Release</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="ThirdParty\DirectxTex\Debug\DirectXTex_Debug.lib">
+      <Filter>06_ThirdParty\DirectxTex\Debug</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

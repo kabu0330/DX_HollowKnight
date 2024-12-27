@@ -3,12 +3,6 @@
 #include "EngineSprite.h"
 #include "RenderUnit.h"
 
-struct EngineVertex
-{
-	float4 POSITION;
-	float4 TEXCOORD; // UV값이라고 불리는 존재로 텍스처가 매핑되는 비율을 지정해줍니다.
-	float4 COLOR;
-};
 
 
 
@@ -46,7 +40,6 @@ public:
 	FSpriteData SpriteData;
 
 	class UEngineSprite* Sprite = nullptr;
-
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> SamplerState = nullptr; // 샘플러 스테이트
 	Microsoft::WRL::ComPtr<ID3D11Buffer> TransformConstBuffer = nullptr; // 상수버퍼
 	Microsoft::WRL::ComPtr<ID3D11Buffer> SpriteConstBuffer = nullptr; // 스프라이트용 상수버퍼
