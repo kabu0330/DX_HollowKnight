@@ -10,9 +10,6 @@
     <ClInclude Include="IContentsCore.h">
       <Filter>02_Interface</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>04_Object\Component\Contents</Filter>
-    </ClInclude>
     <ClInclude Include="ActorComponent.h">
       <Filter>04_Object\Component</Filter>
     </ClInclude>
@@ -34,26 +31,14 @@
     <ClInclude Include="EngineGraphicDevice.h">
       <Filter>05_Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="CameraActor.h">
-      <Filter>04_Object\Component\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineCamera.h">
-      <Filter>04_Object\Component\Render</Filter>
-    </ClInclude>
     <ClInclude Include="ThirdParty\DirectxTex\Inc\DirectXTex.h">
       <Filter>06_ThirdParty\DirectxTex\Inc</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteRenderer.h">
-      <Filter>04_Object\Component</Filter>
     </ClInclude>
     <ClInclude Include="EngineResources.h">
       <Filter>07_Resources</Filter>
     </ClInclude>
     <ClInclude Include="EngineTexture.h">
       <Filter>07_Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineSprite.h">
-      <Filter>04_Object\Component\Contents</Filter>
     </ClInclude>
     <ClInclude Include="EngineGUI.h">
       <Filter>08_GUI</Filter>
@@ -85,7 +70,26 @@
     <ClInclude Include="EngineGUIWindow.h">
       <Filter>08_GUI</Filter>
     </ClInclude>
-    <ClInclude Include="DefaultSceneComponent.h" />
+    <ClInclude Include="Renderer.h">
+      <Filter>04_Object\Component\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultSceneComponent.h">
+      <Filter>04_Object\Component\Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraActor.h">
+      <Filter>04_Object\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineCamera.h">
+      <Filter>04_Object\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>04_Object\Component\Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineSprite.h">
+      <Filter>07_Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderUnit.h" />
+    <ClInclude Include="VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -93,9 +97,6 @@
     </ClCompile>
     <ClCompile Include="EngineCore.cpp">
       <Filter>03_Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>04_Object\Component\Contents</Filter>
     </ClCompile>
     <ClCompile Include="ActorComponent.cpp">
       <Filter>04_Object\Component</Filter>
@@ -118,23 +119,11 @@
     <ClCompile Include="EngineGraphicDevice.cpp">
       <Filter>05_Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="CameraActor.cpp">
-      <Filter>04_Object\Component\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineCamera.cpp">
-      <Filter>04_Object\Component\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteRenderer.cpp">
-      <Filter>04_Object\Component</Filter>
-    </ClCompile>
     <ClCompile Include="EngineResources.cpp">
       <Filter>07_Resources</Filter>
     </ClCompile>
     <ClCompile Include="EngineTexture.cpp">
       <Filter>07_Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineSprite.cpp">
-      <Filter>04_Object\Component\Contents</Filter>
     </ClCompile>
     <ClCompile Include="EngineGUI.cpp">
       <Filter>08_GUI</Filter>
@@ -160,7 +149,26 @@
     <ClCompile Include="EngineGUIWindow.cpp">
       <Filter>08_GUI</Filter>
     </ClCompile>
-    <ClCompile Include="DefaultSceneComponent.cpp" />
+    <ClCompile Include="Renderer.cpp">
+      <Filter>04_Object\Component\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultSceneComponent.cpp">
+      <Filter>04_Object\Component\Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraActor.cpp">
+      <Filter>04_Object\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineCamera.cpp">
+      <Filter>04_Object\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>04_Object\Component\Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineSprite.cpp">
+      <Filter>07_Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderUnit.cpp" />
+    <ClCompile Include="VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
@@ -216,6 +224,9 @@
     </Filter>
     <Filter Include="08_GUI\IMGUI">
       <UniqueIdentifier>{c0b47a39-820e-475e-bfcc-7d5022a970c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Object\Render">
+      <UniqueIdentifier>{f0fc40e5-8297-44dc-ae31-6620bca09549}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

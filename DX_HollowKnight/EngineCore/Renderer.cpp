@@ -16,11 +16,21 @@ URenderer::~URenderer()
 
 }
 
-void URenderer::SetTexture(std::string_view _Value)
+void URenderer::SetSprite(UEngineSprite* _Sprite)
+{
+	Sprite = _Sprite;
+
+	if (nullptr == Sprite)
+	{
+		MSGASSERT("존재하지 않는 스프라이트를 사용하려고 했습니다.");
+	}
+}
+
+void URenderer::SetSprite(std::string_view _Value)
 {
 	std::string UpperName = UEngineString::ToUpper(_Value);
 
-	Sprite = UEngineSprite::Find<UEngineSprite>(UpperName);
+	Sprite = UEngineSprite::Find<UEngineSprite>(UpperName).get();
 
 	if (nullptr == Sprite)
 	{

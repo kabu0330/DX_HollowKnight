@@ -44,6 +44,8 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	UEngineSprite::CreateSpriteToMeta("Player.png", ".sdata");
 
 
+	// UEngineCore::CreateLevel<APlayGameMode, APawn>("PlayLevel");
+
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("Titlelevel");
 	UEngineCore::OpenLevel("Titlelevel");
 	
