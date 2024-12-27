@@ -9,43 +9,26 @@ ATitleLogo::ATitleLogo()
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
-	// 랜더러를 만든다.
 	LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	// LogoRenderer->SetSprite("Player.png", 0);
-
-	LogoRenderer->CreateAnimation("Idle", "Player.png", 0, 0, 0.1f);
+	//LogoRenderer->SetSprite("862.png", 0);
+	//LogoRenderer->CreateAnimation("Idle", "862.png", 0, 0, 0.1f);
+	LogoRenderer->CreateAnimation("Idle", "Knight.png", 0, 0, 0.1f);
 	{
 		USpriteRenderer::FrameAnimation* Animation = LogoRenderer->FindAnimation("Idle");
 		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 4.0f;
+		//Animation->AutoScaleRatio = 1.0f;
 	}
 
-	LogoRenderer->CreateAnimation("Move", "Player.png", 1, 4, 0.3f);
-
+	LogoRenderer->CreateAnimation("Move", "Knight.png", 1, 4, 0.3f);
 	{
 		USpriteRenderer::FrameAnimation* Animation = LogoRenderer->FindAnimation("Move");
 		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 4.0f;
+		//Animation->AutoScaleRatio = 1.0f;
 	}
 
 	LogoRenderer->ChangeAnimation("Idle");
-
-	// 부모가 존재하지 않는 root는 Relative든 Local이던 
-	// 결과는 같다. 
-	// 부모의 크기에 내가 영향을 받을수 있기 대문에 함수가 나뉜것이다.
-	// 부모가 없으면
 	LogoRenderer->SetRelativeScale3D({50, 50, 1.0f});
 	LogoRenderer->SetupAttachment(RootComponent);
-
-
-
-	//Child = CreateDefaultSubObject<USpriteRenderer>();
-	//Child->SetSprite("Player.png", 2);
-	//// 부모의 스케일이 나에게 영향을 주면서 나는 100이 아닐수가 있다
-	//Child->SetRelativeLocation({100.0f, 0.0f, 0.0f});
-	//Child->SetScale3D({ 50.0f, 50.0f, 1.0f });
-	//// Child->SetScale3D({ 50.0f, 50.0f, 1.0f });
-	//Child->SetupAttachment(RootComponent);
 }
 
 ATitleLogo::~ATitleLogo()

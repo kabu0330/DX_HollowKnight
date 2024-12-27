@@ -22,7 +22,11 @@ protected:
 	void EngineTick(float _DeltaTime);
 	void EngineEnd();
 
+
 private:
+	void SetWindowSize(UEngineInitData& _Data);
+	void LoadResourceDirectory();
+	void LoadFolder();
 
 };
 

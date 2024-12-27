@@ -88,11 +88,21 @@
     <ClInclude Include="EngineSprite.h">
       <Filter>07_Resources</Filter>
     </ClInclude>
-    <ClInclude Include="RenderUnit.h" />
-    <ClInclude Include="VertexBuffer.h" />
-    <ClInclude Include="EngineVertex.h" />
-    <ClInclude Include="IndexBuffer.h" />
-    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="RenderUnit.h">
+      <Filter>04_Object\Component\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineVertex.h">
+      <Filter>07_Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>07_Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>07_Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>07_Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -170,11 +180,21 @@
     <ClCompile Include="EngineSprite.cpp">
       <Filter>07_Resources</Filter>
     </ClCompile>
-    <ClCompile Include="RenderUnit.cpp" />
-    <ClCompile Include="VertexBuffer.cpp" />
-    <ClCompile Include="EngineGraphicDevice_Resources.cpp" />
-    <ClCompile Include="IndexBuffer.cpp" />
-    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="RenderUnit.cpp">
+      <Filter>04_Object\Component\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineGraphicDevice_Resources.cpp">
+      <Filter>05_Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBuffer.cpp">
+      <Filter>07_Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>07_Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>07_Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">

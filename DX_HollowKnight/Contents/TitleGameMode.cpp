@@ -13,7 +13,7 @@ public:
 	void OnGUI() override
 	{
 		ImGui::Button("WindowButton");
-		ImGui::SameLine(); // 한간 띄기
+		ImGui::SameLine(); // 한 칸 띄우기
 		ImGui::Text("test");
 
 	}
@@ -21,14 +21,11 @@ public:
 
 ATitleGameMode::ATitleGameMode()
 {
-	{
-		Logo = GetWorld()->SpawnActor<ATitleLogo>();
-		// Logo->SetActorLocation({ 300.0f, 0.0f, 0.0f });
-		Logo->GetRenderer()->SetSpriteData(4);
-	}
-
-	// 카메라를 일정거리 뒤로 가서 
-	// 카메라 위치조정을 무조건 해줘야 할것이다.
+	Logo = GetWorld()->SpawnActor<ATitleLogo>();
+	// Logo->SetActorLocation({ 300.0f, 0.0f, 0.0f });
+	Logo->GetRenderer()->SetSpriteData(4);
+	
+	// 카메라를 위치조정을 무조건 해줘야 한다.
 	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();
 	Camera->SetActorLocation({0.0f, 0.0f, -1000.0f, 1.0f});
 
@@ -42,9 +39,7 @@ ATitleGameMode::~ATitleGameMode()
 
 void ATitleGameMode::Tick(float _DeltaTime)
 {
-	// 부모 호출
 	AActor::Tick(_DeltaTime);
 
-
-
 }
+
