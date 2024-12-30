@@ -70,6 +70,24 @@ void AKnight::InputCheck(float _DeltaTime)
 	}
 }
 
+void AKnight::CreateSlashEffect()
+{
+	float SlashFrameTime = 0.1f;
+
+	EffectRenderer = CreateDefaultSubObject<UEffectRenderer>();
+	std::string SlashEffect = "SlashEffect";
+	EffectRenderer->CreateAnimation(SlashEffect, SlashEffect, 0, 5, SlashFrameTime, false);
+	{
+		USpriteRenderer::FrameAnimation* Animation = EffectRenderer->FindAnimation(SlashEffect);
+		Animation->IsAutoScale = true;
+		Animation->AutoScaleRatio = 1.0f;
+	}
+	EffectRenderer->ChangeAnimation(SlashEffect);
+	EffectRenderer->SetActive(true);
+
+	EffectRenderer->SetupAttachment(RootComponent);
+}
+
 void AKnight::CreateRenderer()
 {
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
@@ -81,6 +99,7 @@ void AKnight::CreateRenderer()
 	float SlashFrameTime = 0.05f;
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
+
 	//BodyRenderer->SetSprite("862.png", 0);
 	std::string Idle = "Idle";
 	BodyRenderer->CreateAnimation(Idle, "Knight_Idle.png", 0, 8, IdleFrameTime);
@@ -120,6 +139,7 @@ void AKnight::CreateRenderer()
 		Animation->IsAutoScale = true;
 		Animation->AutoScaleRatio = 1.0f;
 	}
+
 
 	//BodyRenderer->ChangeAnimation("Idle");
 	//BodyRenderer->SetRelativeScale3D({ -100, 100, 1.0f });
@@ -164,7 +184,6 @@ void AKnight::SetFSM()
 
 void AKnight::SetIdle(float _DeltaTime)
 {
-
 	if (UEngineInput::IsPress(VK_LEFT) || UEngineInput::IsPress(VK_RIGHT))
 	{
 		FSM.ChangeState(EKnightState::IDLE_TO_RUN);
@@ -237,6 +256,8 @@ void AKnight::SetRunToIdle(float _DeltaTime)
 
 void AKnight::SetSlash(float _DeltaTime)
 {
+	CreateSlashEffect();
+
 	if (true == BodyRenderer->IsCurAnimationEnd())
 	{
 		//bIsAttacking = false;

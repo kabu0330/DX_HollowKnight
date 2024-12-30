@@ -91,8 +91,8 @@ public:
 
 protected:
 	ENGINEAPI void Render(class UEngineCamera* _Camera, float _DeltaTime) override;
-	void BeginPlay() override;
-	void ComponentTick(float _DeltaTime) override;
+	ENGINEAPI void BeginPlay() override;
+	ENGINEAPI void ComponentTick(float _DeltaTime) override;
 
 
 private:

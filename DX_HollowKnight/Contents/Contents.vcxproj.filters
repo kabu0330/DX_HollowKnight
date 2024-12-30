@@ -22,7 +22,9 @@
     <ClInclude Include="Global.h">
       <Filter>04_Global</Filter>
     </ClInclude>
-    <ClInclude Include="EffectRenderer.h" />
+    <ClInclude Include="EffectRenderer.h">
+      <Filter>04_Global</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -46,7 +48,9 @@
     <ClCompile Include="Global.cpp">
       <Filter>04_Global</Filter>
     </ClCompile>
-    <ClCompile Include="EffectRenderer.cpp" />
+    <ClCompile Include="EffectRenderer.cpp">
+      <Filter>04_Global</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">

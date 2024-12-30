@@ -188,6 +188,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PreCompile.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="TimeEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EngineDebug.h" />
@@ -203,6 +204,7 @@
     <ClInclude Include="FSMStateManager.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="PreCompile.h" />
+    <ClInclude Include="TimeEvent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

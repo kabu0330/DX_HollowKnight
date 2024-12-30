@@ -162,6 +162,38 @@ void UContentsCore::LoadResourceDirectory()
 		Dir.Append("Image/Knight/Airborn");
 		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
 	}
+
+	// Knight Effect
+	{
+		UEngineDirectory Dir;
+		if (false == Dir.MoveParentToDirectory("ContentsResources"))
+		{
+			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+			return;
+		}
+		Dir.Append("Image/Effect/Knight/SlashEffect");
+		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
+	}
+	{
+		UEngineDirectory Dir;
+		if (false == Dir.MoveParentToDirectory("ContentsResources"))
+		{
+			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+			return;
+		}
+		Dir.Append("Image/Effect/Knight/UpSlashEffect");
+		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
+	}
+	{
+		UEngineDirectory Dir;
+		if (false == Dir.MoveParentToDirectory("ContentsResources"))
+		{
+			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+			return;
+		}
+		Dir.Append("Image/Effect/Knight/DownSlashEffect");
+		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
+	}
 }
 
 void UContentsCore::LoadFolder()

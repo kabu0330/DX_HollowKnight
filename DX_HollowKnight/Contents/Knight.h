@@ -28,6 +28,9 @@ protected:
 
 private:
 	std::shared_ptr<class USpriteRenderer> BodyRenderer;
+	std::shared_ptr<class UEffectRenderer> EffectRenderer;
+
+	// FSM
 	UFSMStateManager FSM;
 	EKnightState NextState;
 
@@ -37,11 +40,13 @@ private:
 	bool bIsCastingSpell = false;
 	bool bIsDeath = false;
 
+	// 쿨타임 관련
 	float AttackCooldownElapsed = 0.0f;
 
 private:
 	void InputCheck(float _DeltaTime);
 
+	void CreateSlashEffect();
 
 	void CreateRenderer();
 	void SetFSM();
