@@ -292,9 +292,11 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
     // SwapChain내부에 id3d11texture2d*들고 있다.
     // DXBackBufferTexture => 는 BITMAP입니다.
 
-    if (S_OK != SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(DXBackBufferTexture.GetAddressOf())))
+    // DXBackBufferTexture
+    if (S_OK != SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), &DXBackBufferTexture))
     {
         MSGASSERT("백버퍼 텍스처를 얻어오는데 실패했습니다.");
+        
     };
 
 

@@ -68,11 +68,11 @@ void UEngineTexture::ResLoad()
 	}
 
 	if (S_OK != DirectX::CreateShaderResourceView(
-		UEngineCore::Device.GetDevice(),
+		UEngineCore::GetDevice().GetDevice(),
 		ImageData.GetImages(),
 		ImageData.GetImageCount(),
 		ImageData.GetMetadata(),
-		SRV.GetAddressOf()
+		&SRV
 	))
 	{
 		MSGASSERT(UpperExt + "쉐이더 리소스 뷰 생성에 실패했습니다..");

@@ -18,6 +18,8 @@ void USpriteRenderer::SetSprite(std::string_view _Name, size_t _Index)
 void USpriteRenderer::BeginPlay()
 {
 	URenderer::BeginPlay();
+	SetMesh("Rect");
+	SetBlend("AlphaBlend");
 }
 
 USpriteRenderer::FrameAnimation* USpriteRenderer::FindAnimation(std::string_view _AnimationName)
@@ -183,7 +185,7 @@ void USpriteRenderer::CreateAnimation(std::string_view _AnimationName, std::stri
 
 	if (nullptr == FindSprite)
 	{
-		MSGASSERT("로드하지 않은 스프라이트를 애니메이션 생성에 사용하려고 했습니다" + std::string(UpperName));
+		MSGASSERT("로드하지 않은 스프라이트를 애니메이션 생서에 사용하려고 했습니다" + std::string(UpperName));
 		return;
 	}
 

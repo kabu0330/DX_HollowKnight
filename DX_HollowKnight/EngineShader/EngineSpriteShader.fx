@@ -100,6 +100,19 @@ cbuffer MatColor : register(b1)
 };
 
 
+struct OutTargetColor
+{
+	float4 Target0 : SV_Target0; // 뷰포트행렬이 곱해지는 포지션입니다.
+	float4 Target1 : SV_Target1; // 뷰포트행렬이 곱해지는 포지션입니다.
+	float4 Target2 : SV_Target2; // 뷰포트행렬이 곱해지는 포지션입니다.
+	float4 Target3 : SV_Target3; // 뷰포트행렬이 곱해지는 포지션입니다.
+	float4 Target4 : SV_Target4; // 뷰포트행렬이 곱해지는 포지션입니다.
+	float4 Target5 : SV_Target5; // 뷰포트행렬이 곱해지는 포지션입니다.
+	float4 Target6 : SV_Target6; // 뷰포트행렬이 곱해지는 포지션입니다.
+	float4 Target7 : SV_Target7; // 뷰포트행렬이 곱해지는 포지션입니다.
+};
+
+
 // 텍스처 1장과 
 Texture2D ImageTexture : register(t0);
 // 샘플러 1개가 필요합니다.
@@ -112,4 +125,6 @@ float4 PixelToWorld(VertexShaderOutPut _Vertex) : SV_Target0
 	// ImageTexture.Load({0,0));
 	float4 Color = ImageTexture.Sample(ImageSampler, _Vertex.UV.xy);
 	return Color;
-}
+	
+	// return float4(1.0f, 0.0f, 0.0f, 1.0f);
+};

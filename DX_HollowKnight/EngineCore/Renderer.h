@@ -3,9 +3,6 @@
 #include "EngineSprite.h"
 #include "RenderUnit.h"
 
-
-
-
 // 설명 : 어떤 랜더링이든 할수 잇는 구조로 만들겠다.
 // 랜더링이란 랜더러만 하는게 아닙니다. 3D
 class URenderer : public USceneComponent
@@ -30,6 +27,10 @@ public:
 
 	ENGINEAPI void SetSpriteData(size_t _Index);
 
+	ENGINEAPI void SetMesh(std::string_view _Name);
+
+	ENGINEAPI void SetBlend(std::string_view _Name);
+
 protected:
 	ENGINEAPI void BeginPlay() override;
 	ENGINEAPI virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
@@ -37,6 +38,9 @@ protected:
 private:
 
 public:
+	class UMesh* Mesh = nullptr;
+	class UEngineBlend* Blend = nullptr;
+
 	FSpriteData SpriteData;
 
 	class UEngineSprite* Sprite = nullptr;
@@ -46,9 +50,9 @@ public:
 	void ShaderResInit();
 	void ShaderResSetting();
 
-	Microsoft::WRL::ComPtr<ID3D11Buffer> VertexBuffer = nullptr;
+	// Microsoft::WRL::ComPtr<ID3D11Buffer> VertexBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> InputLayOut = nullptr;
-	void InputAssembler1Init();
+	// void InputAssembler1Init();
 	void InputAssembler1Setting();
 	void InputAssembler1LayOut();
 
@@ -63,10 +67,10 @@ public:
 	void VertexShaderSetting();
 
 
-	Microsoft::WRL::ComPtr<ID3D11Buffer> IndexBuffer = nullptr;
+	// Microsoft::WRL::ComPtr<ID3D11Buffer> IndexBuffer = nullptr;
 	// 삼각형을 면으로 생각하고 그려주세요.
 	D3D11_PRIMITIVE_TOPOLOGY Topology = D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	void InputAssembler2Init();
+	// void InputAssembler2Init();
 	void InputAssembler2Setting();
 
 	D3D11_VIEWPORT ViewPortInfo;

@@ -103,6 +103,7 @@
     <ClInclude Include="Mesh.h">
       <Filter>07_Resources</Filter>
     </ClInclude>
+    <ClInclude Include="EngineBlend.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -195,6 +196,7 @@
     <ClCompile Include="VertexBuffer.cpp">
       <Filter>07_Resources</Filter>
     </ClCompile>
+    <ClCompile Include="EngineBlend.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
