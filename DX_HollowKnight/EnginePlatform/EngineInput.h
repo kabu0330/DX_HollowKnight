@@ -162,7 +162,7 @@ public:
 	}
 
 
-	bool IsFree(int _KeyIndex)
+	static bool IsFree(int _KeyIndex)
 	{
 		if (false == GetInst().Keys.contains(_KeyIndex))
 		{

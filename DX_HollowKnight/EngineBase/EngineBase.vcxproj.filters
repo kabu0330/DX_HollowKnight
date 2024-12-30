@@ -32,6 +32,9 @@
       <Filter>07_Time</Filter>
     </ClCompile>
     <ClCompile Include="EngineDelegate.cpp" />
+    <ClCompile Include="FSMStateManager.cpp">
+      <Filter>05_Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PreCompile.h">
@@ -68,6 +71,9 @@
       <Filter>07_Time</Filter>
     </ClInclude>
     <ClInclude Include="EngineDelegate.h" />
+    <ClInclude Include="FSMStateManager.h">
+      <Filter>05_Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_Precompile">
