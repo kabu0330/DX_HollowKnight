@@ -6,29 +6,29 @@
 
 ATitleLogo::ATitleLogo()
 {
-	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
-	RootComponent = Default;
+	//std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
+	//RootComponent = Default;
 
-	LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	//LogoRenderer->SetSprite("862.png", 0);
+	//LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	
 	//LogoRenderer->CreateAnimation("Idle", "862.png", 0, 0, 0.1f);
-	LogoRenderer->CreateAnimation("Idle", "Knight.png", 0, 0, 0.1f);
+	//LogoRenderer->CreateAnimation("Idle", "Knight.png", 0, 0, 0.1f);
 	{
-		USpriteRenderer::FrameAnimation* Animation = LogoRenderer->FindAnimation("Idle");
-		Animation->IsAutoScale = true;
+		//USpriteRenderer::FrameAnimation* Animation = LogoRenderer->FindAnimation("Idle");
+		//Animation->IsAutoScale = true;
 		//Animation->AutoScaleRatio = 1.0f;
 	}
 
-	LogoRenderer->CreateAnimation("Move", "Knight.png", 1, 4, 0.3f);
+	//LogoRenderer->CreateAnimation("Move", "Knight.png", 1, 4, 0.3f);
 	{
-		USpriteRenderer::FrameAnimation* Animation = LogoRenderer->FindAnimation("Move");
-		Animation->IsAutoScale = true;
+		//USpriteRenderer::FrameAnimation* Animation = LogoRenderer->FindAnimation("Move");
+		//Animation->IsAutoScale = true;
 		//Animation->AutoScaleRatio = 1.0f;
 	}
 
-	LogoRenderer->ChangeAnimation("Idle");
-	LogoRenderer->SetRelativeScale3D({50, 50, 1.0f});
-	LogoRenderer->SetupAttachment(RootComponent);
+	// LogoRenderer->ChangeAnimation("Idle");
+	// LogoRenderer->SetRelativeScale3D({50, 50, 1.0f});
+	// LogoRenderer->SetupAttachment(RootComponent);
 }
 
 ATitleLogo::~ATitleLogo()

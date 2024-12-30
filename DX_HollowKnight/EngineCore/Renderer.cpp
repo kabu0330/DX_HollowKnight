@@ -13,29 +13,11 @@ URenderer::URenderer()
 
 URenderer::~URenderer()
 {
-
 }
 
-void URenderer::SetSprite(UEngineSprite* _Sprite)
+void URenderer::SetTexture(UEngineTexture* _Texture)
 {
-	Sprite = _Sprite;
-
-	if (nullptr == Sprite)
-	{
-		MSGASSERT("존재하지 않는 스프라이트를 사용하려고 했습니다.");
-	}
-}
-
-void URenderer::SetSprite(std::string_view _Value)
-{
-	std::string UpperName = UEngineString::ToUpper(_Value);
-
-	Sprite = UEngineSprite::Find<UEngineSprite>(UpperName).get();
-
-	if (nullptr == Sprite)
-	{
-		MSGASSERT("존재하지 않는 스프라이트를 사용하려고 했습니다.");
-	}
+	Texture = _Texture;
 }
 
 void URenderer::SetOrder(int _Order)
@@ -48,14 +30,10 @@ void URenderer::SetOrder(int _Order)
 	Level->ChangeRenderGroup(0, PrevOrder, RendererPtr);
 }
 
-
-ENGINEAPI void URenderer::BeginPlay()
+void URenderer::BeginPlay()
 {
 	USceneComponent::BeginPlay();
 	SetOrder(0);
-
-	// 기본적인 랜더링 파이프라인을 익히기 위한 
-	// 모든 기본 코드들을 다 쳐볼 생각입니다.
 
 	//InputAssembler1Init();
 	VertexShaderInit();
@@ -63,7 +41,6 @@ ENGINEAPI void URenderer::BeginPlay()
 	RasterizerInit();
 	PixelShaderInit();
 	ShaderResInit();
-
 }
 
 void URenderer::ShaderResInit()
@@ -77,7 +54,7 @@ void URenderer::ShaderResInit()
 
 		if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, nullptr, &TransformConstBuffer))
 		{
-			MSGASSERT("상수버퍼 생성에 실패했습니다..");
+			MSGASSERT("상수버퍼 생성에 실패했습니다.");
 			return;
 		}
 	}
@@ -91,7 +68,7 @@ void URenderer::ShaderResInit()
 
 		if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, nullptr, &SpriteConstBuffer))
 		{
-			MSGASSERT("상수버퍼 생성에 실패했습니다..");
+			MSGASSERT("상수버퍼 생성에 실패했습니다.");
 			return;
 		}
 	}
@@ -106,11 +83,6 @@ void URenderer::ShaderResInit()
 	SampInfo.BorderColor[2] = 0.0f;
 	SampInfo.BorderColor[3] = 0.0f;
 
-	// SampInfo.ComparisonFunc = D3D11_COMPARISON_NEVER;
-	// Lod라고 불리는 것은 z값이 얼마나 멀어지면 얼마나 대충 색깔 빼올거냐. 
-	// SampInfo.MaxLOD = 0.0f;
-	// SampInfo.MinLOD = 0.0f;
-
 	UEngineCore::GetDevice().GetDevice()->CreateSamplerState(&SampInfo, &SamplerState);
 }
 
@@ -119,46 +91,37 @@ void URenderer::ShaderResSetting()
 	{
 		FTransform& RendererTrans = GetTransformRef();
 		D3D11_MAPPED_SUBRESOURCE Data = {};
-		// 이 데이터를 사용하는 랜더링 랜더링 잠깐 정지
-		// 잠깐 그래픽카드야 멈 그래픽카드에 있는 상수버퍼 수정해야 해.
+
 		UEngineCore::GetDevice().GetContext()->Map(TransformConstBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &Data);
 
 		// Data.pData 그래픽카드와 연결된 주소값.
 		if (nullptr == Data.pData)
 		{
-			MSGASSERT("그래픽카드가 수정을 거부했습니다.");
+			MSGASSERT("그래픽카드 매핑에 실패했습니다.");
 		}
 		memcpy_s(Data.pData, sizeof(FTransform), &RendererTrans, sizeof(FTransform));
 		UEngineCore::GetDevice().GetContext()->Unmap(TransformConstBuffer.Get(), 0);
 
-		// 같은 상수버퍼를 
 		ID3D11Buffer* ArrPtr[16] = { TransformConstBuffer.Get() };
 		UEngineCore::GetDevice().GetContext()->VSSetConstantBuffers(0, 1, ArrPtr);
 	}
 
 	{
 		D3D11_MAPPED_SUBRESOURCE Data = {};
-		// 이 데이터를 사용하는 랜더링 랜더링 잠깐 정지
-		// 잠깐 그래픽카드야 멈 그래픽카드에 있는 상수버퍼 수정해야 해.
 		UEngineCore::GetDevice().GetContext()->Map(SpriteConstBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &Data);
 
-		// Data.pData 그래픽카드와 연결된 주소값.
 		if (nullptr == Data.pData)
 		{
-			MSGASSERT("그래픽카드가 수정을 거부했습니다.");
+			MSGASSERT("그래픽카드 매핑에 실패했습니다.");
 		}
 		memcpy_s(Data.pData, sizeof(FSpriteData), &SpriteData, sizeof(FSpriteData));
 		UEngineCore::GetDevice().GetContext()->Unmap(SpriteConstBuffer.Get(), 0);
 
-		// 같은 상수버퍼를 
 		ID3D11Buffer* ArrPtr[16] = { SpriteConstBuffer.Get() };
 		UEngineCore::GetDevice().GetContext()->VSSetConstantBuffers(1, 1, ArrPtr);
 	}
 
-
-	
-
-	ID3D11ShaderResourceView* ArrSRV[16] = { Sprite->GetSRV() };
+	ID3D11ShaderResourceView* ArrSRV[16] = { Texture->GetSRV() };
 	UEngineCore::GetDevice().GetContext()->PSSetShaderResources(0, 1, ArrSRV);
 
 	ID3D11SamplerState* ArrSMP[16] = { SamplerState.Get() };
@@ -167,26 +130,22 @@ void URenderer::ShaderResSetting()
 
 void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 {
+	// WVP
 	FTransform& CameraTrans = _Camera->GetTransformRef();
-
 	FTransform& RendererTrans = GetTransformRef();
 
-	// 랜더러는 월드 뷰 프로젝트를 다 세팅받았고
 	RendererTrans.View = CameraTrans.View;
 	RendererTrans.Projection = CameraTrans.Projection;
 
 	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
 
-	
 	if (nullptr == Mesh)
 	{
-		MSGASSERT("매쉬가 세팅되지 않아서 랜더링을 할수 없습니다.");
+		MSGASSERT("메시가 세팅되지 않았습니다.");
 		return;
 	}
-	
 
-
-	ShaderResSetting();
+	ShaderResSetting(); // WVP 상수 버퍼 세팅
 	InputAssembler1Setting();
 	VertexShaderSetting();
 	InputAssembler2Setting();
@@ -196,11 +155,8 @@ void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 
 	// 인덱스 버퍼를 통해서 그리겠다.
 	UEngineCore::GetDevice().GetContext()->DrawIndexed(6, 0, 0);
-
 }
 
-
-//
 //void URenderer::InputAssembler1Init()
 //{
 //	std::vector<EngineVertex> Vertexs;
@@ -251,46 +207,35 @@ void URenderer::InputAssembler1LayOut()
 		Desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		Desc.AlignedByteOffset = 0;
 		Desc.InputSlotClass = D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA;
-
-		// 인스턴싱을 설명할때 이야기 하겠습니다.
 		Desc.SemanticIndex = 0;
 		Desc.InstanceDataStepRate = 0;
 		InputLayOutData.push_back(Desc);
 	}
-
 
 	{
 		D3D11_INPUT_ELEMENT_DESC Desc;
 		Desc.SemanticName = "TEXCOORD";
 		Desc.InputSlot = 0;
 		Desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		Desc.AlignedByteOffset = 16;
+		Desc.AlignedByteOffset = 16; // 이전 데이터 바이트 크기만큼 다음에
 		Desc.InputSlotClass = D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA;
-
 		Desc.SemanticIndex = 0;
 		Desc.InstanceDataStepRate = 0;
 		InputLayOutData.push_back(Desc);
 	}
-
-
-
 
 	{
 		D3D11_INPUT_ELEMENT_DESC Desc;
 		Desc.SemanticName = "COLOR";
 		Desc.InputSlot = 0;
 		Desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		Desc.AlignedByteOffset = 32;
+		Desc.AlignedByteOffset = 32; // 이전 데이터 바이트 크기만큼 다음에
 		Desc.InputSlotClass = D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA;
-
 		Desc.SemanticIndex = 0;
 		Desc.InstanceDataStepRate = 0;
 		InputLayOutData.push_back(Desc);
 	}
 
-
-
-	// 쉐이더에서 어떤 인풋레이아웃을 사용하는지 알려줘.
 	HRESULT Result = UEngineCore::GetDevice().GetDevice()->CreateInputLayout(
 		&InputLayOutData[0],
 		static_cast<unsigned int>(InputLayOutData.size()),
@@ -322,13 +267,11 @@ void URenderer::VertexShaderInit()
 	Flag0 = D3D10_SHADER_DEBUG;
 #endif
 
-	// 행렬을 집어넣게 될것이다.
-	// 조금 느려진다고하는 하는데 느낀적은 없습니다.
 	Flag0 |= D3DCOMPILE_PACK_MATRIX_ROW_MAJOR;
 
 	D3DCompileFromFile(
 		WPath.c_str(),
-		nullptr, // Define TEST 등으로 전처리기를 넣을수.
+		nullptr, 
 		nullptr,
 		"VertexToWorld",
 		version.c_str(),
@@ -416,20 +359,10 @@ void URenderer::RasterizerSetting()
 
 void URenderer::InputAssembler2Setting()
 {
-
 	Mesh->GetIndexBuffer()->Setting();
-
-	// int Offset = 0;
-	//// DXGI_FORMAT_R8_UINT; <= 옛날에는 아꼈다.
-	//// DXGI_FORMAT_R16_UINT; <= 옛날에는 아꼈다.
-	//UEngineCore::GetDevice().GetContext()->IASetIndexBuffer(IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, Offset);
 
 	UEngineCore::GetDevice().GetContext()->IASetPrimitiveTopology(Topology);
 }
-
-
-
-
 
 void URenderer::PixelShaderInit()
 {
@@ -452,7 +385,7 @@ void URenderer::PixelShaderInit()
 
 	D3DCompileFromFile(
 		WPath.c_str(),
-		nullptr, // Define TEST 등으로 전처리기를 넣을수.
+		nullptr, 
 		nullptr,
 		"PixelToWorld",
 		version.c_str(),
@@ -465,7 +398,7 @@ void URenderer::PixelShaderInit()
 	if (nullptr == PSShaderCodeBlob)
 	{
 		std::string ErrString = reinterpret_cast<char*>(PSErrorCodeBlob->GetBufferPointer());
-		MSGASSERT("쉐이더 코드 중간빌드에서 실패했습니다\n" + ErrString);
+		MSGASSERT("픽셀 셰이더 코드 컴파일에 실패했습니다.\n" + ErrString);
 		return;
 	}
 
@@ -478,7 +411,7 @@ void URenderer::PixelShaderInit()
 
 	if (S_OK != Result)
 	{
-		MSGASSERT("픽셀 쉐이더 생성에 실패했습니다.");
+		MSGASSERT("픽셀 셰이더 생성에 실패했습니다.");
 	}
 }
 
@@ -494,8 +427,7 @@ void URenderer::OutPutMergeSetting()
 		Blend->Setting();
 	}
 
-	// 배열 넣어줄수 있다. 
-	// 0번이면 sv_target0
+	// 0번이면 sv_target0, 배열 삽입 가능
 	ID3D11RenderTargetView* RTV = UEngineCore::GetDevice().GetRTV();
 
 	ID3D11RenderTargetView* ArrRtv[16] = { 0 };
@@ -504,9 +436,9 @@ void URenderer::OutPutMergeSetting()
 	UEngineCore::GetDevice().GetContext()->OMSetRenderTargets(1, &ArrRtv[0], nullptr);
 }
 
-void URenderer::SetSpriteData(size_t _Index)
+void URenderer::SetSpriteData(UEngineSprite* _Sprite, size_t _Index)
 {
-	SpriteData = Sprite->GetSpriteData(_Index);
+	SpriteData = _Sprite->GetSpriteData(_Index);
 }
 
 void URenderer::SetMesh(std::string_view _Name)
@@ -517,7 +449,8 @@ void URenderer::SetMesh(std::string_view _Name)
 
 	if (nullptr == Mesh)
 	{
-		MSGASSERT("존재하지 않는 매쉬를 세팅할수 없습니다.\n");
+		MSGASSERT("존재하지 않는 메시를 세팅할 수 없습니다.");
+		return;
 	}
 }
 
@@ -529,6 +462,7 @@ void URenderer::SetBlend(std::string_view _Name)
 
 	if (nullptr == Blend)
 	{
-		MSGASSERT("존재하지 않는 Blend를 세팅할수 없습니다.\n");
+		MSGASSERT("존재하지 않는 Blend를 세팅할 수 없습니다.");
+		return;
 	}
 }

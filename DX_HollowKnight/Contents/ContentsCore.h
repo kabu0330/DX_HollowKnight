@@ -27,6 +27,8 @@ private:
 	void SetWindowSize(UEngineInitData& _Data);
 	void LoadResourceDirectory();
 	void LoadFolder();
+	void LoadSprite();
+	void CreateLevel();
 
 };
 

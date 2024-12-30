@@ -22,10 +22,9 @@ public:
 
 	ENGINEAPI void SetOrder(int _Order) override;
  
-	ENGINEAPI void SetSprite(std::string_view _Value);
-	ENGINEAPI void SetSprite(UEngineSprite* _Sprite);
+	ENGINEAPI void SetTexture(UEngineTexture* _Value);
 
-	ENGINEAPI void SetSpriteData(size_t _Index);
+	ENGINEAPI void SetSpriteData(UEngineSprite* _Sprite, size_t _Index);
 
 	ENGINEAPI void SetMesh(std::string_view _Name);
 
@@ -42,8 +41,7 @@ public:
 	class UEngineBlend* Blend = nullptr;
 
 	FSpriteData SpriteData;
-
-	class UEngineSprite* Sprite = nullptr;
+	UEngineTexture* Texture = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> SamplerState = nullptr; // 샘플러 스테이트
 	Microsoft::WRL::ComPtr<ID3D11Buffer> TransformConstBuffer = nullptr; // 상수버퍼
 	Microsoft::WRL::ComPtr<ID3D11Buffer> SpriteConstBuffer = nullptr; // 스프라이트용 상수버퍼

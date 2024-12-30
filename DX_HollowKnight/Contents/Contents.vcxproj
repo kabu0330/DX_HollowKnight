@@ -168,7 +168,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ContentsCore.h" />
-    <ClInclude Include="Player.h">
+    <ClInclude Include="Global.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Knight.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="PlayGameMode.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -178,7 +186,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp" />
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="Global.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Knight.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="PlayGameMode.cpp">
       <SubType>
       </SubType>
     </ClCompile>

@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "EngineSprite.h"
 #include "EngineBase/EngineDebug.h"
+#include "EngineTexture.h"
 
 UEngineSprite::UEngineSprite()
 {
@@ -8,6 +9,44 @@ UEngineSprite::UEngineSprite()
 
 UEngineSprite::~UEngineSprite()
 {
+}
+
+std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToFolder(std::string_view _Name, std::string_view _Path)
+{
+	UEngineDirectory Dir = _Path;
+
+	std::vector<UEngineFile> Files = Dir.GetAllFile(false, { ".png" });
+
+	if (0 == Files.size())
+	{
+		MSGASSERT("파일이 존재하지 않는 폴더를 스프라이트로 만들수는 없습니다.");
+	}
+
+	std::shared_ptr<UEngineSprite> NewRes = std::make_shared<UEngineSprite>();
+	PushRes<UEngineSprite>(NewRes, _Name, "");
+
+	for (size_t i = 0; i < Files.size(); i++)
+	{
+		std::string UpperName = UEngineString::ToUpper(Files[i].GetFileName());
+
+		std::shared_ptr<UEngineTexture> Texture = UEngineTexture::Find<UEngineTexture>(UpperName);
+
+		if (nullptr == Texture)
+		{
+			MSGASSERT("텍스처를 먼저 로드하고 폴더 스프라이트를 만들어 주세요." + UpperName);
+			return nullptr;
+		}
+
+		NewRes->SpriteTexture.push_back(Texture.get());
+
+		FSpriteData SpriteData;
+		SpriteData.CuttingPos = { 0.0f, 0.0f };
+		SpriteData.CuttingSize = { 1.0f, 1.0f };
+		SpriteData.Pivot = { 0.5f, 0.0f };
+		NewRes->SpriteDatas.push_back(SpriteData);
+	}
+
+	return NewRes;
 }
 
 std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToMeta(std::string_view _Name, std::string_view _DataFileExt)
@@ -22,13 +61,6 @@ std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToMeta(std::string_vie
 
 	std::shared_ptr<UEngineSprite> NewRes = std::make_shared<UEngineSprite>();
 	PushRes<UEngineSprite>(NewRes, _Name, "");
-	NewRes->Texture = Tex.get();
-
-
-	// 파싱 문자열을 자르고 쪼개서 의미를 부여하는 것을 파싱이라고 합니다.
-	// 문자가 일정 규칙으로 구성되어있다는 것을 파악하고 
-	// 이걸 기반으로 한 언어들을 스트럭처드 언어라고 부른다.
-	// 대표적으로 xml json 등등이 있다.
 
 	UEnginePath Path = Tex->GetPath();
 	std::string FileName = Path.GetFileName();
@@ -55,6 +87,7 @@ std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToMeta(std::string_vie
 			break;
 		}
 
+		NewRes->SpriteTexture.push_back(Tex.get());
 		SpriteDataTexts.push_back(Text.substr(RectIndex, AligIndex - RectIndex));
 		StartPosition = AligIndex;
 	}
@@ -71,38 +104,41 @@ std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToMeta(std::string_vie
 
 		FSpriteData SpriteData;
 
-
 		{
 			std::string Number = UEngineString::InterString(Text, "x:", "\n", Start);
 			SpriteData.CuttingPos.X = static_cast<float>(atof(Number.c_str()));
+			int a = 0;
 		}
 
 		{
 			std::string Number = UEngineString::InterString(Text, "y:", "\n", Start);
 			SpriteData.CuttingPos.Y = static_cast<float>(atof(Number.c_str()));
+			int a = 0;
 		}
 
 		{
 			std::string Number = UEngineString::InterString(Text, "width:", "\n", Start);
 			SpriteData.CuttingSize.X = static_cast<float>(atof(Number.c_str()));
+			int a = 0;
 		}
 
 		{
 			std::string Number = UEngineString::InterString(Text, "height:", "\n", Start);
 			SpriteData.CuttingSize.Y = static_cast<float>(atof(Number.c_str()));
+			int a = 0;
 		}
 
 		{
 			std::string Number = UEngineString::InterString(Text, "x:", ",", Start);
 			SpriteData.Pivot.X = static_cast<float>(atof(Number.c_str()));
+			int a = 0;
 		}
 
 		{
 			std::string Number = UEngineString::InterString(Text, "y:", "}", Start);
 			SpriteData.Pivot.Y = static_cast<float>(atof(Number.c_str()));
+			int a = 0;
 		}
-
-
 
 		SpriteData.CuttingPos.Y = TexSize.Y - SpriteData.CuttingPos.Y - SpriteData.CuttingSize.Y;
 
@@ -111,21 +147,22 @@ std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToMeta(std::string_vie
 		SpriteData.CuttingSize.X /= TexSize.X;
 		SpriteData.CuttingSize.Y /= TexSize.Y;
 
-
 		TestData.push_back(SpriteData);
 	}
-
 
 	NewRes->SpriteDatas = TestData;
 
 	return NewRes;
-
 }
 
-
-ID3D11ShaderResourceView* UEngineSprite::GetSRV()
+UEngineTexture* UEngineSprite::GetTexture(size_t _Index /*= 0*/)
 {
-	return Texture->GetSRV();
+	return SpriteTexture[_Index];
+}
+
+ID3D11ShaderResourceView* UEngineSprite::GetSRV(size_t _Index/* = 0*/)
+{
+	return SpriteTexture[_Index]->GetSRV();
 }
 
 FVector UEngineSprite::GetSpriteScaleToReal(size_t _Index)
@@ -138,8 +175,8 @@ FVector UEngineSprite::GetSpriteScaleToReal(size_t _Index)
 	FVector Result;
 
 	//                0~1사이의 비율이기 때문에
-	Result.X = SpriteDatas[_Index].CuttingSize.X * Texture->GetTextureSize().X;
-	Result.Y = SpriteDatas[_Index].CuttingSize.Y * Texture->GetTextureSize().Y;
+	Result.X = SpriteDatas[_Index].CuttingSize.X * SpriteTexture[_Index]->GetTextureSize().X;
+	Result.Y = SpriteDatas[_Index].CuttingSize.Y * SpriteTexture[_Index]->GetTextureSize().Y;
 
 	return Result;
 }
