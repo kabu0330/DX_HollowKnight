@@ -51,15 +51,21 @@ private:
 
 	void CreateRenderer();
 
-	void ChangePrevAnimation();
 
+	bool bIsOnGround = true;
 	bool CanJump();
 	bool IsOnGround();
-	bool bIsOnGround = true;
-	void ChangeJumpAnimation();
 
 	bool CanAction();
+
+	// Animation
+	void ChangeNextAnimation(EKnightState _NextState);
+	void ChangePrevAnimation();
+
 	void ChangeAttackAnimation(EKnightState _PrevState);
+	void ChangeJumpAnimation();
+	void ChangeNonCombatAnimation();
+	void ChangeLookAnimation();
 
 	// FSM
 	UFSMStateManager FSM;
@@ -71,11 +77,22 @@ private:
 	void SetRunToIdle(float _DeltaTime);
 	void SetJump(float _DeltaTime);
 	void SetAirborn(float _DeltaTime);
+	void SetLand(float _DeltaTime);
+	void SetHardLand(float _DeltaTime);
+
+	void SetLookDown(float _DeltaTime);
+	void SetLookDownLoop(float _DeltaTime);
+	void SetLookUp(float _DeltaTime);
+	void SetLookUpLoop(float _DeltaTime);
+
 	void SetSlash(float _DeltaTime);
 	void SetUpSlash(float _DeltaTime);
 	void SetDownSlash(float _DeltaTime);
+
 	void SetDamage(float _DeltaTime);
 	void SetDeath(float _DeltaTime);
+	void SetDeathDamage(float _DeltaTime);
+	void SetDeathHead(float _DeltaTime);
 
 	void CheckDirection();
 };

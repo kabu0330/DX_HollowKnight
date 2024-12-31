@@ -187,6 +187,76 @@ void UContentsCore::LoadResourceDirectory()
 		Dir.Append("Image/Knight/Airborn");
 		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
 	}
+	{
+		UEngineDirectory Dir;
+		if (false == Dir.MoveParentToDirectory("ContentsResources"))
+		{
+			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+			return;
+		}
+		Dir.Append("Image/Knight/Land");
+		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
+	}
+	{
+		UEngineDirectory Dir;
+		if (false == Dir.MoveParentToDirectory("ContentsResources"))
+		{
+			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+			return;
+		}
+		Dir.Append("Image/Knight/DeathHead");
+		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
+	}
+	{
+		UEngineDirectory Dir;
+		if (false == Dir.MoveParentToDirectory("ContentsResources"))
+		{
+			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+			return;
+		}
+		Dir.Append("Image/Knight/HardLand");
+		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
+	}
+	{
+		UEngineDirectory Dir;
+		if (false == Dir.MoveParentToDirectory("ContentsResources"))
+		{
+			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+			return;
+		}
+		Dir.Append("Image/Knight/LookDown");
+		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
+	}
+	{
+		UEngineDirectory Dir;
+		if (false == Dir.MoveParentToDirectory("ContentsResources"))
+		{
+			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+			return;
+		}
+		Dir.Append("Image/Knight/LookDownLoop");
+		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
+	}
+	{
+		UEngineDirectory Dir;
+		if (false == Dir.MoveParentToDirectory("ContentsResources"))
+		{
+			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+			return;
+		}
+		Dir.Append("Image/Knight/LookUp");
+		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
+	}
+	{
+		UEngineDirectory Dir;
+		if (false == Dir.MoveParentToDirectory("ContentsResources"))
+		{
+			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+			return;
+		}
+		Dir.Append("Image/Knight/LookUpLoop");
+		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
+	}
 
 	// Knight Effect
 	{

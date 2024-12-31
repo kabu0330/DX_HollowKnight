@@ -121,6 +121,38 @@ void AKnight::ChangeJumpAnimation()
 	}
 }
 
+void AKnight::ChangeNonCombatAnimation()
+{
+	if (true == CanAction())
+	{
+		return;
+	}
+	if (false == IsOnGround())
+	{
+		return;
+	}
+
+}
+
+void AKnight::ChangeLookAnimation()
+{
+	if (false == IsOnGround())
+	{
+		return;
+	}
+
+	if (UEngineInput::IsPress(VK_DOWN))
+	{
+		FSM.ChangeState(EKnightState::LOOK_DOWN);
+		return;
+	}
+	if (UEngineInput::IsPress(VK_UP))
+	{
+		FSM.ChangeState(EKnightState::LOOK_UP);
+		return;
+	}
+}
+
 void AKnight::InputCheck(float _DeltaTime)
 {
 	if (UEngineInput::IsPress(VK_LEFT))
@@ -197,6 +229,8 @@ void AKnight::SetIdle(float _DeltaTime)
 		return;
 	}
 
+	ChangeLookAnimation();
+
 	ChangeJumpAnimation();
 	ChangeAttackAnimation(EKnightState::IDLE); // 지상 공격
 }
@@ -215,11 +249,7 @@ void AKnight::SetRun(float _DeltaTime)
 
 void AKnight::SetIdleToRun(float _DeltaTime)
 {
-	if (true == BodyRenderer->IsCurAnimationEnd())
-	{
-		FSM.ChangeState(EKnightState::RUN);
-		return;
-	}
+	ChangeNextAnimation(EKnightState::RUN);
 
 	ChangeJumpAnimation();
 	ChangeAttackAnimation(EKnightState::RUN); // 지상 공격
@@ -227,11 +257,7 @@ void AKnight::SetIdleToRun(float _DeltaTime)
 
 void AKnight::SetRunToIdle(float _DeltaTime)
 {
-	if (true == BodyRenderer->IsCurAnimationEnd())
-	{
-		FSM.ChangeState(EKnightState::IDLE);
-		return;
-	}
+	ChangeNextAnimation(EKnightState::IDLE);
 
 	ChangeJumpAnimation();
 	ChangeAttackAnimation(EKnightState::RUN); // 지상 공격
@@ -245,37 +271,68 @@ void AKnight::SetSlash(float _DeltaTime)
 
 void AKnight::SetUpSlash(float _DeltaTime)
 {
-	if (true == BodyRenderer->IsCurAnimationEnd())
-	{
-		FSM.ChangeState(NextState);
-		return;
-	}
+	ChangePrevAnimation();
 }
 
 void AKnight::SetDownSlash(float _DeltaTime)
 {
-	if (true == BodyRenderer->IsCurAnimationEnd())
-	{
-		FSM.ChangeState(NextState);
-		return;
-	}
+	ChangePrevAnimation();
 }
 
 void AKnight::SetJump(float _DeltaTime)
 {
-	if (true == BodyRenderer->IsCurAnimationEnd())
-	{
-		FSM.ChangeState(EKnightState::AIRBORN);
-		return;
-	}
+	ChangeNextAnimation(EKnightState::AIRBORN);
 
 	ChangeAttackAnimation(EKnightState::AIRBORN);
 }
 
 void AKnight::SetAirborn(float _DeltaTime)
 {
-	// 땅에 닿으면 땅에 닿는 모션 이후에 Idle로 전환해야 할 듯
-	if (true == BodyRenderer->IsCurAnimationEnd())
+	ChangeNextAnimation(EKnightState::LAND);
+}
+
+void AKnight::SetLand(float _DeltaTime)
+{
+	ChangeNextAnimation(EKnightState::IDLE);
+}
+
+void AKnight::SetHardLand(float _DeltaTime)
+{
+	ChangeNextAnimation(EKnightState::IDLE);
+}
+
+void AKnight::SetLookDown(float _DeltaTime)
+{
+	ChangeNextAnimation(EKnightState::LOOK_DOWN_LOOP);
+	if (UEngineInput::IsFree(VK_DOWN))
+	{
+		FSM.ChangeState(EKnightState::IDLE);
+		return;
+	}
+}
+
+void AKnight::SetLookDownLoop(float _DeltaTime)
+{
+	if (UEngineInput::IsFree(VK_DOWN))
+	{
+		FSM.ChangeState(EKnightState::IDLE);
+		return;
+	}
+}
+
+void AKnight::SetLookUp(float _DeltaTime)
+{
+	ChangeNextAnimation(EKnightState::LOOK_UP_LOOP);
+	if (UEngineInput::IsFree(VK_UP))
+	{
+		FSM.ChangeState(EKnightState::IDLE);
+		return;
+	}
+}
+
+void AKnight::SetLookUpLoop(float _DeltaTime)
+{
+	if (UEngineInput::IsFree(VK_UP))
 	{
 		FSM.ChangeState(EKnightState::IDLE);
 		return;
@@ -284,19 +341,31 @@ void AKnight::SetAirborn(float _DeltaTime)
 
 void AKnight::SetDamage(float _DeltaTime)
 {
+	if (true == bIsOnGround)
+	{
+		ChangeNextAnimation(EKnightState::IDLE);
+	}
+	else
+	{
+		ChangeNextAnimation(EKnightState::AIRBORN);
+	}
+	
+	// 뒤로 밀려나고
+	// 이펙트 출력
 }
 
 void AKnight::SetDeath(float _DeltaTime)
 {
+	ChangeNextAnimation(EKnightState::DEATH_DAMAGE);
 }
 
-void AKnight::ChangePrevAnimation()
+void AKnight::SetDeathDamage(float _DeltaTime)
 {
-	if (true == BodyRenderer->IsCurAnimationEnd())
-	{
-		FSM.ChangeState(NextState);
-		return;
-	}
+	ChangeNextAnimation(EKnightState::DEATH_HEAD);
+}
+
+void AKnight::SetDeathHead(float _DeltaTime)
+{
 }
 
 void AKnight::CreateRenderer()
@@ -311,6 +380,7 @@ void AKnight::CreateRenderer()
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 
+	// 이동 애니메이션
 	std::string Idle = "Idle";
 	BodyRenderer->CreateAnimation(Idle, "Knight_Idle.png", 0, 8, IdleFrameTime);
 	{
@@ -358,7 +428,56 @@ void AKnight::CreateRenderer()
 		Animation->IsAutoScale = true;
 		Animation->AutoScaleRatio = 1.0f;
 	}
+	std::string Land = "Land";
+	BodyRenderer->CreateAnimation(Land, Land, 0, 2, RunFrameTime);
+	{
+		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(Land);
+		Animation->IsAutoScale = true;
+		Animation->AutoScaleRatio = 1.0f;
+	}
 
+	std::string HardLand = "HardLand";
+	BodyRenderer->CreateAnimation(HardLand, HardLand, 0, 9, RunFrameTime, false);
+	{
+		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(HardLand);
+		Animation->IsAutoScale = true;
+		Animation->AutoScaleRatio = 1.0f;
+	}
+
+	// 정적 애니메이션
+	float StaticFrameTime = 0.2f;
+	std::string LookDown = "LookDown";
+	BodyRenderer->CreateAnimation(LookDown, LookDown, 0, 5, StaticFrameTime, false);
+	{
+		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(LookDown);
+		Animation->IsAutoScale = true;
+		Animation->AutoScaleRatio = 1.0f;
+	}
+	std::string LookDownLoop = "LookDownLoop";
+	BodyRenderer->CreateAnimation(LookDownLoop, LookDownLoop, 0, 4, IdleFrameTime);
+	{
+		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(LookDownLoop);
+		Animation->IsAutoScale = true;
+		Animation->AutoScaleRatio = 1.0f;
+	}
+
+	std::string LookUp = "LookUp";
+	BodyRenderer->CreateAnimation(LookUp, LookUp, 0, 5, StaticFrameTime, false);
+	{
+		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(LookUp);
+		Animation->IsAutoScale = true;
+		Animation->AutoScaleRatio = 1.0f;
+	}
+	std::string LookUpLoop = "LookUpLoop";
+	BodyRenderer->CreateAnimation(LookUpLoop, LookUpLoop, 0, 4, IdleFrameTime);
+	{
+		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(LookUpLoop);
+		Animation->IsAutoScale = true;
+		Animation->AutoScaleRatio = 1.0f;
+	}
+
+
+	// 전투 애니메이션
 	std::string Slash = "Slash";
 	BodyRenderer->CreateAnimation(Slash, Slash, 0, 6, SlashFrameTime, false);
 	{
@@ -393,6 +512,14 @@ void AKnight::CreateRenderer()
 
 	float DeathFrameTime = 0.2f;
 
+	std::string DeathDamage = "DeathDamage";
+	BodyRenderer->CreateAnimation(DeathDamage, DeathDamage, 0, 6, DeathFrameTime, false);
+	{
+		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(DeathDamage);
+		Animation->IsAutoScale = true;
+		Animation->AutoScaleRatio = 1.0f;
+	}
+
 	std::string Death = "Death";
 	BodyRenderer->CreateAnimation(Death, Death, 0, 12, DeathFrameTime, false);
 	{
@@ -401,10 +528,10 @@ void AKnight::CreateRenderer()
 		Animation->AutoScaleRatio = 1.0f;
 	}
 
-	std::string DeathDamage = "DeathDamage";
-	BodyRenderer->CreateAnimation(DeathDamage, DeathDamage, 0, 6, DeathFrameTime, false);
+	std::string DeathHead = "DeathHead";
+	BodyRenderer->CreateAnimation(DeathHead, DeathHead, 0, 0, DeathFrameTime, false);
 	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(DeathDamage);
+		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(DeathHead);
 		Animation->IsAutoScale = true;
 		Animation->AutoScaleRatio = 1.0f;
 	}
@@ -450,6 +577,46 @@ void AKnight::SetFSM()
 			BodyRenderer->ChangeAnimation("Airborn");
 		}
 	);
+	FSM.CreateState(EKnightState::LAND, std::bind(&AKnight::SetLand, this, std::placeholders::_1),
+		[this]()
+		{
+			BodyRenderer->ChangeAnimation("Land");
+		}
+	);
+	FSM.CreateState(EKnightState::HARD_LAND, std::bind(&AKnight::SetHardLand, this, std::placeholders::_1),
+		[this]()
+		{
+			BodyRenderer->ChangeAnimation("HardLand");
+		}
+	);
+
+	// 정적 애니메이션
+	FSM.CreateState(EKnightState::LOOK_DOWN, std::bind(&AKnight::SetLookDown, this, std::placeholders::_1),
+		[this]()
+		{
+			BodyRenderer->ChangeAnimation("LookDown");
+		}
+	);
+	FSM.CreateState(EKnightState::LOOK_DOWN_LOOP, std::bind(&AKnight::SetLookDownLoop, this, std::placeholders::_1),
+		[this]()
+		{
+			BodyRenderer->ChangeAnimation("LookDownLoop");
+		}
+	);
+	FSM.CreateState(EKnightState::LOOK_UP, std::bind(&AKnight::SetLookUp, this, std::placeholders::_1),
+		[this]()
+		{
+			BodyRenderer->ChangeAnimation("LookUp");
+		}
+	);
+	FSM.CreateState(EKnightState::LOOK_UP_LOOP, std::bind(&AKnight::SetLookUpLoop, this, std::placeholders::_1),
+		[this]()
+		{
+			BodyRenderer->ChangeAnimation("LookUpLoop");
+		}
+	);
+
+	// 전투 애니메이션
 	FSM.CreateState(EKnightState::SLASH, std::bind(&AKnight::SetSlash, this, std::placeholders::_1),
 		[this]()
 		{
@@ -480,6 +647,18 @@ void AKnight::SetFSM()
 			BodyRenderer->ChangeAnimation("Death");
 		}
 	);
+	FSM.CreateState(EKnightState::DEATH_DAMAGE, std::bind(&AKnight::SetDeathDamage, this, std::placeholders::_1),
+		[this]()
+		{
+			BodyRenderer->ChangeAnimation("DeathDamage");
+		}
+	);
+	FSM.CreateState(EKnightState::DEATH_HEAD, std::bind(&AKnight::SetDeathHead, this, std::placeholders::_1),
+		[this]()
+		{
+			BodyRenderer->ChangeAnimation("DeathHead");
+		}
+	);
 
 	FSM.ChangeState(EKnightState::IDLE);
 }
@@ -497,6 +676,26 @@ void AKnight::CheckDirection()
 	if (UEngineInput::IsPress(VK_RIGHT))
 	{
 		BodyRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
+	}
+}
+
+// 다음 애니메이션으로 변경
+void AKnight::ChangeNextAnimation(EKnightState _NextState)
+{
+	if (true == BodyRenderer->IsCurAnimationEnd())
+	{
+		FSM.ChangeState(_NextState);
+		return;
+	}
+}
+
+// 이전 애니메이션으로 변경
+void AKnight::ChangePrevAnimation()
+{
+	if (true == BodyRenderer->IsCurAnimationEnd())
+	{
+		FSM.ChangeState(NextState);
+		return;
 	}
 }
 
