@@ -9,7 +9,6 @@ USceneComponent::~USceneComponent()
 {
 }
 
-
 void USceneComponent::SetupAttachment(std::shared_ptr<USceneComponent> _Parent)
 {
 	SetupAttachment(_Parent.get());

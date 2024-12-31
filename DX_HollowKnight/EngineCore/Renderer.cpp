@@ -45,7 +45,7 @@ void URenderer::BeginPlay()
 
 void URenderer::ShaderResInit()
 {
-	{
+	{   // WVP
 		D3D11_BUFFER_DESC BufferInfo = { 0 };
 		BufferInfo.ByteWidth = sizeof(FTransform);
 		BufferInfo.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -88,8 +88,8 @@ void URenderer::ShaderResInit()
 
 void URenderer::ShaderResSetting()
 {
-	{
-		FTransform& RendererTrans = GetTransformRef();
+	{   // WVP
+		FTransform& RendererTrans = GetTransformRef(); // WVP Data
 		D3D11_MAPPED_SUBRESOURCE Data = {};
 
 		UEngineCore::GetDevice().GetContext()->Map(TransformConstBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &Data);
@@ -100,6 +100,7 @@ void URenderer::ShaderResSetting()
 			MSGASSERT("그래픽카드 매핑에 실패했습니다.");
 		}
 		memcpy_s(Data.pData, sizeof(FTransform), &RendererTrans, sizeof(FTransform));
+
 		UEngineCore::GetDevice().GetContext()->Unmap(TransformConstBuffer.Get(), 0);
 
 		ID3D11Buffer* ArrPtr[16] = { TransformConstBuffer.Get() };
@@ -115,6 +116,7 @@ void URenderer::ShaderResSetting()
 			MSGASSERT("그래픽카드 매핑에 실패했습니다.");
 		}
 		memcpy_s(Data.pData, sizeof(FSpriteData), &SpriteData, sizeof(FSpriteData));
+
 		UEngineCore::GetDevice().GetContext()->Unmap(SpriteConstBuffer.Get(), 0);
 
 		ID3D11Buffer* ArrPtr[16] = { SpriteConstBuffer.Get() };
@@ -284,7 +286,7 @@ void URenderer::VertexShaderInit()
 	if (nullptr == VSShaderCodeBlob)
 	{
 		std::string ErrString = reinterpret_cast<char*>(VSErrorCodeBlob->GetBufferPointer());
-		MSGASSERT("쉐이더 코드 중간빌드에서 실패했습니다\n" + ErrString);
+		MSGASSERT("셰이더 코드 중간 빌드에서 실패했습니다\n" + ErrString);
 		return;
 	}
 
@@ -297,7 +299,7 @@ void URenderer::VertexShaderInit()
 
 	if (S_OK != Result)
 	{
-		MSGASSERT("버텍스 쉐이더 생성에 실패했습니다.");
+		MSGASSERT("버텍스 셰이더 생성에 실패했습니다.");
 	}
 
 	InputAssembler1LayOut();

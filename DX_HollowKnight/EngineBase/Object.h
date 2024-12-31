@@ -41,7 +41,6 @@ public:
 		Name = _Name.data();
 	}
 
-	// bool IsActive()
 	virtual bool IsActive()
 	{
 		return IsActiveValue && false == IsDestroyValue;
@@ -52,7 +51,6 @@ public:
 		return IsDestroyValue;
 	}
 
-	// 바로 죽겠죠?
 	// _Time 시간후에 죽어라.
 	void Destroy(float _Time = 0.0f)
 	{

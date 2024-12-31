@@ -1,8 +1,6 @@
 #pragma once
 #include <EngineCore/IContentsCore.h>
 
-// 규칙을 만드는 수밖에 없다.
-
 // 설명 :
 class UContentsCore : public IContentsCore
 {

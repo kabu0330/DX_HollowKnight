@@ -1,17 +1,12 @@
 #pragma once
-// Os Header
 #include <Windows.h>
 
-// std Header
 #include <map>
 #include <string>
 #include <functional>
 
-// user header
 #include <EngineBase/EngineMath.h>
 
-
-// 정신 잘 붙
 
 // 설명 :
 class UEngineWindow
@@ -67,16 +62,11 @@ public:
 
 	ENGINEAPI static  void SetCustomProc(std::function<bool(HWND, UINT, WPARAM, LPARAM)> _CustomProc);
 
-	
-
 protected:
 
 private:
 	ENGINEAPI static std::function<bool(HWND, UINT, WPARAM, LPARAM)> CustomProc;
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-	// static HINSTANCE hInstance; 있을거야
-	// 진짜는 cpp안에 있어.
 
 	ENGINEAPI static HINSTANCE hInstance;
 

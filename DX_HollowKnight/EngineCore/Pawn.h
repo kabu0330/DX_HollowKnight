@@ -1,7 +1,7 @@
 #pragma once
 #include <EngineCore/Actor.h>
 
-// 설명 : 주인공캐릭터는 무조건 상속 받아야 한다.
+// 설명 : 주인공 캐릭터는 무조건 상속 받아야 한다.
 class APawn : public AActor
 {
 public:

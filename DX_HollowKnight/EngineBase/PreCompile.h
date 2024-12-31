@@ -10,8 +10,8 @@
 #include <string>
 #include <iostream>
 #include <functional>
-// 쉐어드 Ptr을 사용하기 위한 헤더
-#include <memory>
+
+#include <memory> // std::shared_ptr
 
 #include "EngineMath.h"
 #include "EngineDirectory.h"

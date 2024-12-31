@@ -34,7 +34,6 @@ public:
 
 	ENGINEAPI static std::shared_ptr<UEngineSprite> CreateSpriteToFolder(std::string_view _Name, std::string_view _Path);
 
-
 	ENGINEAPI static std::shared_ptr<UEngineSprite> CreateSpriteToMeta(std::string_view _Name, std::string_view _DataFileExt);
 
 	ENGINEAPI UEngineTexture* GetTexture(size_t _Index = 0);
@@ -52,7 +51,6 @@ public:
 	}
 
 	ENGINEAPI FVector GetSpriteScaleToReal(size_t _Index);
-
 
 protected:
 

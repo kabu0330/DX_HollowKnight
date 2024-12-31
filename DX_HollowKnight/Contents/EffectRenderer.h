@@ -20,7 +20,6 @@ public:
 	{
 		ChangeAnimation(_AnimationName, _Force);
 		
-		
 	}
 
 protected:

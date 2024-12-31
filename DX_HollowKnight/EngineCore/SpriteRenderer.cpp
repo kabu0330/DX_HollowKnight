@@ -84,7 +84,8 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 			{
 				CurAnimation->IsEnd = true;
 			}
-			else {
+			else 
+			{
 				CurAnimation->IsEnd = false;
 			}
 

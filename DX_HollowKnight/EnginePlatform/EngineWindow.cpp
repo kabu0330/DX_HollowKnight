@@ -14,7 +14,6 @@ HINSTANCE UEngineWindow::hInstance = nullptr;
 std::map<std::string, WNDCLASSEXA> UEngineWindow::WindowClasss;
 std::function<bool(HWND, UINT, WPARAM, LPARAM)> UEngineWindow::CustomProc = nullptr;
 int WindowCount = 0;
-// bool UEngineWindow::LoopActive = true;
 
 void UEngineWindow::SetCustomProc(std::function<bool(HWND, UINT, WPARAM, LPARAM)> _CustomProc)
 {
@@ -41,7 +40,7 @@ LRESULT CALLBACK UEngineWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
     {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
-        // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
+
         EndPaint(hWnd, &ps);
     }
     break;
@@ -58,13 +57,10 @@ LRESULT CALLBACK UEngineWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
     return 0;
 }
 
-
 void UEngineWindow::EngineWindowInit(HINSTANCE _Instance)
 {
     hInstance = _Instance;
 
-    // 어차피 무조건 해줘야 한다면 여기서 하려고 한것.
-    // 디폴트 윈도우 클래스 등록
     WNDCLASSEXA wcex;
     wcex.cbSize = sizeof(WNDCLASSEX);
     wcex.style = CS_HREDRAW | CS_VREDRAW;
@@ -122,20 +118,11 @@ int UEngineWindow::WindowMessageLoop(std::function<void()> _StartFunction, std::
 
 void UEngineWindow::CreateWindowClass(const WNDCLASSEXA& _Class)
 {
-    // 일반적인 맵의 사용법
-
     std::map<std::string, WNDCLASSEXA>::iterator EndIter = WindowClasss.end();
     std::map<std::string, WNDCLASSEXA>::iterator FindIter = WindowClasss.find(std::string(_Class.lpszClassName));
 
-    // ckw
     if (EndIter != FindIter)
     {
-        // std::string ErrorText = "같은 이름의 윈도우 클래스를 2번 등록했습니다" + std::string(_Class.lpszClassName);
-
-        // std::string 내부에 들고 있는 맴버변수 => std::string => std::vector<char>
-        // std::vector<char> char* = new char[100];
-        // ErrorText const char* 리턴해주는 함수가 c_str()
-        // const char* Text = ErrorText.c_str();
         MSGASSERT(std::string(_Class.lpszClassName) + " 같은 이름의 윈도우 클래스를 2번 등록했습니다");
         return;
     }
@@ -147,7 +134,6 @@ void UEngineWindow::CreateWindowClass(const WNDCLASSEXA& _Class)
 
 UEngineWindow::UEngineWindow() 
 {
-    
 }
 
 UEngineWindow::~UEngineWindow()
@@ -182,13 +168,11 @@ void UEngineWindow::Create(std::string_view _TitleName, std::string_view _ClassN
         return;
     }
 
-    // 윈도우가 만들어지면 hdc를 여기서 얻어올 겁니다.
     HDC WindowMainDC = GetDC(WindowHandle);
 }
 
 void UEngineWindow::Open(std::string_view _TitleName /*= "Window"*/)
 {
-    // 어 window 안만들고 띄우려고 하네?
     if (0 == WindowHandle)
     {
         // 만들어
@@ -200,7 +184,6 @@ void UEngineWindow::Open(std::string_view _TitleName /*= "Window"*/)
         return;
     }
 
-	// 단순히 윈도창을 보여주는 것만이 아니라
 	ShowWindow(WindowHandle, SW_SHOW);
     UpdateWindow(WindowHandle);
 	// ShowWindow(WindowHandle, SW_HIDE);
@@ -220,8 +203,7 @@ FVector UEngineWindow::GetMousePos()
     POINT MousePoint;
 
     GetCursorPos(&MousePoint);
-    // 윈도우창 위치기준으로 마우스 포지션을 
-    ScreenToClient(WindowHandle, &MousePoint);
+    ScreenToClient(WindowHandle, &MousePoint); // 윈도우창 위치기준으로 마우스 포지션을 가져온다.
 
     return FVector(MousePoint.x, MousePoint.y);
 }

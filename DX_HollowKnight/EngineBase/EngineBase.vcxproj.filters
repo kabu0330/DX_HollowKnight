@@ -31,12 +31,14 @@
     <ClCompile Include="EngineTimer.cpp">
       <Filter>07_Time</Filter>
     </ClCompile>
-    <ClCompile Include="EngineDelegate.cpp" />
     <ClCompile Include="FSMStateManager.cpp">
       <Filter>05_Object</Filter>
     </ClCompile>
     <ClCompile Include="TimeEvent.cpp">
       <Filter>05_Object</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineDelegate.cpp">
+      <Filter>08_Event</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -73,12 +75,14 @@
     <ClInclude Include="EngineTimer.h">
       <Filter>07_Time</Filter>
     </ClInclude>
-    <ClInclude Include="EngineDelegate.h" />
     <ClInclude Include="FSMStateManager.h">
       <Filter>05_Object</Filter>
     </ClInclude>
     <ClInclude Include="TimeEvent.h">
       <Filter>05_Object</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineDelegate.h">
+      <Filter>08_Event</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +109,9 @@
     </Filter>
     <Filter Include="07_Time">
       <UniqueIdentifier>{16dd6aed-6008-4925-86d4-ac7d497b77fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08_Event">
+      <UniqueIdentifier>{15cbe489-edc5-413d-8aa7-f86b8d46518f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

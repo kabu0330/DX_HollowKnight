@@ -15,7 +15,7 @@ std::shared_ptr<UVertexBuffer> UVertexBuffer::Create(std::string_view _Name, con
 
 	if (true == Contains(UpperName))
 	{
-		MSGASSERT("이미 로드한 텍스처를 도 로드하려고 했습니다." + UpperName);
+		MSGASSERT("이미 로드한 텍스처를 또 로드하려고 했습니다." + UpperName);
 		return nullptr;
 	}
 
@@ -47,11 +47,8 @@ void UVertexBuffer::ResCreate(const void* _InitData, size_t _VertexSize, size_t 
 
 void UVertexBuffer::Setting()
 {
-	// UINT VertexSize = sizeof(EngineVertex);
-	// 이 버텍스 버퍼가 10개짜리인데 3번째 버텍스 부터 세팅해줘.
 	UINT Offset = 0;
 	ID3D11Buffer* ArrBuffer[1];
 	ArrBuffer[0] = VertexBuffer.Get();
-	UEngineCore::GetDevice().GetContext()->IASetVertexBuffers(0, 1, ArrBuffer, &VertexSize, &Offset);
-	
+	UEngineCore::GetDevice().GetContext()->IASetVertexBuffers(0, 1, ArrBuffer, &VertexSize, &Offset);	
 }

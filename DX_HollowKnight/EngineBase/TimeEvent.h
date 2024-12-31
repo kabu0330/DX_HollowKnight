@@ -68,6 +68,5 @@ protected:
 
 private:
 	std::list<TimeEventFunction> Events;
-
 };
 

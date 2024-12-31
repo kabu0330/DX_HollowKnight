@@ -30,10 +30,6 @@ private:
 	std::shared_ptr<class USpriteRenderer> BodyRenderer;
 	std::shared_ptr<class UEffectRenderer> EffectRenderer;
 
-	// FSM
-	UFSMStateManager FSM;
-	EKnightState NextState;
-
 	// 공격 또는 피격 동작 중일 때
 	bool bIsAttacking = false;
 	bool bIsBeingHit = false;
@@ -49,6 +45,10 @@ private:
 	void CreateSlashEffect();
 
 	void CreateRenderer();
+
+	// FSM
+	UFSMStateManager FSM;
+	EKnightState NextState;
 	void SetFSM();
 	void SetIdle(float _DeltaTime);
 	void SetRun(float _DeltaTime);

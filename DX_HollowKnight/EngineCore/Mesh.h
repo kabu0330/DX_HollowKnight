@@ -38,6 +38,5 @@ protected:
 private:
 	std::shared_ptr<UVertexBuffer> VertexBuffer;
 	std::shared_ptr<UIndexBuffer> IndexBuffer;
-
 };
 

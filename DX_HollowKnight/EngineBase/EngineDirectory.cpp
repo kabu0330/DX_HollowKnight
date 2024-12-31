@@ -7,7 +7,7 @@
 UEngineDirectory::UEngineDirectory()
 	: UEnginePath()
 {
-	// 만들어지면 현재로 
+
 }
 
 UEngineDirectory::UEngineDirectory(std::string_view _Path)
@@ -22,11 +22,9 @@ UEngineDirectory::UEngineDirectory(std::filesystem::path _Path)
 
 }
 
-
 UEngineDirectory::~UEngineDirectory()
 {
 }
-
 
 std::vector<class UEngineFile> UEngineDirectory::GetAllFile(bool _IsRecursive, std::vector<std::string> _Exts)
 {

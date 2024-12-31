@@ -41,7 +41,6 @@ void UEngineTexture::ResLoad()
 	std::wstring wLoadPath = UEngineString::AnsiToUnicode(Str.c_str());
 	std::string UpperExt = UEngineString::ToUpper(Ext.c_str());
 
-
 	if (UpperExt == ".DDS")
 	{
 		if (S_OK != DirectX::LoadFromDDSFile(wLoadPath.c_str(), DirectX::DDS_FLAGS_NONE, &Metadata, ImageData))

@@ -17,7 +17,6 @@ public:
 
 	void Tick(float _DeltaTime);
 
-
 protected:
 
 private:

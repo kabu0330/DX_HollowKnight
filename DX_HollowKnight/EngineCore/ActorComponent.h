@@ -27,14 +27,11 @@ public:
 	ENGINEAPI virtual void BeginPlay() {}
 	ENGINEAPI virtual void ComponentTick(float _DeltaTime) {};
 
-
 protected:
 
 private:
 
 	// 액터에 들어갈수 있다. 개념
-	// std::shared_ptr<class AActor> 
-	// std::weak_ptr
 	class AActor* Actor;
 };
 

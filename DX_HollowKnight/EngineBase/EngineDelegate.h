@@ -14,12 +14,6 @@ public:
 
 	ENGINEAPI  ~EngineDelegate();
 
-	// delete Function
-	//EngineDelegate(const EngineDelegate& _Other) = delete;
-	//EngineDelegate(EngineDelegate&& _Other) noexcept = delete;
-	//EngineDelegate& operator=(const EngineDelegate& _Other) = delete;
-	//EngineDelegate& operator=(EngineDelegate&& _Other) noexcept = delete;
-
 	bool IsBind()
 	{
 		return false == Functions.empty();
