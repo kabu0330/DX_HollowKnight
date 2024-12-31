@@ -39,6 +39,8 @@ private:
 	bool bIsCastingSpell = false;
 	bool bIsDeath = false;
 
+	float HitStunDuration = 1.0f;
+
 	// 쿨타임 관련
 	float AttackCooldownElapsed = 0.0f;
 
@@ -49,6 +51,7 @@ private:
 
 	void CreateRenderer();
 
+	void ChangePrevAnimation();
 
 	bool CanJump();
 	bool IsOnGround();

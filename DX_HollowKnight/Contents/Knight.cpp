@@ -104,6 +104,23 @@ bool AKnight::IsOnGround()
 	return true;
 }
 
+void AKnight::ChangeJumpAnimation()
+{
+	if (true == CanJump())
+	{
+		if (UEngineInput::IsPress('Z'))
+		{
+			bIsOnGround = false;
+			FSM.ChangeState(EKnightState::JUMP);
+			return;
+		}
+		if (UEngineInput::IsFree('Z')) // 키를 떼면 업벡터를 0로 해야함
+		{
+
+		}
+	}
+}
+
 void AKnight::InputCheck(float _DeltaTime)
 {
 	if (UEngineInput::IsPress(VK_LEFT))
@@ -146,6 +163,20 @@ void AKnight::ChangeAttackAnimation(EKnightState _PrevState)
 {
 	if (true == CanAction())
 	{
+		if (UEngineInput::IsPress('X') && UEngineInput::IsPress(VK_UP))
+		{
+			bIsAttacking = true;
+			NextState = _PrevState;
+			FSM.ChangeState(EKnightState::UP_SLASH);
+			return;
+		}
+		if (UEngineInput::IsPress('X') && UEngineInput::IsPress(VK_DOWN))
+		{
+			bIsAttacking = true;
+			NextState = _PrevState;
+			FSM.ChangeState(EKnightState::DOWN_SLASH);
+			return;
+		}
 		if (UEngineInput::IsPress('X'))
 		{
 			bIsAttacking = true;
@@ -156,18 +187,17 @@ void AKnight::ChangeAttackAnimation(EKnightState _PrevState)
 	}
 }
 
-void AKnight::ChangeJumpAnimation()
-{
-}
-
 void AKnight::SetIdle(float _DeltaTime)
 {
+	bIsOnGround = true;
+
 	if (UEngineInput::IsPress(VK_LEFT) || UEngineInput::IsPress(VK_RIGHT))
 	{
 		FSM.ChangeState(EKnightState::IDLE_TO_RUN);
 		return;
 	}
 
+	ChangeJumpAnimation();
 	ChangeAttackAnimation(EKnightState::IDLE); // 지상 공격
 }
 
@@ -179,6 +209,7 @@ void AKnight::SetRun(float _DeltaTime)
 		return;
 	}
 
+	ChangeJumpAnimation();
 	ChangeAttackAnimation(EKnightState::RUN); // 지상 공격
 }
 
@@ -188,8 +219,9 @@ void AKnight::SetIdleToRun(float _DeltaTime)
 	{
 		FSM.ChangeState(EKnightState::RUN);
 		return;
-
 	}
+
+	ChangeJumpAnimation();
 	ChangeAttackAnimation(EKnightState::RUN); // 지상 공격
 }
 
@@ -200,34 +232,54 @@ void AKnight::SetRunToIdle(float _DeltaTime)
 		FSM.ChangeState(EKnightState::IDLE);
 		return;
 	}
+
+	ChangeJumpAnimation();
 	ChangeAttackAnimation(EKnightState::RUN); // 지상 공격
 }
 
 void AKnight::SetSlash(float _DeltaTime)
 {
 	CreateSlashEffect();
+	ChangePrevAnimation();
+}
+
+void AKnight::SetUpSlash(float _DeltaTime)
+{
 	if (true == BodyRenderer->IsCurAnimationEnd())
 	{
-		//bIsAttacking = false;
 		FSM.ChangeState(NextState);
 		return;
 	}
 }
 
-void AKnight::SetUpSlash(float _DeltaTime)
-{
-}
-
 void AKnight::SetDownSlash(float _DeltaTime)
 {
+	if (true == BodyRenderer->IsCurAnimationEnd())
+	{
+		FSM.ChangeState(NextState);
+		return;
+	}
 }
 
 void AKnight::SetJump(float _DeltaTime)
 {
+	if (true == BodyRenderer->IsCurAnimationEnd())
+	{
+		FSM.ChangeState(EKnightState::AIRBORN);
+		return;
+	}
+
+	ChangeAttackAnimation(EKnightState::AIRBORN);
 }
 
 void AKnight::SetAirborn(float _DeltaTime)
 {
+	// 땅에 닿으면 땅에 닿는 모션 이후에 Idle로 전환해야 할 듯
+	if (true == BodyRenderer->IsCurAnimationEnd())
+	{
+		FSM.ChangeState(EKnightState::IDLE);
+		return;
+	}
 }
 
 void AKnight::SetDamage(float _DeltaTime)
@@ -236,6 +288,15 @@ void AKnight::SetDamage(float _DeltaTime)
 
 void AKnight::SetDeath(float _DeltaTime)
 {
+}
+
+void AKnight::ChangePrevAnimation()
+{
+	if (true == BodyRenderer->IsCurAnimationEnd())
+	{
+		FSM.ChangeState(NextState);
+		return;
+	}
 }
 
 void AKnight::CreateRenderer()
@@ -283,7 +344,7 @@ void AKnight::CreateRenderer()
 	}
 
 	std::string Jump = "Jump";
-	BodyRenderer->CreateAnimation(Jump, Jump, 0, 7, RunFrameTime);
+	BodyRenderer->CreateAnimation(Jump, Jump, 0, 7, RunFrameTime, false);
 	{
 		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(Jump);
 		Animation->IsAutoScale = true;
@@ -291,7 +352,7 @@ void AKnight::CreateRenderer()
 	}
 
 	std::string Airborn = "Airborn";
-	BodyRenderer->CreateAnimation(Airborn, Airborn, 0, 7, RunFrameTime);
+	BodyRenderer->CreateAnimation(Airborn, Airborn, 0, 2, RunFrameTime);
 	{
 		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(Airborn);
 		Animation->IsAutoScale = true;
@@ -323,15 +384,17 @@ void AKnight::CreateRenderer()
 	}
 
 	std::string Damage = "Damage";
-	BodyRenderer->CreateAnimation(Damage, Damage, 0, 6, SlashFrameTime, false);
+	BodyRenderer->CreateAnimation(Damage, Damage, 0, 0, HitStunDuration, false);
 	{
 		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(Damage);
 		Animation->IsAutoScale = true;
 		Animation->AutoScaleRatio = 1.0f;
 	}
 
+	float DeathFrameTime = 0.2f;
+
 	std::string Death = "Death";
-	BodyRenderer->CreateAnimation(Death, Death, 0, 6, SlashFrameTime, false);
+	BodyRenderer->CreateAnimation(Death, Death, 0, 12, DeathFrameTime, false);
 	{
 		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(Death);
 		Animation->IsAutoScale = true;
@@ -339,7 +402,7 @@ void AKnight::CreateRenderer()
 	}
 
 	std::string DeathDamage = "DeathDamage";
-	BodyRenderer->CreateAnimation(DeathDamage, DeathDamage, 0, 6, SlashFrameTime, false);
+	BodyRenderer->CreateAnimation(DeathDamage, DeathDamage, 0, 6, DeathFrameTime, false);
 	{
 		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(DeathDamage);
 		Animation->IsAutoScale = true;
