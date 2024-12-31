@@ -28,5 +28,7 @@ private:
 	void LoadSprite();
 	void CreateLevel();
 
+	int Select = 0;
+
 };
 

@@ -57,7 +57,7 @@ public:
 
 	ENGINEAPI void CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, std::vector<int> _Indexs, float _Frame, bool _Loop = true);
 
-	// 내가 Idle인데 Idle 바꾸라고 했다. 
+	// 애니메이션 생성 후 각 렌더러 별로 ChangeAnimation을 통해 기본 실행 애니메이션을 지정해줘야 한다.
 	ENGINEAPI void ChangeAnimation(std::string_view _AnimationName, bool _Force = false);
 
 	ENGINEAPI void SetAnimationEvent(std::string_view _AnimationName, int _Frame, std::function<void()> _Function);

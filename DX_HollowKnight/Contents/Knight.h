@@ -20,15 +20,18 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
-	bool CanAction();
-	void ChangeAttackAnimation(EKnightState _PrevState);
 	void TimeElapsed(float _DeltaTime);
+	void EndAnimationEffect();
+
+
+
+
 
 protected:
 
 private:
 	std::shared_ptr<class USpriteRenderer> BodyRenderer;
-	std::shared_ptr<class UEffectRenderer> EffectRenderer;
+	std::shared_ptr<class USpriteRenderer> EffectRenderer;
 
 	// 공격 또는 피격 동작 중일 때
 	bool bIsAttacking = false;
@@ -46,6 +49,15 @@ private:
 
 	void CreateRenderer();
 
+
+	bool CanJump();
+	bool IsOnGround();
+	bool bIsOnGround = true;
+	void ChangeJumpAnimation();
+
+	bool CanAction();
+	void ChangeAttackAnimation(EKnightState _PrevState);
+
 	// FSM
 	UFSMStateManager FSM;
 	EKnightState NextState;
@@ -54,11 +66,12 @@ private:
 	void SetRun(float _DeltaTime);
 	void SetIdleToRun(float _DeltaTime);
 	void SetRunToIdle(float _DeltaTime);
+	void SetJump(float _DeltaTime);
+	void SetAirborn(float _DeltaTime);
 	void SetSlash(float _DeltaTime);
 	void SetUpSlash(float _DeltaTime);
 	void SetDownSlash(float _DeltaTime);
-	void SetAirborn(float _DeltaTime);
-	void SetDamaged(float _DeltaTime);
+	void SetDamage(float _DeltaTime);
 	void SetDeath(float _DeltaTime);
 
 	void CheckDirection();

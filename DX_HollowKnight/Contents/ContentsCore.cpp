@@ -1,5 +1,7 @@
 #include "PreCompile.h"
 #include "ContentsCore.h"
+
+#include <EnginePlatform/EngineInput.h>
 #include <EngineCore/Level.h>
 #include <EngineCore/EngineTexture.h>
 #include <EngineCore/EngineSprite.h>
@@ -28,9 +30,32 @@ void UContentsCore::SetWindowSize(UEngineInitData& _Data)
 void UContentsCore::CreateLevel()
 {
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("Title");
-	UEngineCore::OpenLevel("Title");
 	UEngineCore::CreateLevel<APlayGameMode, AKnight>("Play");
+
 	UEngineCore::OpenLevel("Play");
+}
+
+void UContentsCore::EngineTick(float _DeltaTime)
+{
+	for (size_t i = 0; i < 4; i++)
+	{
+		if (true == UEngineInput::IsDown('1' + i))
+		{
+			Select = i + 1;
+			break;
+		}
+	}
+	
+	switch (Select)
+	{
+	case 0:
+		//UEngineCore::OpenLevel("Play");
+		break;
+	case 1:
+		//UEngineCore::OpenLevel("Title");
+	default:
+		break;
+	}
 }
 
 void UContentsCore::LoadResourceDirectory()
@@ -208,10 +233,6 @@ void UContentsCore::LoadSprite()
 {
 	UEngineSprite::CreateSpriteToMeta("Knight_Idle.png", ".smeta");
 
-}
-
-void UContentsCore::EngineTick(float _DeltaTime)
-{
 }
 
 void UContentsCore::EngineEnd()
