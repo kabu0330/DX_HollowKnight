@@ -83,13 +83,13 @@ public:
 class FVector
 {
 public:
-	static const FVector ZERO;
-	static const FVector LEFT;
-	static const FVector RIGHT;
-	static const FVector UP;
-	static const FVector DOWN;
-	static const FVector FORWARD;
-	static const FVector BACK;
+	ENGINEAPI static const FVector ZERO;
+	ENGINEAPI static const FVector LEFT;
+	ENGINEAPI static const FVector RIGHT;
+	ENGINEAPI static const FVector UP;
+	ENGINEAPI static const FVector DOWN;
+	ENGINEAPI static const FVector FORWARD;
+	ENGINEAPI static const FVector BACK;
 
 public:
 	union

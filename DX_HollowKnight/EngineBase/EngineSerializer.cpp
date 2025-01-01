@@ -20,7 +20,7 @@ void UEngineSerializer::Write(void* _Data, unsigned int _Size)
 	WriteOffset += _Size;
 }
 
-void UEngineSerializer::operator<<(ISerializObject& _Data)
+void UEngineSerializer::operator<<(ISerializeObject& _Data)
 {
 	_Data.Serialize(*this);
 }
@@ -31,7 +31,7 @@ void UEngineSerializer::Read(void* _Data, unsigned int _Size)
 	ReadOffset += _Size;
 }
 
-void UEngineSerializer::operator>>(ISerializObject& _Data)
+void UEngineSerializer::operator>>(ISerializeObject& _Data)
 {
 	_Data.DeSerialize(*this);
 }

@@ -8,14 +8,12 @@ AKnightEffect::AKnightEffect()
 
 	KnightEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
 
-	// 이동 애니메이션
 	std::string SlashEffect = "SlashEffect";
 	KnightEffectRenderer->CreateAnimation(SlashEffect, SlashEffect, 0, 5, 0.1f, false);
 	GlobalFunc::AutoScale(KnightEffectRenderer, SlashEffect);
 
 	KnightEffectRenderer->SetupAttachment(RootComponent);
 	KnightEffectRenderer->ChangeAnimation(SlashEffect);
-
 }
 
 AKnightEffect::~AKnightEffect()
@@ -62,7 +60,8 @@ void AKnightEffect::Release()
 		return;
 	}
 
-	Destroy(1.0f);
+	// Release 미구현
+	//Destroy(1.0f);
 
 }
 

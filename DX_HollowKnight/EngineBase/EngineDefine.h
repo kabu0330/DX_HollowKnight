@@ -5,5 +5,5 @@
 #ifdef USEDLL
 #define ENGINEAPI __declspec(dllexport)
 #else
-#define ENGINEAPI 
+#define ENGINEAPI __declspec(dllimport)
 #endif

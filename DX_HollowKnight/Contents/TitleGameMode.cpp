@@ -6,6 +6,7 @@
 #include <EngineCore/EngineGUIWindow.h>
 #include <EngineCore/EngineGUI.h>
 #include <EngineCore/imgui.h>
+#include "TitleScene.h"
 
 class TestWindow : public UEngineGUIWindow
 {
@@ -21,18 +22,31 @@ public:
 
 ATitleGameMode::ATitleGameMode()
 {
-	//Logo = GetWorld()->SpawnActor<ATitleLogo>();
-	//// Logo->SetActorLocation({ 300.0f, 0.0f, 0.0f });
-	//Logo->GetRenderer()->SetSpriteData(4);
-	//
-	//// 카메라를 위치조정을 무조건 해줘야 한다.
-	//std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();
-	//Camera->SetActorLocation({0.0f, 0.0f, -1000.0f, 1.0f});
+	UEngineDirectory Dir;
+	if (false == Dir.MoveParentToDirectory("ContentsResources"))
+	{
+		MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+		return;
+	}
+	Dir.Append("Image/Title/TitleBackGround");
+	UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
+
+	TitleScene = GetWorld()->SpawnActor<ATitleScene>();
+	TitleScene->SetActorLocation({ 0.0f, -450.0f, 0.0f });
+	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();
+	Camera->SetActorLocation({0.0f, 0.0f, -1000.0f, 1.0f});
+
+
 
 	//UEngineGUI::CreateGUIWindow<TestWindow>("TestWindow");
 }
 
 ATitleGameMode::~ATitleGameMode()
+{
+
+}
+
+void ATitleGameMode::BeginPlay()
 {
 
 }

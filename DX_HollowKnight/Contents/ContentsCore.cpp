@@ -7,6 +7,7 @@
 #include <EngineCore/EngineSprite.h>
 #include "TitleGameMode.h"
 #include "PlayGameMode.h"
+#include "MapEditorMode.h"
 
 // 상위 엔진 레벨에 해당 클래스를 EngineCore에 간접적인 제어권한을 가지는 컨텐츠 코어로 설정한다.
 CreateContentsCoreDefine(UContentsCore);
@@ -31,7 +32,10 @@ void UContentsCore::CreateLevel()
 {
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("Title");
 	UEngineCore::CreateLevel<APlayGameMode, AKnight>("Play");
+	UEngineCore::CreateLevel<AMapEditorMode, APawn>("MapEditor");
 
+	//UEngineCore::OpenLevel("MapEditor");
+	//UEngineCore::OpenLevel("Title");
 	UEngineCore::OpenLevel("Play");
 }
 
@@ -72,6 +76,12 @@ void UContentsCore::LoadResourceDirectory()
 	LoadContentsResource("Image/Knight/LookDownLoop");
 	LoadContentsResource("Image/Knight/LookUp");
 	LoadContentsResource("Image/Knight/LookUpLoop");
+	LoadContentsResource("Image/Knight/Dash");
+	LoadContentsResource("Image/Knight/Focus");
+	LoadContentsResource("Image/Knight/FocusGet");
+	LoadContentsResource("Image/Knight/FocusEnd");
+	LoadContentsResource("Image/Knight/FireballAntic");
+	LoadContentsResource("Image/Knight/FireballCast");
 
 	// Knight Effect
 	LoadContentsResource("Image/Effect/Knight/SlashEffect");
@@ -93,28 +103,10 @@ void UContentsCore::LoadSprite()
 
 }
 
-
 void UContentsCore::EngineTick(float _DeltaTime)
 {
-	//for (size_t i = 0; i < 4; i++)
-	//{
-	//	if (true == UEngineInput::IsDown('1' + i))
-	//	{
-	//		Select = i + 1;
-	//		break;
-	//	}
-	//}
-	//
-	//switch (Select)
-	//{
-	//case 0:
-	//	//UEngineCore::OpenLevel("Play");
-	//	break;
-	//case 1:
-	//	//UEngineCore::OpenLevel("Title");
-	//default:
-	//	break;
-	//}
+	CheckInput();
+	SwitchGameMode();
 }
 
 void UContentsCore::EngineEnd()
@@ -132,6 +124,31 @@ void UContentsCore::LoadContentsResource(std::string_view _Path)
 	}
 	Dir.Append(Path);
 	UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
+}
+
+void UContentsCore::CheckInput()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		if (true == UEngineInput::IsDown('1' + i))
+		{
+			Select = i + 1;
+			break;
+		}
+	}
+}
+
+void UContentsCore::SwitchGameMode()
+{
+	switch (Select)
+	{
+	case 0:
+	{
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 UContentsCore::UContentsCore()

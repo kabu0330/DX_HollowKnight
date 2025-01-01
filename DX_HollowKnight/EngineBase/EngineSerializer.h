@@ -50,7 +50,7 @@ public:
 		}
 	}
 
-	void operator<<(class ISerializObject& _Data);
+	void operator<<(class ISerializeObject& _Data);
 
 	template<typename DataType>
 	void operator<<(std::vector<DataType>& _vector)
@@ -95,7 +95,7 @@ public:
 		Read(&_Data[0], static_cast<int>(_Data.size()));
 	}
 
-	void operator>>(class ISerializObject& _Data);
+	void operator>>(class ISerializeObject& _Data);
 
 	template<typename DataType>
 	void operator>>(std::vector<DataType>& _vector)
@@ -139,7 +139,7 @@ private:
 	std::vector<char> Data;
 };
 
-class ISerializObject
+class ISerializeObject
 {
 public:
 	// 데이터를 직렬화(압축)

@@ -10,6 +10,9 @@
     <ClInclude Include="EngineInput.h">
       <Filter>03_Input</Filter>
     </ClInclude>
+    <ClInclude Include="EngineWinDebug.h">
+      <Filter>01_Debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -20,6 +23,9 @@
     </ClCompile>
     <ClCompile Include="EngineInput.cpp">
       <Filter>03_Input</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineWinDebug.cpp">
+      <Filter>01_Debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -104,6 +104,9 @@
       <Filter>07_Resources</Filter>
     </ClInclude>
     <ClInclude Include="EngineBlend.h" />
+    <ClInclude Include="EngineCoreDebug.h">
+      <Filter>01_Debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -197,6 +200,9 @@
       <Filter>07_Resources</Filter>
     </ClCompile>
     <ClCompile Include="EngineBlend.cpp" />
+    <ClCompile Include="EngineCoreDebug.cpp">
+      <Filter>01_Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">

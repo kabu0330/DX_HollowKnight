@@ -28,7 +28,9 @@ private:
 	void LoadSprite();
 	void CreateLevel();
 	void LoadContentsResource(std::string_view _Path);
-
+	
+	void CheckInput();
+	void SwitchGameMode();
 	int Select = 0;
 
 };

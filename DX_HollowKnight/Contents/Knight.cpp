@@ -85,6 +85,36 @@ bool AKnight::CanAction()
 	return true;
 }
 
+void AKnight::ChangeDash()
+{
+	if (false == CanAction())
+	{
+		return;
+	}
+
+	if (UEngineInput::IsDown('C'))
+	{
+		bIsDashing = true;
+		FSM.ChangeState(EKnightState::DASH);
+		return;
+	}
+}
+
+void AKnight::CastFocus()
+{
+	if (false == CanAction())
+	{
+		return;
+	}
+
+	if (UEngineInput::IsPress('A'))
+	{
+		FSM.ChangeState(EKnightState::FOCUS);
+		//FSM.ChangeState(EKnightState::FIREBALL_ANTIC);
+		return;
+	}
+}
+
 bool AKnight::CanJump()
 {
 	if (false == CanAction())
@@ -179,6 +209,14 @@ void AKnight::InputCheck(float _DeltaTime)
 	}
 }
 
+void AKnight::DebugInput()
+{
+	if (UEngineInput::IsPress('V'))
+	{
+		FSM.ChangeState(EKnightState::DEATH_DAMAGE);
+	}
+}
+
 void AKnight::CreateSlashEffect()
 {
 	if (true == bIsShowEffect)
@@ -237,6 +275,7 @@ void AKnight::ChangeAttackAnimation(EKnightState _PrevState)
 void AKnight::SetIdle(float _DeltaTime)
 {
 	bIsOnGround = true;
+	bCanRotation = true;
 
 	if (UEngineInput::IsPress(VK_LEFT) || UEngineInput::IsPress(VK_RIGHT))
 	{
@@ -244,14 +283,21 @@ void AKnight::SetIdle(float _DeltaTime)
 		return;
 	}
 
-	ChangeLookAnimation();
+	ChangeJumpAnimation();  // 점프
+	ChangeDash(); // 대시
 
-	ChangeJumpAnimation();
+	ChangeLookAnimation(); // 위 아래 쳐다보기
+
 	ChangeAttackAnimation(EKnightState::IDLE); // 지상 공격
+	CastFocus(); // 집중
+
+	DebugInput();
 }
 
 void AKnight::SetRun(float _DeltaTime)
 {
+	bCanRotation = true;
+
 	if (UEngineInput::IsFree(VK_LEFT) && UEngineInput::IsFree(VK_RIGHT))
 	{
 		FSM.ChangeState(EKnightState::RUN_TO_IDLE);
@@ -259,19 +305,27 @@ void AKnight::SetRun(float _DeltaTime)
 	}
 
 	ChangeJumpAnimation();
+	ChangeDash(); // 대시
+
 	ChangeAttackAnimation(EKnightState::RUN); // 지상 공격
 }
 
 void AKnight::SetIdleToRun(float _DeltaTime)
 {
+	bCanRotation = true;
+
 	ChangeNextAnimation(EKnightState::RUN);
 
 	ChangeJumpAnimation();
+	ChangeDash(); // 대시
+
 	ChangeAttackAnimation(EKnightState::RUN); // 지상 공격
 }
 
 void AKnight::SetRunToIdle(float _DeltaTime)
 {
+	bCanRotation = true;
+
 	ChangeNextAnimation(EKnightState::IDLE);
 
 	if (UEngineInput::IsPress(VK_LEFT) || UEngineInput::IsPress(VK_RIGHT))
@@ -281,7 +335,41 @@ void AKnight::SetRunToIdle(float _DeltaTime)
 	}
 
 	ChangeJumpAnimation();
+	ChangeDash(); // 대시
+
 	ChangeAttackAnimation(EKnightState::RUN); // 지상 공격
+}
+
+void AKnight::SetJump(float _DeltaTime)
+{
+	bCanRotation = true;
+
+	ChangeNextAnimation(EKnightState::AIRBORN);
+
+	ChangeAttackAnimation(EKnightState::AIRBORN);
+}
+
+void AKnight::SetAirborn(float _DeltaTime)
+{
+	bCanRotation = true;
+
+	ChangeNextAnimation(EKnightState::LAND);
+}
+
+void AKnight::SetLand(float _DeltaTime)
+{
+	ChangeNextAnimation(EKnightState::IDLE);
+}
+
+void AKnight::SetHardLand(float _DeltaTime)
+{
+	ChangeNextAnimation(EKnightState::IDLE);
+}
+
+void AKnight::SetDash(float _DeltaTime)
+{
+	bCanRotation = false;
+	ChangeNextAnimation(EKnightState::RUN_TO_IDLE);
 }
 
 void AKnight::SetSlash(float _DeltaTime)
@@ -300,26 +388,55 @@ void AKnight::SetDownSlash(float _DeltaTime)
 	ChangePrevAnimation();
 }
 
-void AKnight::SetJump(float _DeltaTime)
+void AKnight::SetFocus(float _DeltaTime)
 {
-	ChangeNextAnimation(EKnightState::AIRBORN);
+	//if (UEngineInput::IsFree('A'))
+	//{
+	//	ChangeNextAnimation(EKnightState::IDLE);
+	//	return;
+	//}
 
-	ChangeAttackAnimation(EKnightState::AIRBORN);
+	ChangeNextAnimation(EKnightState::FOCUS_GET);
 }
 
-void AKnight::SetAirborn(float _DeltaTime)
+void AKnight::SetFocusGet(float _DeltaTime)
 {
-	ChangeNextAnimation(EKnightState::LAND);
+	//if (UEngineInput::IsFree('A'))
+	//{
+	//	ChangeNextAnimation(EKnightState::IDLE);
+	//	return;
+	//}
+	ChangeNextAnimation(EKnightState::FOCUS_END);
 }
 
-void AKnight::SetLand(float _DeltaTime)
+void AKnight::SetFocusEnd(float _DeltaTime)
 {
-	ChangeNextAnimation(EKnightState::IDLE);
+	if (UEngineInput::IsPress('A'))
+	{
+		FSM.ChangeState(EKnightState::FOCUS);
+		return;
+	}
+	else // 스킬 시전 종료
+	{
+		ChangeNextAnimation(EKnightState::IDLE);
+	}
 }
 
-void AKnight::SetHardLand(float _DeltaTime)
+void AKnight::SetFireballAntic(float _DeltaTime)
 {
-	ChangeNextAnimation(EKnightState::IDLE);
+	ChangeNextAnimation(EKnightState::FIREBALL_CAST);
+}
+
+void AKnight::SetFireballCast(float _DeltaTime)
+{
+	if (true == bIsOnGround)
+	{
+		ChangeNextAnimation(EKnightState::IDLE);
+	}
+	else
+	{
+		ChangeNextAnimation(EKnightState::AIRBORN);
+	}
 }
 
 void AKnight::SetLookDown(float _DeltaTime)
@@ -375,18 +492,20 @@ void AKnight::SetDamage(float _DeltaTime)
 	// 이펙트 출력
 }
 
-void AKnight::SetDeath(float _DeltaTime)
-{
-	ChangeNextAnimation(EKnightState::DEATH_DAMAGE);
-}
-
 void AKnight::SetDeathDamage(float _DeltaTime)
 {
+	ChangeNextAnimation(EKnightState::DEATH);
+}
+
+void AKnight::SetDeath(float _DeltaTime)
+{
 	ChangeNextAnimation(EKnightState::DEATH_HEAD);
+	
 }
 
 void AKnight::SetDeathHead(float _DeltaTime)
 {
+	ChangeNextAnimation(EKnightState::IDLE);
 }
 
 void AKnight::CreateRenderer()
@@ -417,6 +536,10 @@ void AKnight::CreateRenderer()
 	std::string IdleToRun = "IdleToRun";
 	BodyRenderer->CreateAnimation(IdleToRun, IdleToRun, 0, 4, ChangeFrameTime, false);
 	GlobalFunc::AutoScale(BodyRenderer, IdleToRun);
+
+	std::string Dash = "Dash";
+	BodyRenderer->CreateAnimation(Dash, Dash, 0, 6, SlashFrameTime, false);
+	GlobalFunc::AutoScale(BodyRenderer, Dash);
 
 	std::string Jump = "Jump";
 	BodyRenderer->CreateAnimation(Jump, Jump, 0, 7, RunFrameTime, false);
@@ -467,15 +590,38 @@ void AKnight::CreateRenderer()
 	BodyRenderer->CreateAnimation(DownSlash, DownSlash, 0, 6, SlashFrameTime, false);
 	GlobalFunc::AutoScale(BodyRenderer, DownSlash);
 
+	// 스펠 애니메이션
+	std::string Focus = "Focus";
+	BodyRenderer->CreateAnimation(Focus, Focus, 0, 6, RunFrameTime, false);
+	GlobalFunc::AutoScale(BodyRenderer, Focus);
+
+	std::string FocusGet = "FocusGet";
+	BodyRenderer->CreateAnimation(FocusGet, FocusGet, 0, 10, RunFrameTime, false);
+	GlobalFunc::AutoScale(BodyRenderer, FocusGet);
+
+	std::string FocusEnd = "FocusEnd";
+	BodyRenderer->CreateAnimation(FocusEnd, FocusEnd, 0, 2, RunFrameTime, false);
+	GlobalFunc::AutoScale(BodyRenderer, FocusEnd);
+
+	std::string FireballAntic = "FireballAntic";
+	BodyRenderer->CreateAnimation(FireballAntic, FireballAntic, 0, 2, RunFrameTime, false);
+	GlobalFunc::AutoScale(BodyRenderer, FireballAntic);
+
+	std::string FireballCast = "FireballCast";
+	BodyRenderer->CreateAnimation(FireballCast, FireballCast, 0, 5, RunFrameTime, false);
+	GlobalFunc::AutoScale(BodyRenderer, FireballCast);
+
+
+	// 피격 애니메이션
 	std::string Damage = "Damage";
 	BodyRenderer->CreateAnimation(Damage, Damage, 0, 0, HitStunDuration, false);
 	GlobalFunc::AutoScale(BodyRenderer, Damage);
 
 
-	float DeathFrameTime = 0.2f;
-
+	// 사망 애니메이션
+	float DeathFrameTime = 0.1f;
 	std::string DeathDamage = "DeathDamage";
-	BodyRenderer->CreateAnimation(DeathDamage, DeathDamage, 0, 6, DeathFrameTime, false);
+	BodyRenderer->CreateAnimation(DeathDamage, DeathDamage, 0, 4, DeathFrameTime, false);
 	GlobalFunc::AutoScale(BodyRenderer, DeathDamage);
 
 	std::string Death = "Death";
@@ -483,7 +629,7 @@ void AKnight::CreateRenderer()
 	GlobalFunc::AutoScale(BodyRenderer, Death);
 
 	std::string DeathHead = "DeathHead";
-	BodyRenderer->CreateAnimation(DeathHead, DeathHead, 0, 0, DeathFrameTime, false);
+	BodyRenderer->CreateAnimation(DeathHead, DeathHead, 0, 0, 1.0f, false);
 	GlobalFunc::AutoScale(BodyRenderer, DeathHead);
 
 	BodyRenderer->SetupAttachment(RootComponent);
@@ -496,6 +642,7 @@ void AKnight::SetFSM()
 	CreateState(EKnightState::RUN, &AKnight::SetRun, "Run");
 	CreateState(EKnightState::RUN_TO_IDLE, &AKnight::SetRunToIdle, "RunToIdle");
 	CreateState(EKnightState::IDLE_TO_RUN, &AKnight::SetIdleToRun, "IdleToRun");
+	CreateState(EKnightState::DASH, &AKnight::SetDash, "Dash");
 	CreateState(EKnightState::JUMP, &AKnight::SetJump, "Jump");
 	CreateState(EKnightState::AIRBORN, &AKnight::SetAirborn, "Airborn");
 	CreateState(EKnightState::LAND, &AKnight::SetLand, "Land");
@@ -508,12 +655,22 @@ void AKnight::SetFSM()
 	CreateState(EKnightState::LOOK_UP_LOOP, &AKnight::SetLookUpLoop, "LookUpLoop");
 
 	// 전투 애니메이션
+	// 일반공격
 	CreateState(EKnightState::SLASH, &AKnight::SetSlash, "Slash");
 	CreateState(EKnightState::UP_SLASH, &AKnight::SetUpSlash, "UpSlash");
 	CreateState(EKnightState::DOWN_SLASH, &AKnight::SetDownSlash, "DownSlash");
 
+	// 스펠
+	CreateState(EKnightState::FOCUS, &AKnight::SetFocus, "Focus");
+	CreateState(EKnightState::FOCUS_GET, &AKnight::SetFocusGet, "FocusGet");
+	CreateState(EKnightState::FOCUS_END, &AKnight::SetFocusEnd, "FocusEnd");
+	CreateState(EKnightState::FIREBALL_ANTIC, &AKnight::SetFireballAntic, "FireballAntic");
+	CreateState(EKnightState::FIREBALL_CAST, &AKnight::SetFireballCast, "FireballCast");
+
+	// 피격
 	CreateState(EKnightState::DAMAGED, &AKnight::SetDamage, "Damage");
 
+	// 사망
 	CreateState(EKnightState::DEATH, &AKnight::SetDeath, "Death");
 	CreateState(EKnightState::DEATH_DAMAGE, &AKnight::SetDeathDamage, "DeathDamage");
 	CreateState(EKnightState::DEATH_HEAD, &AKnight::SetDeathHead, "DeathHead");
@@ -534,6 +691,10 @@ void AKnight::CreateState(EKnightState _State, StateCallback _Callback, std::str
 void AKnight::CheckDirection()
 {
 	if (false == CanAction()) 
+	{
+		return;
+	}
+	if (false == bCanRotation)
 	{
 		return;
 	}

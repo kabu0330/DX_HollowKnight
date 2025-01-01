@@ -177,6 +177,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="EngineCoreDebug.h" />
     <ClInclude Include="EngineGraphicDevice.h" />
     <ClInclude Include="EngineGUI.h" />
     <ClInclude Include="EngineGUIWindow.h" />
@@ -217,6 +218,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="EngineCoreDebug.cpp" />
     <ClCompile Include="EngineGraphicDevice.cpp" />
     <ClCompile Include="EngineGraphicDevice_Resources.cpp" />
     <ClCompile Include="EngineGUI.cpp" />

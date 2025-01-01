@@ -168,6 +168,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="EngineInput.h" />
+    <ClInclude Include="EngineWinDebug.h" />
     <ClInclude Include="EngineWindow.h">
       <SubType>
       </SubType>
@@ -176,6 +177,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineInput.cpp" />
+    <ClCompile Include="EngineWinDebug.cpp" />
     <ClCompile Include="EngineWindow.cpp">
       <SubType>
       </SubType>

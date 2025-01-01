@@ -37,23 +37,29 @@ private:
 
 	float HitStunDuration = 1.0f;
 
-	// 쿨타임 관련
-	float AttackCooldownElapsed = 0.0f;
 
 private:
 	void InputCheck(float _DeltaTime);
+	void DebugInput();
 
-	void CreateSlashEffect();
 	bool bIsShowEffect = false;
+	float AttackCooldownElapsed = 0.0f;
+	void CreateSlashEffect();
 
 	void CreateRenderer();
 
+	bool CanAction();
+	
+	bool bIsDashing = false;
+	bool bCanRotation = true; // 방향전환 여부, 대시 중에는 불가
+	float DashCooldownElapsed = 0.0f;
+	void ChangeDash();
+
+	void CastFocus();
 
 	bool bIsOnGround = true;
 	bool CanJump();
 	bool IsOnGround();
-
-	bool CanAction();
 
 	// Animation
 	void ChangeNextAnimation(EKnightState _NextState);
@@ -75,6 +81,7 @@ private:
 	void SetRun(float _DeltaTime);
 	void SetIdleToRun(float _DeltaTime);
 	void SetRunToIdle(float _DeltaTime);
+	void SetDash(float _DeltaTime);
 	void SetJump(float _DeltaTime);
 	void SetAirborn(float _DeltaTime);
 	void SetLand(float _DeltaTime);
@@ -88,6 +95,12 @@ private:
 	void SetSlash(float _DeltaTime);
 	void SetUpSlash(float _DeltaTime);
 	void SetDownSlash(float _DeltaTime);
+
+	void SetFocus(float _DeltaTime);
+	void SetFocusGet(float _DeltaTime);
+	void SetFocusEnd(float _DeltaTime);
+	void SetFireballAntic(float _DeltaTime);
+	void SetFireballCast(float _DeltaTime);
 
 	void SetDamage(float _DeltaTime);
 	void SetDeath(float _DeltaTime);
