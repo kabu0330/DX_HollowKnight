@@ -1,5 +1,17 @@
 #pragma once
 #include <EngineBase/EngineMath.h>
+#include <EngineCore/SpriteRenderer.h>
+
+class GlobalFunc
+{
+public:
+	static void AutoScale(std::shared_ptr<USpriteRenderer> _Renderer, std::string_view _AnimationName)
+	{
+		USpriteRenderer::FrameAnimation* Animation = _Renderer->FindAnimation(_AnimationName);
+		Animation->IsAutoScale = true;
+		Animation->AutoScaleRatio = 1.0f;
+	}
+};
 
 enum class EKnightState
 {

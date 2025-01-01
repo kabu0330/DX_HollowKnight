@@ -35,29 +35,6 @@ void UContentsCore::CreateLevel()
 	UEngineCore::OpenLevel("Play");
 }
 
-void UContentsCore::EngineTick(float _DeltaTime)
-{
-	for (size_t i = 0; i < 4; i++)
-	{
-		if (true == UEngineInput::IsDown('1' + i))
-		{
-			Select = i + 1;
-			break;
-		}
-	}
-	
-	switch (Select)
-	{
-	case 0:
-		//UEngineCore::OpenLevel("Play");
-		break;
-	case 1:
-		//UEngineCore::OpenLevel("Title");
-	default:
-		break;
-	}
-}
-
 void UContentsCore::LoadResourceDirectory()
 {
 	{
@@ -77,218 +54,29 @@ void UContentsCore::LoadResourceDirectory()
 	}
 
 	// Knight
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/Run");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/Jump");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/RunToIdle");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/IdleToRun");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/Slash");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/UpSlash");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/DownSlash");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/Damage");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/Death");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/DeathDamage");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/Airborn");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/Land");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/DeathHead");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/HardLand");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/LookDown");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/LookDownLoop");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/LookUp");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Knight/LookUpLoop");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
+	LoadContentsResource("Image/Knight/Run");
+	LoadContentsResource("Image/Knight/Jump");
+	LoadContentsResource("Image/Knight/RunToIdle");
+	LoadContentsResource("Image/Knight/IdleToRun");
+	LoadContentsResource("Image/Knight/Slash");
+	LoadContentsResource("Image/Knight/UpSlash");
+	LoadContentsResource("Image/Knight/DownSlash");
+	LoadContentsResource("Image/Knight/Damage");
+	LoadContentsResource("Image/Knight/Death");
+	LoadContentsResource("Image/Knight/DeathDamage");
+	LoadContentsResource("Image/Knight/DeathHead");
+	LoadContentsResource("Image/Knight/Airborn");
+	LoadContentsResource("Image/Knight/Land");
+	LoadContentsResource("Image/Knight/HardLand");
+	LoadContentsResource("Image/Knight/LookDown");
+	LoadContentsResource("Image/Knight/LookDownLoop");
+	LoadContentsResource("Image/Knight/LookUp");
+	LoadContentsResource("Image/Knight/LookUpLoop");
 
 	// Knight Effect
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Effect/Knight/SlashEffect");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Effect/Knight/UpSlashEffect");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image/Effect/Knight/DownSlashEffect");
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
+	LoadContentsResource("Image/Effect/Knight/SlashEffect");
+	LoadContentsResource("Image/Effect/Knight/UpSlashEffect");
+	LoadContentsResource("Image/Effect/Knight/DownSlashEffect");
 }
 
 void UContentsCore::LoadFolder()
@@ -305,8 +93,45 @@ void UContentsCore::LoadSprite()
 
 }
 
+
+void UContentsCore::EngineTick(float _DeltaTime)
+{
+	//for (size_t i = 0; i < 4; i++)
+	//{
+	//	if (true == UEngineInput::IsDown('1' + i))
+	//	{
+	//		Select = i + 1;
+	//		break;
+	//	}
+	//}
+	//
+	//switch (Select)
+	//{
+	//case 0:
+	//	//UEngineCore::OpenLevel("Play");
+	//	break;
+	//case 1:
+	//	//UEngineCore::OpenLevel("Title");
+	//default:
+	//	break;
+	//}
+}
+
 void UContentsCore::EngineEnd()
 {
+}
+
+void UContentsCore::LoadContentsResource(std::string_view _Path)
+{
+	std::string Path = _Path.data();
+	UEngineDirectory Dir;
+	if (false == Dir.MoveParentToDirectory("ContentsResources"))
+	{
+		MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+		return;
+	}
+	Dir.Append(Path);
+	UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
 }
 
 UContentsCore::UContentsCore()

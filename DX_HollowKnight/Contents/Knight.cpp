@@ -131,7 +131,6 @@ void AKnight::ChangeNonCombatAnimation()
 	{
 		return;
 	}
-
 }
 
 void AKnight::ChangeLookAnimation()
@@ -259,6 +258,12 @@ void AKnight::SetRunToIdle(float _DeltaTime)
 {
 	ChangeNextAnimation(EKnightState::IDLE);
 
+	if (UEngineInput::IsPress(VK_LEFT) || UEngineInput::IsPress(VK_RIGHT))
+	{
+		FSM.ChangeState(EKnightState::IDLE_TO_RUN);
+		return;
+	}
+
 	ChangeJumpAnimation();
 	ChangeAttackAnimation(EKnightState::RUN); // 지상 공격
 }
@@ -383,289 +388,135 @@ void AKnight::CreateRenderer()
 	// 이동 애니메이션
 	std::string Idle = "Idle";
 	BodyRenderer->CreateAnimation(Idle, "Knight_Idle.png", 0, 8, IdleFrameTime);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(Idle);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, Idle);
 
 	std::string Run = "Run";
 	BodyRenderer->CreateAnimation(Run, Run, 0, 7, RunFrameTime);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(Run);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, Run);
 
 	std::string RunToIdle = "RunToIdle";
 	BodyRenderer->CreateAnimation(RunToIdle, RunToIdle, 0, 5, ChangeFrameTime, false);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(RunToIdle);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, RunToIdle);
 
 	std::string IdleToRun = "IdleToRun";
 	BodyRenderer->CreateAnimation(IdleToRun, IdleToRun, 0, 4, ChangeFrameTime, false);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(IdleToRun);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, IdleToRun);
 
 	std::string Jump = "Jump";
 	BodyRenderer->CreateAnimation(Jump, Jump, 0, 7, RunFrameTime, false);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(Jump);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, Jump);
 
 	std::string Airborn = "Airborn";
 	BodyRenderer->CreateAnimation(Airborn, Airborn, 0, 2, RunFrameTime);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(Airborn);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, Airborn);
+
 	std::string Land = "Land";
 	BodyRenderer->CreateAnimation(Land, Land, 0, 2, RunFrameTime);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(Land);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, Land);
 
 	std::string HardLand = "HardLand";
 	BodyRenderer->CreateAnimation(HardLand, HardLand, 0, 9, RunFrameTime, false);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(HardLand);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, HardLand);
+
 
 	// 정적 애니메이션
-	float StaticFrameTime = 0.2f;
+	float StaticFrameTime = 0.15f;
 	std::string LookDown = "LookDown";
 	BodyRenderer->CreateAnimation(LookDown, LookDown, 0, 5, StaticFrameTime, false);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(LookDown);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, LookDown);
+
 	std::string LookDownLoop = "LookDownLoop";
 	BodyRenderer->CreateAnimation(LookDownLoop, LookDownLoop, 0, 4, IdleFrameTime);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(LookDownLoop);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, LookDownLoop);
 
 	std::string LookUp = "LookUp";
 	BodyRenderer->CreateAnimation(LookUp, LookUp, 0, 5, StaticFrameTime, false);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(LookUp);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, LookUp);
+
 	std::string LookUpLoop = "LookUpLoop";
 	BodyRenderer->CreateAnimation(LookUpLoop, LookUpLoop, 0, 4, IdleFrameTime);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(LookUpLoop);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
-
+	GlobalFunc::AutoScale(BodyRenderer, LookUpLoop);
 
 	// 전투 애니메이션
 	std::string Slash = "Slash";
 	BodyRenderer->CreateAnimation(Slash, Slash, 0, 6, SlashFrameTime, false);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(Slash);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, Slash);
 
 	std::string UpSlash = "UpSlash";
 	BodyRenderer->CreateAnimation(UpSlash, UpSlash, 0, 6, SlashFrameTime, false);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(UpSlash);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, UpSlash);
 
 	std::string DownSlash = "DownSlash";
 	BodyRenderer->CreateAnimation(DownSlash, DownSlash, 0, 6, SlashFrameTime, false);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(DownSlash);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, DownSlash);
 
 	std::string Damage = "Damage";
 	BodyRenderer->CreateAnimation(Damage, Damage, 0, 0, HitStunDuration, false);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(Damage);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, Damage);
+
 
 	float DeathFrameTime = 0.2f;
 
 	std::string DeathDamage = "DeathDamage";
 	BodyRenderer->CreateAnimation(DeathDamage, DeathDamage, 0, 6, DeathFrameTime, false);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(DeathDamage);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, DeathDamage);
 
 	std::string Death = "Death";
 	BodyRenderer->CreateAnimation(Death, Death, 0, 12, DeathFrameTime, false);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(Death);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, Death);
 
 	std::string DeathHead = "DeathHead";
 	BodyRenderer->CreateAnimation(DeathHead, DeathHead, 0, 0, DeathFrameTime, false);
-	{
-		USpriteRenderer::FrameAnimation* Animation = BodyRenderer->FindAnimation(DeathHead);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	GlobalFunc::AutoScale(BodyRenderer, DeathHead);
 
 	BodyRenderer->SetupAttachment(RootComponent);
 }
 
 void AKnight::SetFSM()
 {
-	FSM.CreateState(EKnightState::IDLE, std::bind(&AKnight::SetIdle, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("Idle");
-		}
-	);
-	FSM.CreateState(EKnightState::RUN, std::bind(&AKnight::SetRun, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("Run");
-		}
-	);
-	FSM.CreateState(EKnightState::RUN_TO_IDLE, std::bind(&AKnight::SetRunToIdle, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("RunToIdle");
-		}
-	);
-	FSM.CreateState(EKnightState::IDLE_TO_RUN, std::bind(&AKnight::SetIdleToRun, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("IdleToRun");
-		}
-	);
-	FSM.CreateState(EKnightState::JUMP, std::bind(&AKnight::SetJump, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("Jump");
-		}
-	);
-	FSM.CreateState(EKnightState::AIRBORN, std::bind(&AKnight::SetAirborn, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("Airborn");
-		}
-	);
-	FSM.CreateState(EKnightState::LAND, std::bind(&AKnight::SetLand, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("Land");
-		}
-	);
-	FSM.CreateState(EKnightState::HARD_LAND, std::bind(&AKnight::SetHardLand, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("HardLand");
-		}
-	);
+	// 이동 애니메이션
+	CreateState(EKnightState::IDLE, &AKnight::SetIdle, "Idle");
+	CreateState(EKnightState::RUN, &AKnight::SetRun, "Run");
+	CreateState(EKnightState::RUN_TO_IDLE, &AKnight::SetRunToIdle, "RunToIdle");
+	CreateState(EKnightState::IDLE_TO_RUN, &AKnight::SetIdleToRun, "IdleToRun");
+	CreateState(EKnightState::JUMP, &AKnight::SetJump, "Jump");
+	CreateState(EKnightState::AIRBORN, &AKnight::SetAirborn, "Airborn");
+	CreateState(EKnightState::LAND, &AKnight::SetLand, "Land");
+	CreateState(EKnightState::HARD_LAND, &AKnight::SetHardLand, "HardLand");
 
 	// 정적 애니메이션
-	FSM.CreateState(EKnightState::LOOK_DOWN, std::bind(&AKnight::SetLookDown, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("LookDown");
-		}
-	);
-	FSM.CreateState(EKnightState::LOOK_DOWN_LOOP, std::bind(&AKnight::SetLookDownLoop, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("LookDownLoop");
-		}
-	);
-	FSM.CreateState(EKnightState::LOOK_UP, std::bind(&AKnight::SetLookUp, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("LookUp");
-		}
-	);
-	FSM.CreateState(EKnightState::LOOK_UP_LOOP, std::bind(&AKnight::SetLookUpLoop, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("LookUpLoop");
-		}
-	);
+	CreateState(EKnightState::LOOK_DOWN, &AKnight::SetLookDown, "LookDown");
+	CreateState(EKnightState::LOOK_DOWN_LOOP, &AKnight::SetLookDownLoop, "LookDownLoop");
+	CreateState(EKnightState::LOOK_UP, &AKnight::SetLookUp, "LookUp");
+	CreateState(EKnightState::LOOK_UP_LOOP, &AKnight::SetLookUpLoop, "LookUpLoop");
 
 	// 전투 애니메이션
-	FSM.CreateState(EKnightState::SLASH, std::bind(&AKnight::SetSlash, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("Slash");
-		}
-	);
-	FSM.CreateState(EKnightState::UP_SLASH, std::bind(&AKnight::SetUpSlash, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("UpSlash");
-		}
-	);
-	FSM.CreateState(EKnightState::DOWN_SLASH, std::bind(&AKnight::SetDownSlash, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("DownSlash");
-		}
-	);
-	FSM.CreateState(EKnightState::DAMAGED, std::bind(&AKnight::SetDamage, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("Damage");
-		}
-	);
-	FSM.CreateState(EKnightState::DEATH, std::bind(&AKnight::SetDeath, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("Death");
-		}
-	);
-	FSM.CreateState(EKnightState::DEATH_DAMAGE, std::bind(&AKnight::SetDeathDamage, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("DeathDamage");
-		}
-	);
-	FSM.CreateState(EKnightState::DEATH_HEAD, std::bind(&AKnight::SetDeathHead, this, std::placeholders::_1),
-		[this]()
-		{
-			BodyRenderer->ChangeAnimation("DeathHead");
-		}
-	);
+	CreateState(EKnightState::SLASH, &AKnight::SetSlash, "Slash");
+	CreateState(EKnightState::UP_SLASH, &AKnight::SetUpSlash, "UpSlash");
+	CreateState(EKnightState::DOWN_SLASH, &AKnight::SetDownSlash, "DownSlash");
+
+	CreateState(EKnightState::DAMAGED, &AKnight::SetDamage, "Damage");
+
+	CreateState(EKnightState::DEATH, &AKnight::SetDeath, "Death");
+	CreateState(EKnightState::DEATH_DAMAGE, &AKnight::SetDeathDamage, "DeathDamage");
+	CreateState(EKnightState::DEATH_HEAD, &AKnight::SetDeathHead, "DeathHead");
 
 	FSM.ChangeState(EKnightState::IDLE);
 }
 
+void AKnight::CreateState(EKnightState _State, StateCallback _CallbackFunc, std::string_view _AnimationName)
+{
+	FSM.CreateState(_State, std::bind(_CallbackFunc, this, std::placeholders::_1),
+		[this, _AnimationName]()
+		{
+			std::string AnimationName = _AnimationName.data();
+			BodyRenderer->ChangeAnimation(AnimationName);
+		} );
+}
+
 void AKnight::CheckDirection()
 {
-	if (false == CanAction())
+	if (false == CanAction()) 
 	{
 		return;
 	}

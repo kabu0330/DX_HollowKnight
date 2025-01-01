@@ -23,10 +23,6 @@ public:
 	void TimeElapsed(float _DeltaTime);
 	void EndAnimationEffect();
 
-
-
-
-
 protected:
 
 private:
@@ -68,9 +64,12 @@ private:
 	void ChangeLookAnimation();
 
 	// FSM
+	using StateCallback = void(AKnight::*)(float);
+
 	UFSMStateManager FSM;
 	EKnightState NextState;
 	void SetFSM();
+	void CreateState(EKnightState _State, StateCallback _CallbackFunc, std::string_view _AnimationName);
 	void SetIdle(float _DeltaTime);
 	void SetRun(float _DeltaTime);
 	void SetIdleToRun(float _DeltaTime);

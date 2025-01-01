@@ -27,6 +27,7 @@ private:
 	void LoadFolder();
 	void LoadSprite();
 	void CreateLevel();
+	void LoadContentsResource(std::string_view _Path);
 
 	int Select = 0;
 

@@ -168,15 +168,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ContentsCore.h" />
-    <ClInclude Include="EffectRenderer.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="Global.h">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="Knight.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="KnightEffect.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -190,15 +190,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp" />
-    <ClCompile Include="EffectRenderer.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
     <ClCompile Include="Global.cpp">
       <SubType>
       </SubType>
     </ClCompile>
     <ClCompile Include="Knight.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="KnightEffect.cpp">
       <SubType>
       </SubType>
     </ClCompile>
