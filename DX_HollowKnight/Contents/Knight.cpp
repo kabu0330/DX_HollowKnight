@@ -6,6 +6,8 @@
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/DefaultSceneComponent.h>
 
+#include "KnightEffect.h"
+
 AKnight::AKnight()
 {
 	CreateRenderer();
@@ -26,7 +28,7 @@ void AKnight::Tick(float _DeltaTime)
 	FSM.Update(_DeltaTime);
 	TimeElapsed(_DeltaTime);
 	EndAnimationEffect();
-	//InputCheck(_DeltaTime);
+	InputCheck(_DeltaTime);
 }
 
 void AKnight::TimeElapsed(float _DeltaTime)
@@ -36,11 +38,12 @@ void AKnight::TimeElapsed(float _DeltaTime)
 	if (true == bIsAttacking)
 	{
 		AttackCooldownElapsed += _DeltaTime;
-	}
-	if (AttackCooldownElapsed >= AttackCooldown)
-	{
-		bIsAttacking = false;
-		AttackCooldownElapsed = 0.0f;
+		if (AttackCooldownElapsed >= AttackCooldown)
+		{
+			bIsAttacking = false;
+			bIsShowEffect = false;
+			AttackCooldownElapsed = 0.0f;
+		}
 	}
 }
 
@@ -170,24 +173,37 @@ void AKnight::InputCheck(float _DeltaTime)
 	{
 		AddRelativeLocation(FVector{ 1000.0f * _DeltaTime, 0.0f, 0.0f });
 	}
+	if (UEngineInput::IsFree('X'))
+	{
+
+	}
 }
 
 void AKnight::CreateSlashEffect()
 {
-	float SlashFrameTime = 0.1f;
-
-	EffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	std::string SlashEffect = "SlashEffect";
-	EffectRenderer->CreateAnimation(SlashEffect, SlashEffect, 0, 5, SlashFrameTime, false);
+	if (true == bIsShowEffect)
 	{
-		USpriteRenderer::FrameAnimation* Animation = EffectRenderer->FindAnimation(SlashEffect);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
+		return;
 	}
-	EffectRenderer->ChangeAnimation(SlashEffect);
-	EffectRenderer->SetActive(true);
 
-	EffectRenderer->SetupAttachment(RootComponent);
+	std::shared_ptr<AKnightEffect> SlashEffect = GetWorld()->SpawnActor<AKnightEffect>();
+	SlashEffect->ChangeEffect("SlashEffect");
+
+	FVector Pos = RootComponent->GetTransformRef().RelativeLocation;
+	FVector LRPos = FVector{ -100.0f, 0.0f, 0.0f };
+	if (true == bLeftDir)
+	{
+		LRPos += Pos;
+	}
+	else
+	{
+		LRPos -= Pos;
+	}
+	
+	SlashEffect->SetLocation(LRPos, bLeftDir);
+
+	bIsShowEffect = true;
+	return;
 }
 
 void AKnight::ChangeAttackAnimation(EKnightState _PrevState)
@@ -437,6 +453,7 @@ void AKnight::CreateRenderer()
 	BodyRenderer->CreateAnimation(LookUpLoop, LookUpLoop, 0, 4, IdleFrameTime);
 	GlobalFunc::AutoScale(BodyRenderer, LookUpLoop);
 
+
 	// 전투 애니메이션
 	std::string Slash = "Slash";
 	BodyRenderer->CreateAnimation(Slash, Slash, 0, 6, SlashFrameTime, false);
@@ -504,9 +521,9 @@ void AKnight::SetFSM()
 	FSM.ChangeState(EKnightState::IDLE);
 }
 
-void AKnight::CreateState(EKnightState _State, StateCallback _CallbackFunc, std::string_view _AnimationName)
+void AKnight::CreateState(EKnightState _State, StateCallback _Callback, std::string_view _AnimationName)
 {
-	FSM.CreateState(_State, std::bind(_CallbackFunc, this, std::placeholders::_1),
+	FSM.CreateState(_State, std::bind(_Callback, this, std::placeholders::_1),
 		[this, _AnimationName]()
 		{
 			std::string AnimationName = _AnimationName.data();
@@ -522,10 +539,12 @@ void AKnight::CheckDirection()
 	}
 	if (UEngineInput::IsPress(VK_LEFT))
 	{
+		bLeftDir = true;
 		BodyRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
 	}
 	if (UEngineInput::IsPress(VK_RIGHT))
 	{
+		bLeftDir = false;
 		BodyRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
 	}
 }

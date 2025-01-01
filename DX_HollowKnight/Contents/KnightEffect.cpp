@@ -6,18 +6,16 @@ AKnightEffect::AKnightEffect()
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
-	EffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	KnightEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
 
 	// 이동 애니메이션
 	std::string SlashEffect = "SlashEffect";
-	EffectRenderer->CreateAnimation(SlashEffect, SlashEffect, 0, 8, 0.1f);
-	{
-		USpriteRenderer::FrameAnimation* Animation = EffectRenderer->FindAnimation(SlashEffect);
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 1.0f;
-	}
+	KnightEffectRenderer->CreateAnimation(SlashEffect, SlashEffect, 0, 5, 0.1f, false);
+	GlobalFunc::AutoScale(KnightEffectRenderer, SlashEffect);
 
-	EffectRenderer->SetupAttachment(RootComponent);
+	KnightEffectRenderer->SetupAttachment(RootComponent);
+	KnightEffectRenderer->ChangeAnimation(SlashEffect);
+
 }
 
 AKnightEffect::~AKnightEffect()
@@ -32,10 +30,41 @@ void AKnightEffect::BeginPlay()
 void AKnightEffect::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
-
+	Release();
 }
 
 void AKnightEffect::ChangeEffect(std::string_view _AnimationName)
 {
+	KnightEffectRenderer->ChangeAnimation(_AnimationName);
 }
+
+void AKnightEffect::SetLocation(FVector _Pos, bool _Left)
+{
+
+	if (true == _Left)
+	{
+		KnightEffectRenderer->SetRelativeLocation(_Pos);
+		KnightEffectRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
+		return;
+	}
+	else
+	{
+		KnightEffectRenderer->SetRelativeLocation(-_Pos);
+		KnightEffectRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
+		return;
+	}
+}
+
+void AKnightEffect::Release()
+{
+	if (nullptr == KnightEffectRenderer)
+	{
+		return;
+	}
+
+	Destroy(1.0f);
+
+}
+
+
 

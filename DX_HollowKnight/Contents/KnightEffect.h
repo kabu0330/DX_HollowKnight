@@ -17,11 +17,14 @@ public:
 
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
+
 	void ChangeEffect(std::string_view _AnimationName);
+	void SetLocation(FVector _Pos, bool _Left = true);
+	void Release();
 
 protected:
 
 private:
-	std::shared_ptr<class USpriteRenderer> EffectRenderer;
+	std::shared_ptr<class USpriteRenderer> KnightEffectRenderer;
 };
 

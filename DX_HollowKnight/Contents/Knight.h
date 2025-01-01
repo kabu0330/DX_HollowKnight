@@ -44,6 +44,7 @@ private:
 	void InputCheck(float _DeltaTime);
 
 	void CreateSlashEffect();
+	bool bIsShowEffect = false;
 
 	void CreateRenderer();
 
@@ -65,11 +66,11 @@ private:
 
 	// FSM
 	using StateCallback = void(AKnight::*)(float);
+	void CreateState(EKnightState _State, StateCallback _Callback, std::string_view _AnimationName);
 
 	UFSMStateManager FSM;
 	EKnightState NextState;
 	void SetFSM();
-	void CreateState(EKnightState _State, StateCallback _CallbackFunc, std::string_view _AnimationName);
 	void SetIdle(float _DeltaTime);
 	void SetRun(float _DeltaTime);
 	void SetIdleToRun(float _DeltaTime);
@@ -94,5 +95,6 @@ private:
 	void SetDeathHead(float _DeltaTime);
 
 	void CheckDirection();
+	bool bLeftDir = true;
 };
 
