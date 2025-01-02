@@ -193,14 +193,27 @@ void AKnight::ChangeLookAnimation()
 
 	if (UEngineInput::IsPress(VK_DOWN))
 	{
-		FSM.ChangeState(EKnightState::LOOK_DOWN);
-		return;
+
+		float PressTime = UEngineInput::IsPressTime(VK_DOWN);
+		float TriggerTime = 0.5f;
+
+		if (PressTime >= TriggerTime)
+		{
+			FSM.ChangeState(EKnightState::LOOK_DOWN);
+			return;
+		}
 	}
-	if (UEngineInput::IsPress(VK_UP))
-	{
-		FSM.ChangeState(EKnightState::LOOK_UP);
-		return;
-	}
+	//if (UEngineInput::IsPress(VK_UP))
+	//{
+	//	float PressTime = UEngineInput::IsPressTime(VK_UP);
+	//	float TriggerTime = 0.5f;
+
+	//	if (PressTime >= TriggerTime)
+	//	{
+	//		FSM.ChangeState(EKnightState::LOOK_UP);
+	//		return;
+	//	}
+	//}
 }
 
 void AKnight::InputCheck(float _DeltaTime)
@@ -244,22 +257,41 @@ void AKnight::CreateSlashEffect()
 
 	std::shared_ptr<AKnightEffect> SlashEffect = GetWorld()->SpawnActor<AKnightEffect>();
 	SlashEffect->ChangeEffect("SlashEffect");
-
-	FVector Pos = RootComponent->GetTransformRef().RelativeLocation;
 	FVector LRPos = FVector{ -100.0f, 0.0f, 0.0f };
-	if (true == bLeftDir)
-	{
-		LRPos += Pos;
-	}
-	else
-	{
-		LRPos -= Pos;
-	}
-	
-	SlashEffect->SetLocation(LRPos, bLeftDir);
-
 	bIsShowEffect = true;
+	
+	FVector Pos = RootComponent->GetTransformRef().RelativeLocation;
+	GlobalFunc::SetLocation(RootComponent, SlashEffect->GetKnightEffectRenderer(), LRPos, bLeftDir);
+
 	return;
+}
+
+void AKnight::CreateUpSlashEffect()
+{
+	if (true == bIsShowEffect)
+	{
+		return;
+	}
+
+	std::shared_ptr<AKnightEffect> SlashEffect = GetWorld()->SpawnActor<AKnightEffect>();
+	SlashEffect->ChangeEffect("UpSlashEffect");
+	FVector LRPos = FVector{ 0.0f, 50.0f, 0.0f };
+	GlobalFunc::SetLocationOffset(RootComponent, SlashEffect->GetKnightEffectRenderer(), LRPos);
+	bIsShowEffect = true;
+}
+
+void AKnight::CreateDownSlashEffect()
+{
+	if (true == bIsShowEffect)
+	{
+		return;
+	}
+
+	std::shared_ptr<AKnightEffect> SlashEffect = GetWorld()->SpawnActor<AKnightEffect>();
+	SlashEffect->ChangeEffect("DownSlashEffect");
+	FVector LRPos = FVector{ 0.0f, -100.0f, 0.0f };
+	GlobalFunc::SetLocationOffset(RootComponent, SlashEffect->GetKnightEffectRenderer(), LRPos);
+	bIsShowEffect = true;
 }
 
 void AKnight::ChangeAttackAnimation(EKnightState _PrevState)
@@ -273,7 +305,7 @@ void AKnight::ChangeAttackAnimation(EKnightState _PrevState)
 			FSM.ChangeState(EKnightState::UP_SLASH);
 			return;
 		}
-		if (UEngineInput::IsPress('X') && UEngineInput::IsPress(VK_DOWN))
+		if (UEngineInput::IsPress('X') && UEngineInput::IsPress(VK_DOWN) && false == bIsOnGround)
 		{
 			bIsAttacking = true;
 			NextState = _PrevState;
@@ -399,16 +431,19 @@ void AKnight::SetSlash(float _DeltaTime)
 
 void AKnight::SetUpSlash(float _DeltaTime)
 {
+	CreateUpSlashEffect();
 	ChangePrevAnimation();
 }
 
 void AKnight::SetDownSlash(float _DeltaTime)
 {
+	CreateDownSlashEffect();
 	ChangePrevAnimation();
 }
 
 void AKnight::SetFocus(float _DeltaTime)
 {
+
 	//if (UEngineInput::IsFree('A'))
 	//{
 	//	ChangeNextAnimation(EKnightState::IDLE);
@@ -420,6 +455,14 @@ void AKnight::SetFocus(float _DeltaTime)
 
 void AKnight::SetFocusGet(float _DeltaTime)
 {
+	if (false == bIsEffectActive)
+	{
+		std::shared_ptr<AKnightEffect> FocusEffect = GetWorld()->SpawnActor<AKnightEffect>();
+		FocusEffect->ChangeEffect("FocusEffect");
+		GlobalFunc::SetLocationOffset(RootComponent, FocusEffect->GetKnightEffectRenderer());
+		bIsEffectActive = true;
+	}
+
 	//if (UEngineInput::IsFree('A'))
 	//{
 	//	ChangeNextAnimation(EKnightState::IDLE);
@@ -433,10 +476,18 @@ void AKnight::SetFocusEnd(float _DeltaTime)
 	if (UEngineInput::IsPress('A'))
 	{
 		FSM.ChangeState(EKnightState::FOCUS);
+		bIsEffectActive = false;
 		return;
 	}
 	else // 스킬 시전 종료
 	{
+		if (true == bIsEffectActive)
+		{
+			std::shared_ptr<AKnightEffect> FocusEffect = GetWorld()->SpawnActor<AKnightEffect>();
+			FocusEffect->ChangeEffect("FocusEffectEnd");
+			GlobalFunc::SetLocationOffset(RootComponent, FocusEffect->GetKnightEffectRenderer());
+			bIsEffectActive = false;
+		}
 		ChangeNextAnimation(EKnightState::IDLE);
 	}
 }

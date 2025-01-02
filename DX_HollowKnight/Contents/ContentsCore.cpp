@@ -87,6 +87,8 @@ void UContentsCore::LoadResourceDirectory()
 	LoadContentsResource("Image/Effect/Knight/SlashEffect");
 	LoadContentsResource("Image/Effect/Knight/UpSlashEffect");
 	LoadContentsResource("Image/Effect/Knight/DownSlashEffect");
+	LoadContentsResource("Image/Effect/Knight/FocusEffect");
+	LoadContentsResource("Image/Effect/Knight/FocusEffectEnd");
 }
 
 void UContentsCore::LoadFolder()

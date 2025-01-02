@@ -22,6 +22,11 @@ public:
 	void SetLocation(FVector _Pos, bool _Left = true);
 	void Release();
 
+	std::shared_ptr<class USpriteRenderer> GetKnightEffectRenderer()
+	{
+		return KnightEffectRenderer;
+	}
+
 protected:
 
 private:

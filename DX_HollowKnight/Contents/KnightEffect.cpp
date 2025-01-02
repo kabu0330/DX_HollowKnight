@@ -9,8 +9,24 @@ AKnightEffect::AKnightEffect()
 	KnightEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
 
 	std::string SlashEffect = "SlashEffect";
-	KnightEffectRenderer->CreateAnimation(SlashEffect, SlashEffect, 0, 5, 0.1f, false);
+	KnightEffectRenderer->CreateAnimation(SlashEffect, SlashEffect, 0, 5, 0.05f, false);
 	GlobalFunc::AutoScale(KnightEffectRenderer, SlashEffect);
+
+	std::string UpSlashEffect = "UpSlashEffect";
+	KnightEffectRenderer->CreateAnimation(UpSlashEffect, UpSlashEffect, 0, 5, 0.05f, false);
+	GlobalFunc::AutoScale(KnightEffectRenderer, UpSlashEffect);
+
+	std::string DownSlashEffect = "DownSlashEffect";
+	KnightEffectRenderer->CreateAnimation(DownSlashEffect, DownSlashEffect, 0, 5, 0.05f, false);
+	GlobalFunc::AutoScale(KnightEffectRenderer, DownSlashEffect);
+
+	std::string FocusEffect = "FocusEffect";
+	KnightEffectRenderer->CreateAnimation(FocusEffect, FocusEffect, 0, 12, 0.08f, false);
+	GlobalFunc::AutoScale(KnightEffectRenderer, FocusEffect);
+
+	std::string FocusEffectEnd = "FocusEffectEnd";
+	KnightEffectRenderer->CreateAnimation(FocusEffectEnd, FocusEffectEnd, 0, 1, 0.07f, false);
+	GlobalFunc::AutoScale(KnightEffectRenderer, FocusEffectEnd);
 
 	KnightEffectRenderer->SetupAttachment(RootComponent);
 	KnightEffectRenderer->ChangeAnimation(SlashEffect);
@@ -38,7 +54,6 @@ void AKnightEffect::ChangeEffect(std::string_view _AnimationName)
 
 void AKnightEffect::SetLocation(FVector _Pos, bool _Left)
 {
-
 	if (true == _Left)
 	{
 		KnightEffectRenderer->SetRelativeLocation(_Pos);

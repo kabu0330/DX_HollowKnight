@@ -34,6 +34,9 @@
     <ClInclude Include="TitleScene.h">
       <Filter>05_Title</Filter>
     </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>06_Play</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -68,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="TitleScene.cpp">
       <Filter>05_Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>06_Play</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

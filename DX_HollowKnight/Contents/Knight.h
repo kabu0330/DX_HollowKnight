@@ -29,6 +29,7 @@ private:
 	std::shared_ptr<class USpriteRenderer> BodyRenderer;
 	std::shared_ptr<class USpriteRenderer> EffectRenderer;
 
+
 	// 공격 또는 피격 동작 중일 때
 	bool bIsAttacking = false;
 	bool bIsBeingHit = false;
@@ -45,6 +46,8 @@ private:
 	bool bIsShowEffect = false;
 	float AttackCooldownElapsed = 0.0f;
 	void CreateSlashEffect();
+	void CreateUpSlashEffect();
+	void CreateDownSlashEffect();
 
 	void CreateRenderer();
 
@@ -55,6 +58,7 @@ private:
 	float DashCooldownElapsed = 0.0f;
 	void ChangeDash();
 
+	bool bIsEffectActive = false;
 	void CastFocus();
 	void CastFireball();
 

@@ -11,6 +11,38 @@ public:
 		Animation->IsAutoScale = true;
 		Animation->AutoScaleRatio = 1.0f;
 	}
+
+	// 방향전환이 필요한 경우
+	static void SetLocation(std::shared_ptr<class USceneComponent> _RootComponent, std::shared_ptr<USpriteRenderer> _Renderer, FVector _OffsetPos , bool _Left, FVector _Rotation = { 0.0f, 0.0f, 0.0f })
+	{
+		FVector Pos = _RootComponent->GetTransformRef().RelativeLocation;
+		FVector LRPos = _OffsetPos;
+		if (true == _Left)
+		{
+			LRPos += Pos;
+			_Renderer->SetRelativeLocation(LRPos);
+			_Renderer->SetRotation(_Rotation);
+			return;
+		}
+		else
+		{
+			LRPos -= Pos;
+			_Renderer->SetRelativeLocation(-LRPos);
+			_Renderer->SetRotation({ _Rotation.X, _Rotation.Y + 180.0f, _Rotation.Z });
+			return;
+		}
+	}
+
+	// 방향전환이 필요없는 경우
+	static void SetLocationOffset(std::shared_ptr<class USceneComponent> _RootComponent, std::shared_ptr<USpriteRenderer> _Renderer, FVector _OffsetPos = {0.0f, 0.0f, 0.0f} , FVector _Rotation = {0.0f, 0.0f, 0.0f})
+	{
+		FVector Pos = _RootComponent->GetTransformRef().RelativeLocation;
+		FVector LRPos = _OffsetPos;
+		LRPos += Pos;
+
+		_Renderer->SetRelativeLocation(LRPos);
+		_Renderer->SetRotation(_Rotation);
+	}
 };
 
 enum class ELayer
