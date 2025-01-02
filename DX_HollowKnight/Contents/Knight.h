@@ -38,9 +38,19 @@ private:
 
 	float HitStunDuration = 1.0f;
 
+	// Stat
+	float Velocity = 300.0f;
+	float InitVelocity = 0.0f;
+	float DashSpeed = 0.0f;
+	float NailRange = 100.0f;
+	int NailDamage = 5;
+	int MaxHealth = 5;
+
 
 private:
 	void InputCheck(float _DeltaTime);
+	void Move(float _DeltaTime);
+
 	void DebugInput();
 
 	bool bIsShowEffect = false;

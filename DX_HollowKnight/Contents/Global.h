@@ -12,8 +12,8 @@ public:
 		Animation->AutoScaleRatio = 1.0f;
 	}
 
-	// 방향전환이 필요한 경우
-	static void SetLocation(std::shared_ptr<class USceneComponent> _RootComponent, std::shared_ptr<USpriteRenderer> _Renderer, FVector _OffsetPos , bool _Left, FVector _Rotation = { 0.0f, 0.0f, 0.0f })
+	// 좌우반전 적용
+	static void SetLocation(std::shared_ptr<class USceneComponent> _RootComponent, std::shared_ptr<USpriteRenderer> _Renderer, bool _Left = true, const FVector& _OffsetPos = { 0.0f, 0.0f, 0.0f }, const FVector& _Rotation = { 0.0f, 0.0f, 0.0f })
 	{
 		FVector Pos = _RootComponent->GetTransformRef().RelativeLocation;
 		FVector LRPos = _OffsetPos;
@@ -26,23 +26,34 @@ public:
 		}
 		else
 		{
+			float Inverse = 180.0f;
 			LRPos -= Pos;
 			_Renderer->SetRelativeLocation(-LRPos);
-			_Renderer->SetRotation({ _Rotation.X, _Rotation.Y + 180.0f, _Rotation.Z });
+			_Renderer->SetRotation({ _Rotation.X, _Rotation.Y + Inverse, _Rotation.Z });
 			return;
 		}
 	}
 
-	// 방향전환이 필요없는 경우
-	static void SetLocationOffset(std::shared_ptr<class USceneComponent> _RootComponent, std::shared_ptr<USpriteRenderer> _Renderer, FVector _OffsetPos = {0.0f, 0.0f, 0.0f} , FVector _Rotation = {0.0f, 0.0f, 0.0f})
+	// 상하 모션일 때 좌우 반전
+	static void SetLocationTB(std::shared_ptr<class USceneComponent> _RootComponent, std::shared_ptr<USpriteRenderer> _Renderer, bool _Left = true, const FVector& _OffsetPos = { 0.0f, 0.0f, 0.0f }, const FVector& _Rotation = { 0.0f, 0.0f, 0.0f })
 	{
 		FVector Pos = _RootComponent->GetTransformRef().RelativeLocation;
 		FVector LRPos = _OffsetPos;
 		LRPos += Pos;
-
 		_Renderer->SetRelativeLocation(LRPos);
-		_Renderer->SetRotation(_Rotation);
+		if (true == _Left)
+		{
+			_Renderer->SetRotation(_Rotation);
+			return;
+		}
+		else
+		{
+			float Inverse = 180.0f;
+			_Renderer->SetRotation({ _Rotation.X, _Rotation.Y + Inverse, _Rotation.Z });
+			return;
+		}
 	}
+
 };
 
 enum class ELayer
