@@ -20,12 +20,11 @@ public:
 
 
 	}
+
 	void GetMousePos()
 	{
-
-
-		//ImGui::Text("Mouse Pos : ");
-		//ImGui::Text("X : %.2f, Y : %.2f", MousePos.X, MousePos.Y);
+		FVector MousePos = UEngineCore::GetMainWindow().GetMousePos();
+		ImGui::Text("Mouse Pos X : %.0f, Y : %.0f", MousePos.X, MousePos.Y);
 	}
 };
 
@@ -47,7 +46,7 @@ void AMapEditorMode::BeginPlay()
 void AMapEditorMode::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
-	//MousePos = UEngineCore::MainWindow.GetMousePos();
+
 
 	if (true == UEngineInput::IsPress(VK_LBUTTON))
 	{

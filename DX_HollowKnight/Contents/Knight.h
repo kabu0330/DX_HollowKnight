@@ -56,6 +56,7 @@ private:
 	void ChangeDash();
 
 	void CastFocus();
+	void CastFireball();
 
 	bool bIsOnGround = true;
 	bool CanJump();

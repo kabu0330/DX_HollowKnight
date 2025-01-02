@@ -13,6 +13,11 @@ UEngineGraphicDevice& UEngineCore::GetDevice()
 	return Device;
 }
 
+UEngineWindow& UEngineCore::GetMainWindow()
+{
+	return MainWindow;
+}
+
 UEngineGraphicDevice UEngineCore::Device;
 
 UEngineWindow UEngineCore::MainWindow;

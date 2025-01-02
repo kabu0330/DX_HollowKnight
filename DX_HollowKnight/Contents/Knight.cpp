@@ -111,20 +111,25 @@ void AKnight::CastFocus()
 	{
 		float PressTime = UEngineInput::IsPressTime('A');
 		float TriggerTime = 0.5f;
-		if (PressTime < TriggerTime) // 동작안함
-		{
-			if (UEngineInput::IsFree('A'))
-			{
-				FSM.ChangeState(EKnightState::FIREBALL_ANTIC);
-				return;
-			}
-		}
-		else if (PressTime >= TriggerTime)
+
+		if (PressTime >= TriggerTime)
 		{
 			FSM.ChangeState(EKnightState::FOCUS);
 			return;
 		}
+	}
+}
 
+void AKnight::CastFireball()
+{
+	if (false == CanAction())
+	{
+		return;
+	}
+	if (UEngineInput::IsUp('A'))
+	{
+		FSM.ChangeState(EKnightState::FIREBALL_ANTIC);
+		return;
 	}
 }
 
@@ -303,6 +308,7 @@ void AKnight::SetIdle(float _DeltaTime)
 
 	ChangeAttackAnimation(EKnightState::IDLE); // 지상 공격
 	CastFocus(); // 집중
+	CastFireball(); // 파이어볼
 
 	DebugInput();
 }

@@ -229,7 +229,6 @@ void USpriteRenderer::ChangeAnimation(std::string_view _AnimationName, bool _For
 	}
 }
 
-
 void USpriteRenderer::SetAnimationEvent(std::string_view _AnimationName, int _Frame, std::function<void()> _Function)
 {
 	std::string UpperName = UEngineString::ToUpper(_AnimationName);
