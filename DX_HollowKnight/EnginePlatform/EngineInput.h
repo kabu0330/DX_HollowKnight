@@ -110,7 +110,7 @@ public:
 		return GetInst().Keys[_KeyIndex].IsPress;
 	}
 
-	float IsPressTime(int _KeyIndex)
+	static float IsPressTime(int _KeyIndex)
 	{
 		if (false == GetInst().Keys.contains(_KeyIndex))
 		{

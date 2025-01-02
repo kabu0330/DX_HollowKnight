@@ -109,9 +109,22 @@ void AKnight::CastFocus()
 
 	if (UEngineInput::IsPress('A'))
 	{
-		FSM.ChangeState(EKnightState::FOCUS);
-		//FSM.ChangeState(EKnightState::FIREBALL_ANTIC);
-		return;
+		float PressTime = UEngineInput::IsPressTime('A');
+		float TriggerTime = 0.5f;
+		if (PressTime < TriggerTime) // 동작안함
+		{
+			if (UEngineInput::IsFree('A'))
+			{
+				FSM.ChangeState(EKnightState::FIREBALL_ANTIC);
+				return;
+			}
+		}
+		else if (PressTime >= TriggerTime)
+		{
+			FSM.ChangeState(EKnightState::FOCUS);
+			return;
+		}
+
 	}
 }
 
