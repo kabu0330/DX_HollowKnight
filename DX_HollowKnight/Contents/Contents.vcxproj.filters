@@ -7,9 +7,6 @@
     <ClInclude Include="ContentsCore.h">
       <Filter>02_Core</Filter>
     </ClInclude>
-    <ClInclude Include="Knight.h">
-      <Filter>04_Global</Filter>
-    </ClInclude>
     <ClInclude Include="TitleGameMode.h">
       <Filter>03_Level</Filter>
     </ClInclude>
@@ -20,9 +17,6 @@
       <Filter>05_Title</Filter>
     </ClInclude>
     <ClInclude Include="Global.h">
-      <Filter>04_Global</Filter>
-    </ClInclude>
-    <ClInclude Include="KnightEffect.h">
       <Filter>04_Global</Filter>
     </ClInclude>
     <ClInclude Include="MapEditorMode.h">
@@ -37,6 +31,18 @@
     <ClInclude Include="Map.h">
       <Filter>06_Play</Filter>
     </ClInclude>
+    <ClInclude Include="KnightEffect.h">
+      <Filter>04_Global\Knight</Filter>
+    </ClInclude>
+    <ClInclude Include="Knight.h">
+      <Filter>04_Global\Knight</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusUnit.h">
+      <Filter>04_Global\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="FightUnit.h">
+      <Filter>04_Global\Unit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -44,9 +50,6 @@
     </ClCompile>
     <ClCompile Include="ContentsCore.cpp">
       <Filter>02_Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Knight.cpp">
-      <Filter>04_Global</Filter>
     </ClCompile>
     <ClCompile Include="PlayGameMode.cpp">
       <Filter>03_Level</Filter>
@@ -60,9 +63,6 @@
     <ClCompile Include="Global.cpp">
       <Filter>04_Global</Filter>
     </ClCompile>
-    <ClCompile Include="KnightEffect.cpp">
-      <Filter>04_Global</Filter>
-    </ClCompile>
     <ClCompile Include="MapEditorMode.cpp">
       <Filter>03_Level</Filter>
     </ClCompile>
@@ -74,6 +74,18 @@
     </ClCompile>
     <ClCompile Include="Map.cpp">
       <Filter>06_Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Knight.cpp">
+      <Filter>04_Global\Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="KnightEffect.cpp">
+      <Filter>04_Global\Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="FightUnit.cpp">
+      <Filter>04_Global\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="StatusUnit.cpp">
+      <Filter>04_Global\Unit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +112,12 @@
     </Filter>
     <Filter Include="07_Editor">
       <UniqueIdentifier>{17469ec8-26a6-4000-8340-33b98ecd2d11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Global\Knight">
+      <UniqueIdentifier>{67f0f42c-79c4-49df-862a-fa3d6732c0ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Global\Unit">
+      <UniqueIdentifier>{d5827386-64e6-4cdb-98a2-7aeab606afa1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

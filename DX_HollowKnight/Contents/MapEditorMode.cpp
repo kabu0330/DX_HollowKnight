@@ -7,7 +7,6 @@
 #include <EngineCore/EngineCore.h>
 #include <EnginePlatform/EngineInput.h>
 
-
 class TestWindow : public UEngineGUIWindow
 {
 public:

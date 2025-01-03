@@ -12,6 +12,10 @@ AKnight::AKnight()
 {
 	CreateRenderer();
 	GetWorld()->GetCamera(0);
+
+	Velocity = 400.0f;
+	InitVelocity = Velocity;
+	DashSpeed = Velocity * 3.0f;
 }
 
 void AKnight::BeginPlay()
@@ -218,25 +222,42 @@ void AKnight::ChangeLookAnimation()
 
 void AKnight::InputCheck(float _DeltaTime)
 {
-	if (UEngineInput::IsPress(VK_LEFT))
-	{
-		AddRelativeLocation(FVector{ -100.0f * _DeltaTime, 0.0f, 0.0f });
-	}
-	if (UEngineInput::IsPress(VK_RIGHT))
-	{
-		AddRelativeLocation(FVector{ 100.0f * _DeltaTime, 0.0f, 0.0f });
-	}
+	Move(_DeltaTime);
 	if (UEngineInput::IsPress('Z'))
 	{
 		AddRelativeLocation(FVector{ 0.0f, 100.0f * _DeltaTime, 0.0f });
 	}
-	if (UEngineInput::IsDown('C'))
-	{
-		AddRelativeLocation(FVector{ 1000.0f * _DeltaTime, 0.0f, 0.0f });
-	}
+
 	if (UEngineInput::IsFree('X'))
 	{
 
+	}
+}
+
+void AKnight::Move(float _DeltaTime)
+{
+	if (false == bIsDashing)
+	{
+		Velocity = InitVelocity;
+
+	}
+	if (UEngineInput::IsDown('C'))
+	{
+		Velocity = DashSpeed;
+	}
+
+	if (true == bIsDashing)
+	{
+		return;
+	}
+
+	if (UEngineInput::IsPress(VK_LEFT))
+	{
+		AddRelativeLocation(FVector{ -Velocity * _DeltaTime, 0.0f, 0.0f });
+	}
+	if (UEngineInput::IsPress(VK_RIGHT))
+	{
+		AddRelativeLocation(FVector{ Velocity * _DeltaTime, 0.0f, 0.0f });
 	}
 }
 
@@ -261,7 +282,7 @@ void AKnight::CreateSlashEffect()
 	bIsShowEffect = true;
 	
 	FVector Pos = RootComponent->GetTransformRef().RelativeLocation;
-	GlobalFunc::SetLocation(RootComponent, SlashEffect->GetKnightEffectRenderer(), LRPos, bLeftDir);
+	GlobalFunc::SetLocation(RootComponent, SlashEffect->GetKnightEffectRenderer(), bLeftDir, LRPos);
 
 	return;
 }
@@ -276,7 +297,7 @@ void AKnight::CreateUpSlashEffect()
 	std::shared_ptr<AKnightEffect> SlashEffect = GetWorld()->SpawnActor<AKnightEffect>();
 	SlashEffect->ChangeEffect("UpSlashEffect");
 	FVector LRPos = FVector{ 0.0f, 50.0f, 0.0f };
-	GlobalFunc::SetLocationOffset(RootComponent, SlashEffect->GetKnightEffectRenderer(), LRPos);
+	GlobalFunc::SetLocationTB(RootComponent, SlashEffect->GetKnightEffectRenderer(), bLeftDir, LRPos);
 	bIsShowEffect = true;
 }
 
@@ -290,7 +311,7 @@ void AKnight::CreateDownSlashEffect()
 	std::shared_ptr<AKnightEffect> SlashEffect = GetWorld()->SpawnActor<AKnightEffect>();
 	SlashEffect->ChangeEffect("DownSlashEffect");
 	FVector LRPos = FVector{ 0.0f, -100.0f, 0.0f };
-	GlobalFunc::SetLocationOffset(RootComponent, SlashEffect->GetKnightEffectRenderer(), LRPos);
+	GlobalFunc::SetLocationTB(RootComponent, SlashEffect->GetKnightEffectRenderer(), bLeftDir, LRPos);
 	bIsShowEffect = true;
 }
 
@@ -349,6 +370,7 @@ void AKnight::SetRun(float _DeltaTime)
 {
 	bCanRotation = true;
 
+
 	if (UEngineInput::IsFree(VK_LEFT) && UEngineInput::IsFree(VK_RIGHT))
 	{
 		FSM.ChangeState(EKnightState::RUN_TO_IDLE);
@@ -376,7 +398,7 @@ void AKnight::SetIdleToRun(float _DeltaTime)
 void AKnight::SetRunToIdle(float _DeltaTime)
 {
 	bCanRotation = true;
-
+	bIsDashing = false;
 	ChangeNextAnimation(EKnightState::IDLE);
 
 	if (UEngineInput::IsPress(VK_LEFT) || UEngineInput::IsPress(VK_RIGHT))
@@ -420,6 +442,17 @@ void AKnight::SetHardLand(float _DeltaTime)
 void AKnight::SetDash(float _DeltaTime)
 {
 	bCanRotation = false;
+	bIsDashing = true;
+
+	if (true == bLeftDir)
+	{
+		AddRelativeLocation(FVector{ -Velocity * _DeltaTime, 0.0f, 0.0f });
+	}
+	else
+	{
+		AddRelativeLocation(FVector{ Velocity * _DeltaTime, 0.0f, 0.0f });
+	}
+
 	ChangeNextAnimation(EKnightState::RUN_TO_IDLE);
 }
 
@@ -459,7 +492,7 @@ void AKnight::SetFocusGet(float _DeltaTime)
 	{
 		std::shared_ptr<AKnightEffect> FocusEffect = GetWorld()->SpawnActor<AKnightEffect>();
 		FocusEffect->ChangeEffect("FocusEffect");
-		GlobalFunc::SetLocationOffset(RootComponent, FocusEffect->GetKnightEffectRenderer());
+		GlobalFunc::SetLocation(RootComponent, FocusEffect->GetKnightEffectRenderer());
 		bIsEffectActive = true;
 	}
 
@@ -485,7 +518,7 @@ void AKnight::SetFocusEnd(float _DeltaTime)
 		{
 			std::shared_ptr<AKnightEffect> FocusEffect = GetWorld()->SpawnActor<AKnightEffect>();
 			FocusEffect->ChangeEffect("FocusEffectEnd");
-			GlobalFunc::SetLocationOffset(RootComponent, FocusEffect->GetKnightEffectRenderer());
+			GlobalFunc::SetLocation(RootComponent, FocusEffect->GetKnightEffectRenderer());
 			bIsEffectActive = false;
 		}
 		ChangeNextAnimation(EKnightState::IDLE);
