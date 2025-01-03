@@ -3,12 +3,18 @@
 #include <EngineBase/EnginePath.h>
 #include <EngineBase/EngineString.h>
 
+// 템플릿은 다 헤더에 구현되어야 합니다.
+
 class UEngineResources : public UObject
 {
 public:
 	// constrcuter destructer
-	UEngineResources() {}
-	~UEngineResources()	{}
+	UEngineResources() {
+
+	}
+	~UEngineResources()	{
+
+	}
 
 	// delete Function
 	UEngineResources(const UEngineResources& _Other) = delete;
@@ -47,6 +53,7 @@ public:
 		PushRes(_Res, Info.name(), _Name, _Path);
 	}
 
+	// 이 resources 관리 함수들은 전부다 core에서만 사용되게 하겠습니다.
 	ENGINEAPI static void PushRes(std::shared_ptr<UEngineResources> _Res, const std::string_view _Info, std::string_view _Name, std::string_view _Path);
 
 
@@ -59,6 +66,7 @@ protected:
 	UEnginePath Path;
 
 private:
+	// 이걸 해결방법은 
 	//                               텍스처                aaaa.png       데이터
 	//                               버텍스버퍼             Box             데이터
 	ENGINEAPI static inline std::map<std::string, std::map<std::string, std::shared_ptr<UEngineResources>>> ResMap;

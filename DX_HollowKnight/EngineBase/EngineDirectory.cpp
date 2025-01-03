@@ -7,7 +7,7 @@
 UEngineDirectory::UEngineDirectory()
 	: UEnginePath()
 {
-
+	// 만들어지면 현재로 
 }
 
 UEngineDirectory::UEngineDirectory(std::string_view _Path)
@@ -22,11 +22,13 @@ UEngineDirectory::UEngineDirectory(std::filesystem::path _Path)
 
 }
 
+
 UEngineDirectory::~UEngineDirectory()
 {
 }
 
-std::vector<class UEngineFile> UEngineDirectory::GetAllFile(bool _IsRecursive, std::vector<std::string> _Exts)
+
+std::vector<class UEngineFile> UEngineDirectory::GetAllFile(bool _IsRecursive, const std::vector<std::string>& _Exts)
 {
 	std::vector<std::string> UpperExts;
 
@@ -49,7 +51,7 @@ std::vector<class UEngineFile> UEngineDirectory::GetAllFile(bool _IsRecursive, s
 		{
 			if (true == _IsRecursive)
 			{
-				GetAllFileRecursive(FilePath, Result);
+				GetAllFileRecursive(FilePath, Result, _Exts);
 			}
 
 			++Diriter;
@@ -108,9 +110,16 @@ std::vector<class UEngineDirectory> UEngineDirectory::GetAllDirectory()
 }
 
 
-void UEngineDirectory::GetAllFileRecursive(std::filesystem::path _Path
-	, std::vector<class UEngineFile>& _Result)
+void UEngineDirectory::GetAllFileRecursive(std::filesystem::path _Path, std::vector<class UEngineFile>& _Result, const std::vector<std::string>& _Exts)
 {
+	std::vector<std::string> UpperExts;
+
+	for (size_t i = 0; i < _Exts.size(); i++)
+	{
+		UpperExts.push_back(UEngineString::ToUpper(_Exts[i]));
+	}
+
+
 	// 경로를 넣어주면 그 경로의 첫번째 파일을 가리키게 된다.
 	std::filesystem::directory_iterator Diriter = std::filesystem::directory_iterator(_Path);
 
@@ -121,7 +130,26 @@ void UEngineDirectory::GetAllFileRecursive(std::filesystem::path _Path
 		UEnginePath Path = UEnginePath(FilePath);
 		if (true == Path.IsDirectory())
 		{
-			GetAllFileRecursive(FilePath, _Result);
+			GetAllFileRecursive(FilePath, _Result, _Exts);
+			++Diriter;
+			continue;
+		}
+
+		bool Check = true;
+
+		for (size_t i = 0; i < UpperExts.size(); i++)
+		{
+			std::string CurUpperExt = UEngineString::ToUpper(Path.GetExtension());
+
+			if (CurUpperExt == UpperExts[i])
+			{
+				Check = false;
+				break;
+			}
+		}
+
+		if (true == Check)
+		{
 			++Diriter;
 			continue;
 		}

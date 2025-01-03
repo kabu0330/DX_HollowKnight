@@ -7,6 +7,13 @@
 #include "CameraActor.h"
 #include "EngineGUI.h"
 
+// 플레이어 Renderer
+
+// 카메라 1 Renderer
+// 카메라 2 Renderer
+
+
+
 std::shared_ptr<class ACameraActor> ULevel::SpawnCamera(int _Order)
 {
 	std::shared_ptr<ACameraActor> Camera = std::make_shared<ACameraActor>();
@@ -25,6 +32,7 @@ std::shared_ptr<class ACameraActor> ULevel::SpawnCamera(int _Order)
 ULevel::ULevel()
 {
 	SpawnCamera(0);
+
 }
 
 ULevel::~ULevel()
@@ -38,11 +46,14 @@ ULevel::~ULevel()
 
 void ULevel::LevelChangeStart()
 {
+
 }
 
 void ULevel::LevelChangeEnd()
 {
+
 }
+
 
 void ULevel::Tick(float _DeltaTime)
 {
@@ -64,6 +75,7 @@ void ULevel::Tick(float _DeltaTime)
 		AllActorList.push_back(CurActor);
 	}
 
+	// 절대 Ranged for안에서는 erase 리스트의 구조가 변경될 일을 하지 말라고 했ㅅ어요.
 	for (std::shared_ptr<AActor> CurActor : AllActorList)
 	{
 		CurActor->Tick(_DeltaTime);
@@ -77,27 +89,33 @@ void ULevel::Render(float _DeltaTime)
 	for (std::pair<const int, std::shared_ptr<ACameraActor>>& Camera : Cameras)
 	{
 		Camera.second->Tick(_DeltaTime);
-		Camera.second->CameraComponent->Render(_DeltaTime);
+		Camera.second->GetCameraComponent()->Render(_DeltaTime);
 	}
 
 	if (true == UEngineWindow::IsApplicationOn())
 	{
-		UEngineGUI::GUIRender();		
+		UEngineGUI::GUIRender();
+
+		// IMGUI가 랜더링을하면서 
+		
 	}
 	
+
+
 	UEngineCore::GetDevice().RenderEnd();
 }
+
+
 
 void ULevel::ChangeRenderGroup(int _CameraOrder, int _PrevGroupOrder, std::shared_ptr<URenderer> _Renderer)
 {
 	if (false == Cameras.contains(_CameraOrder))
 	{
-		MSGASSERT("존재하지 않는 카메라에 렌더러를 추가할 수 없습니다.");
-		return;
+		MSGASSERT("존재하지 않는 카메라에 랜더러를 집어넣으려고 했습니다.");
 	}
 	std::shared_ptr<ACameraActor> Camera = Cameras[_CameraOrder];
 
-	Camera->CameraComponent->ChangeRenderGroup(_PrevGroupOrder, _Renderer);
+	Camera->GetCameraComponent()->ChangeRenderGroup(_PrevGroupOrder, _Renderer);
 }
 
 

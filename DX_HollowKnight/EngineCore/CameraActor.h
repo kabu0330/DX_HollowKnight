@@ -15,14 +15,22 @@ public:
 	ACameraActor& operator=(const ACameraActor& _Other) = delete;
 	ACameraActor& operator=(ACameraActor&& _Other) noexcept = delete;
 
-	std::shared_ptr<class UEngineCamera> CameraComponent = nullptr;
+	ENGINEAPI std::shared_ptr<class UEngineCamera> GetCameraComponent()
+	{
+		return CameraComponent;
+	}
 
 	void BeginPlay() override;
 	void Tick(float _DeltaTime);
 
+	ENGINEAPI FVector ScreenMousePosToWorldPos();
+
+	// 항상 중심을 0,0 으로 보는 마우스 포스 얻는법
+	ENGINEAPI FVector ScreenMousePosToWorldPosWithOutPos();
 
 protected:
 
 private:
+	std::shared_ptr<class UEngineCamera> CameraComponent = nullptr;
 };
 

@@ -11,11 +11,12 @@ UEngineSprite::~UEngineSprite()
 {
 }
 
+
 std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToFolder(std::string_view _Name, std::string_view _Path)
 {
 	UEngineDirectory Dir = _Path;
 
-	std::vector<UEngineFile> Files = Dir.GetAllFile(false, { ".png" });
+	std::vector<UEngineFile> Files = Dir.GetAllFile(false, { ".png"});
 
 	if (0 == Files.size())
 	{
@@ -62,6 +63,12 @@ std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToMeta(std::string_vie
 	std::shared_ptr<UEngineSprite> NewRes = std::make_shared<UEngineSprite>();
 	PushRes<UEngineSprite>(NewRes, _Name, "");
 
+
+	// 파싱 문자열을 자르고 쪼개서 의미를 부여하는 것을 파싱이라고 합니다.
+	// 문자가 일정 규칙으로 구성되어있다는 것을 파악하고 
+	// 이걸 기반으로 한 언어들을 스트럭처드 언어라고 부른다.
+	// 대표적으로 xml json 등등이 있다.
+
 	UEnginePath Path = Tex->GetPath();
 	std::string FileName = Path.GetFileName();
 	FileName += _DataFileExt;
@@ -104,41 +111,38 @@ std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToMeta(std::string_vie
 
 		FSpriteData SpriteData;
 
+
 		{
 			std::string Number = UEngineString::InterString(Text, "x:", "\n", Start);
 			SpriteData.CuttingPos.X = static_cast<float>(atof(Number.c_str()));
-			int a = 0;
 		}
 
 		{
 			std::string Number = UEngineString::InterString(Text, "y:", "\n", Start);
 			SpriteData.CuttingPos.Y = static_cast<float>(atof(Number.c_str()));
-			int a = 0;
 		}
 
 		{
 			std::string Number = UEngineString::InterString(Text, "width:", "\n", Start);
 			SpriteData.CuttingSize.X = static_cast<float>(atof(Number.c_str()));
-			int a = 0;
 		}
 
 		{
 			std::string Number = UEngineString::InterString(Text, "height:", "\n", Start);
 			SpriteData.CuttingSize.Y = static_cast<float>(atof(Number.c_str()));
-			int a = 0;
 		}
 
 		{
 			std::string Number = UEngineString::InterString(Text, "x:", ",", Start);
 			SpriteData.Pivot.X = static_cast<float>(atof(Number.c_str()));
-			int a = 0;
 		}
 
 		{
 			std::string Number = UEngineString::InterString(Text, "y:", "}", Start);
 			SpriteData.Pivot.Y = static_cast<float>(atof(Number.c_str()));
-			int a = 0;
 		}
+
+
 
 		SpriteData.CuttingPos.Y = TexSize.Y - SpriteData.CuttingPos.Y - SpriteData.CuttingSize.Y;
 
@@ -147,13 +151,17 @@ std::shared_ptr<UEngineSprite> UEngineSprite::CreateSpriteToMeta(std::string_vie
 		SpriteData.CuttingSize.X /= TexSize.X;
 		SpriteData.CuttingSize.Y /= TexSize.Y;
 
+
 		TestData.push_back(SpriteData);
 	}
+
 
 	NewRes->SpriteDatas = TestData;
 
 	return NewRes;
+
 }
+
 
 UEngineTexture* UEngineSprite::GetTexture(size_t _Index /*= 0*/)
 {

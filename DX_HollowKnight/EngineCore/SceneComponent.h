@@ -13,13 +13,15 @@ class USceneComponent : public UActorComponent
 public:
 	// constrcuter destructer
 	USceneComponent();
-	virtual ~USceneComponent() = 0; // 추상 클래스 => 객체화 불가
+	virtual ~USceneComponent() = 0;
 
 	// delete Function
 	USceneComponent(const USceneComponent& _Other) = delete;
 	USceneComponent(USceneComponent&& _Other) noexcept = delete;
 	USceneComponent& operator=(const USceneComponent& _Other) = delete;
 	USceneComponent& operator=(USceneComponent&& _Other) noexcept = delete;
+
+	ENGINEAPI void ComponentTick(float _DeltaTime) override;
 
 	void AddRelativeLocation(const FVector& _Value)
 	{
@@ -63,10 +65,16 @@ public:
 	// local
 	void SetRelativeScale3D(const FVector& _Value)
 	{
+		// 절대값이라는 뜻
+		// 이게 true가 되면 부모가 있건 없건
+		// 100 100 100
+		// 10 10 10
+		// 나는 무조건 이값에 해당하는 행렬이 되어야 한다는 뜻으로 
 		Transform.Scale = _Value;
 		Transform.Scale.W = 0.0f;
 		TransformUpdate();
 	}
+
 
 	FTransform& GetTransformRef()
 	{

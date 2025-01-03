@@ -25,6 +25,7 @@ public:
 	UEngineSprite& operator=(const UEngineSprite& _Other) = delete;
 	UEngineSprite& operator=(UEngineSprite&& _Other) noexcept = delete;
 
+
 	ENGINEAPI static std::shared_ptr<UEngineSprite> CreateSpriteToFolder(std::string_view _Path)
 	{
 		UEngineDirectory Dir = _Path;
@@ -51,6 +52,7 @@ public:
 	}
 
 	ENGINEAPI FVector GetSpriteScaleToReal(size_t _Index);
+
 
 protected:
 
