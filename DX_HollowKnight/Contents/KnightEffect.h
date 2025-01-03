@@ -19,7 +19,8 @@ public:
 	void Tick(float _DeltaTime) override;
 
 	void ChangeEffect(std::string_view _AnimationName);
-	void SetLocation(FVector _Pos, bool _Left = true);
+	void SetLocation(USceneComponent* _Knight, FVector _Pos, bool _Left = true);
+	void SetLocation(FVector _Pos, bool _Left);
 	void Release();
 
 	std::shared_ptr<class USpriteRenderer> GetKnightEffectRenderer()

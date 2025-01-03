@@ -622,6 +622,7 @@ void AKnight::CreateRenderer()
 	float SlashFrameTime = 0.05f;
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	BodyRenderer->SetupAttachment(RootComponent);
 
 	// 이동 애니메이션
 	std::string Idle = "Idle";
@@ -734,8 +735,6 @@ void AKnight::CreateRenderer()
 	std::string DeathHead = "DeathHead";
 	BodyRenderer->CreateAnimation(DeathHead, DeathHead, 0, 0, 1.0f, false);
 	GlobalFunc::AutoScale(BodyRenderer, DeathHead);
-
-	BodyRenderer->SetupAttachment(RootComponent);
 }
 
 void AKnight::SetFSM()

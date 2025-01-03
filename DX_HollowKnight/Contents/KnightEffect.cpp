@@ -52,6 +52,11 @@ void AKnightEffect::ChangeEffect(std::string_view _AnimationName)
 	KnightEffectRenderer->ChangeAnimation(_AnimationName);
 }
 
+void AKnightEffect::SetLocation(USceneComponent* _Knight, FVector _Pos, bool _Left)
+{
+	
+}
+
 void AKnightEffect::SetLocation(FVector _Pos, bool _Left)
 {
 	if (true == _Left)
