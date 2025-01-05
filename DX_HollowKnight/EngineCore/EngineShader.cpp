@@ -19,7 +19,6 @@ void UEngineShader::ReflectionCompile(UEngineFile& _File)
 	_File.FileOpen("rt");
 	std::string ShaderCode = _File.GetAllFileText();
 	
-
 	{
 		size_t EntryIndex = ShaderCode.find("_VS(");
 
@@ -58,19 +57,6 @@ void UEngineShader::ReflectionCompile(UEngineFile& _File)
 
 void UEngineShader::ShaderResCheck()
 {
-	// 리플렉션이라는 용어는 c#등의 최신언어들에서 많이 등장하는데.
-	// RTTI라고 보시면 됩니다.
-	// RTTI 런타임 타입 인포메이션
-	// C#으로 설명을 드리면 c#은 어떤 클래스 
-	// classInfo Info = typeid(Player);
-	// Info.FunctionCount();
-	// Info.PrivateFunctionCount();
-
-	// shader라면 어떨까?
-	// Info.ConstantBufferCount();
-
-	// 상수버퍼 및 모든 쉐이더에서 사용한 리소스 검색기능입니다.
-	// 당연히 다이렉트 x에서 지원해주는 기능을 기반으로 
 	if (nullptr == ShaderCodeBlob)
 	{
 		MSGASSERT("쉐이더가 컴파일되지 않아서 쉐이더의 리소스를 조사할수가 없습니다.");
@@ -79,7 +65,7 @@ void UEngineShader::ShaderResCheck()
 
 	Microsoft::WRL::ComPtr<ID3D11ShaderReflection> CompileInfo = nullptr;
 
-
+	// RTTI 런타임 타입 인포메이션
 	// #include <d3dcompiler.h>
 	if (S_OK != D3DReflect(ShaderCodeBlob->GetBufferPointer(), ShaderCodeBlob->GetBufferSize(), IID_ID3D11ShaderReflection, &CompileInfo))
 	{
@@ -106,7 +92,6 @@ void UEngineShader::ShaderResCheck()
 		{
 		case D3D_SIT_CBUFFER:
 		{
-			// 구체화된 정보를 얻어옵니다.
 			ID3D11ShaderReflectionConstantBuffer* Info = CompileInfo->GetConstantBufferByName(ResDesc.Name);
 			D3D11_SHADER_BUFFER_DESC BufferInfo = { 0 };
 			Info->GetDesc(&BufferInfo);

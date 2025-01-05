@@ -32,7 +32,6 @@ public:
 
 protected:
 
-
 private:
 	ENGINEAPI void ResLoad();
 

@@ -122,5 +122,4 @@ void UEngineShaderResources::TextureSetting(std::string_view _Name, std::string_
 	}
 
 	TextureRes[UpperName].Res = UEngineTexture::Find<UEngineTexture>(_ResName);
-	;
 }

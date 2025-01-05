@@ -2,10 +2,6 @@
 #include "EngineResources.h"
 #include "EngineTexture.h"
 
-
-// EngineCoreDll의 영역입니다.
-
-
 std::shared_ptr<UEngineResources> UEngineResources::Find(std::string_view _ResName, std::string_view _Name)
 {
 	std::string UpperString = UEngineString::ToUpper(_Name);

@@ -11,8 +11,6 @@ UEngineMaterial::~UEngineMaterial()
 {
 }
 
-
-
 void UEngineMaterial::SetVertexShader(std::string_view _Name)
 {
 	VertexShader = UEngineVertexShader::Find<UEngineVertexShader>(_Name);

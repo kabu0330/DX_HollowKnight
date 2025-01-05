@@ -3,9 +3,7 @@
 #include <EngineBase/EngineFile.h>
 #include "EngineShaderResources.h"
 
-
 // 설명 :
-// 픽셀부터 버텍스까지 모든 쉐이더들은 이걸 상속받아야 합니다.
 class UEngineShader
 {
 	friend class UEngineVertexShader;
