@@ -31,12 +31,12 @@ void UContentsCore::SetWindowSize(UEngineInitData& _Data)
 void UContentsCore::CreateLevel()
 {
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("Title");
-	UEngineCore::CreateLevel<APlayGameMode, AKnight>("Play");
+	//UEngineCore::CreateLevel<APlayGameMode, AKnight>("Play");
 	UEngineCore::CreateLevel<AMapEditorMode, APawn>("MapEditor");
 
-	//UEngineCore::OpenLevel("MapEditor");
 	//UEngineCore::OpenLevel("Title");
-	UEngineCore::OpenLevel("Play");
+	//UEngineCore::OpenLevel("Play");
+	UEngineCore::OpenLevel("MapEditor");
 }
 
 void UContentsCore::LoadResourceDirectory()
@@ -56,6 +56,22 @@ void UContentsCore::LoadResourceDirectory()
 			UEngineTexture::Load(FilePath);
 		}
 	}
+
+	{
+		// ¸Ê ¸®¼Ò½º
+		UEngineDirectory Dir;
+		Dir.MoveParentToDirectory("ContentsResources");
+		Dir.Append("MapObjectResources");
+
+		std::vector<UEngineFile> ImageFiles = Dir.GetAllFile(true, { ".PNG", ".BMP", ".JPG" });
+		for (size_t i = 0; i < ImageFiles.size(); i++)
+		{
+			std::string FilePath = ImageFiles[i].GetPathToString();
+			UEngineTexture::Load(FilePath);
+		}
+
+	}
+	LoadContentsResource("MapObjectResources");
 
 	// Knight
 	LoadContentsResource("Image/Knight/Run");

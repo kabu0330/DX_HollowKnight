@@ -8,8 +8,8 @@ class UEngineSerializer
 {
 public:
 	// constrcuter destructer
-	UEngineSerializer();
-	~UEngineSerializer();
+	ENGINEAPI UEngineSerializer();
+	ENGINEAPI ~UEngineSerializer();
 
 	// delete Function
 	UEngineSerializer(const UEngineSerializer& _Other) = delete;
@@ -18,29 +18,29 @@ public:
 	UEngineSerializer& operator=(UEngineSerializer&& _Other) noexcept = delete;
 
 	// 데이터의 크기
-	void Write(void* _Data, unsigned int _Size);
+	ENGINEAPI void Write(void* _Data, unsigned int _Size);
 
-	void operator<<(int& _Data)
+	ENGINEAPI void operator<<(int& _Data)
 	{
 		Write(&_Data, sizeof(int));
 	}
 
-	void operator<<(bool& _Data)
+	ENGINEAPI void operator<<(bool& _Data)
 	{
 		Write(&_Data, sizeof(bool));
 	}
 
-	void operator<<(FVector& _Data)
+	ENGINEAPI void operator<<(FVector& _Data)
 	{
 		Write(&_Data, sizeof(FVector));
 	}
 
-	void operator<<(FIntPoint& _Data)
+	ENGINEAPI void operator<<(FIntPoint& _Data)
 	{
 		Write(&_Data, sizeof(FIntPoint));
 	}
 
-	void operator<<(std::string& _Data)
+	ENGINEAPI void operator<<(std::string& _Data)
 	{
 		int Size = static_cast<int>(_Data.size());
 		operator<<(Size);
@@ -50,10 +50,10 @@ public:
 		}
 	}
 
-	void operator<<(class ISerializeObject& _Data);
+	ENGINEAPI void operator<<(class ISerializeObject& _Data);
 
 	template<typename DataType>
-	void operator<<(std::vector<DataType>& _vector)
+	ENGINEAPI void operator<<(std::vector<DataType>& _vector)
 	{
 		int Size = static_cast<int>(_vector.size());
 		operator<<(Size);
@@ -64,29 +64,29 @@ public:
 		}
 	}
 
-	void Read(void* _Data, unsigned int _Size);
+	ENGINEAPI void Read(void* _Data, unsigned int _Size);
 
-	void operator>>(int& _Data)
+	ENGINEAPI void operator>>(int& _Data)
 	{
 		Read(&_Data, sizeof(int));
 	}
 
-	void operator>>(bool& _Data)
+	ENGINEAPI void operator>>(bool& _Data)
 	{
 		Read(&_Data, sizeof(bool));
 	}
 
-	void operator>>(FVector& _Data)
+	ENGINEAPI void operator>>(FVector& _Data)
 	{
 		Read(&_Data, sizeof(FVector));
 	}
 
-	void operator>>(FIntPoint& _Data)
+	ENGINEAPI void operator>>(FIntPoint& _Data)
 	{
 		Read(&_Data, sizeof(FIntPoint));
 	}
 
-	void operator>>(std::string& _Data)
+	ENGINEAPI void operator>>(std::string& _Data)
 	{
 		int Size;
 		operator>>(Size);
@@ -95,10 +95,10 @@ public:
 		Read(&_Data[0], static_cast<int>(_Data.size()));
 	}
 
-	void operator>>(class ISerializeObject& _Data);
+	ENGINEAPI void operator>>(class ISerializeObject& _Data);
 
 	template<typename DataType>
-	void operator>>(std::vector<DataType>& _vector)
+	ENGINEAPI void operator>>(std::vector<DataType>& _vector)
 	{
 		int Size = 0;
 		operator>>(Size);
@@ -143,7 +143,7 @@ class ISerializeObject
 {
 public:
 	// 데이터를 직렬화(압축)
-	virtual void Serialize(UEngineSerializer& _Ser) = 0;
+	ENGINEAPI virtual void Serialize(UEngineSerializer& _Ser) = 0;
 	// 데이터를 복구(할때)
-	virtual void DeSerialize(UEngineSerializer& _Ser) = 0;
+	ENGINEAPI virtual void DeSerialize(UEngineSerializer& _Ser) = 0;
 };

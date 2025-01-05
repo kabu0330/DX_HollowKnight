@@ -44,7 +44,14 @@ void AKnightEffect::BeginPlay()
 void AKnightEffect::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
+	CheckKnightPos();
 	Release();
+
+}
+
+void AKnightEffect::CheckKnightPos()
+{
+	KnightPos = AKnight::GetPawn()->GetRootComponent()->GetTransformRef().RelativeLocation;
 }
 
 void AKnightEffect::ChangeEffect(std::string_view _AnimationName)
@@ -59,18 +66,30 @@ void AKnightEffect::SetLocation(USceneComponent* _Knight, FVector _Pos, bool _Le
 
 void AKnightEffect::SetLocation(FVector _Pos, bool _Left)
 {
-	if (true == _Left)
+	if (nullptr == AKnight::GetPawn())
 	{
-		KnightEffectRenderer->SetRelativeLocation(_Pos);
-		KnightEffectRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
 		return;
 	}
-	else
-	{
-		KnightEffectRenderer->SetRelativeLocation(-_Pos);
-		KnightEffectRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
-		return;
-	}
+
+	
+
+	//FVector Pos = _RootComponent->GetTransformRef().RelativeLocation;
+	//FVector LRPos = _OffsetPos;
+	//if (true == _Left)
+	//{
+	//	LRPos += Pos;
+	//	_Renderer->SetRelativeLocation(LRPos);
+	//	_Renderer->SetRotation(_Rotation);
+	//	return;
+	//}
+	//else
+	//{
+	//	float Inverse = 180.0f;
+	//	LRPos -= Pos;
+	//	_Renderer->SetRelativeLocation(-LRPos);
+	//	_Renderer->SetRotation({ _Rotation.X, _Rotation.Y + Inverse, _Rotation.Z });
+	//	return;
+	//}
 }
 
 void AKnightEffect::Release()

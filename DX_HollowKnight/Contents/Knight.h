@@ -23,9 +23,20 @@ public:
 	void TimeElapsed(float _DeltaTime);
 	void EndAnimationEffect();
 
+	static std::shared_ptr<AKnight> GetPawn()
+	{
+		return MainPawn;
+	}
+
+	std::shared_ptr<USceneComponent> GetRootComponent() const
+	{
+		return RootComponent;
+	}
+
 protected:
 
 private:
+	static std::shared_ptr<AKnight> MainPawn;
 	std::shared_ptr<class USpriteRenderer> BodyRenderer;
 	std::shared_ptr<class USpriteRenderer> EffectRenderer;
 
@@ -53,28 +64,32 @@ private:
 
 	void DebugInput();
 
+	void CreateRenderer();
+
+	bool CanAction();
+
+	// Jump : Z키
+	bool bIsOnGround = true;
+	bool CanJump();
+	bool IsOnGround();
+
+	// Slash : X키
 	bool bIsShowEffect = false;
 	float AttackCooldownElapsed = 0.0f;
 	void CreateSlashEffect();
 	void CreateUpSlashEffect();
 	void CreateDownSlashEffect();
-
-	void CreateRenderer();
-
-	bool CanAction();
 	
+	// Dash : C키
 	bool bIsDashing = false;
 	bool bCanRotation = true; // 방향전환 여부, 대시 중에는 불가
 	float DashCooldownElapsed = 0.0f;
 	void ChangeDash();
 
+	// Spell : A키
 	bool bIsEffectActive = false;
 	void CastFocus();
 	void CastFireball();
-
-	bool bIsOnGround = true;
-	bool CanJump();
-	bool IsOnGround();
 
 	// Animation
 	void ChangeNextAnimation(EKnightState _NextState);
@@ -90,7 +105,7 @@ private:
 	void CreateState(EKnightState _State, StateCallback _Callback, std::string_view _AnimationName);
 
 	UFSMStateManager FSM;
-	EKnightState NextState;
+	EKnightState NextState = EKnightState::IDLE;
 	void SetFSM();
 	void SetIdle(float _DeltaTime);
 	void SetRun(float _DeltaTime);

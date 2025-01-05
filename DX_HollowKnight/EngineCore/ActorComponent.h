@@ -9,12 +9,12 @@
 // Ό³Έν :
 class UActorComponent : public UObject
 {
-	friend AActor;
+	friend class AActor;
 
 public:
 	// constrcuter destructer
-	UActorComponent();
-	~UActorComponent();
+	ENGINEAPI UActorComponent();
+	ENGINEAPI ~UActorComponent();
 
 	// delete Function
 	UActorComponent(const UActorComponent& _Other) = delete;
@@ -22,7 +22,7 @@ public:
 	UActorComponent& operator=(const UActorComponent& _Other) = delete;
 	UActorComponent& operator=(UActorComponent&& _Other) noexcept = delete;
 
-	class AActor* GetActor();
+	ENGINEAPI class AActor* GetActor();
 	ENGINEAPI virtual void InitializeComponent() {}
 	ENGINEAPI virtual void BeginPlay() {}
 	ENGINEAPI virtual void ComponentTick(float _DeltaTime) {};

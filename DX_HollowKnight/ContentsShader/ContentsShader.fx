@@ -8,14 +8,14 @@ struct EngineVertex
 struct VertexShaderOutPut
 {
 	float4 SVPOSITION : SV_POSITION; 
-	float4 UV : TEXCOORD;
+	float4 UV : TEXCOORD; 
 	float4 COLOR : COLOR;
 };
 
 cbuffer FTransform : register(b0)
 {
 	float4 Scale;
-	float4 RotEation;
+	float4 Rotation;
 	float4 Qut;
 	float4 Location;
 
@@ -45,7 +45,7 @@ cbuffer FSpriteData : register(b1)
 {
 	float4 CuttingPos;
 	float4 CuttingSize;
-	float4 Pivot; 
+	float4 Pivot; // 0.5 0.0f
 };
 
 cbuffer FUVValue : register(b2)
@@ -54,7 +54,7 @@ cbuffer FUVValue : register(b2)
 };
 
 VertexShaderOutPut VertexToWorld_VS(EngineVertex _Vertex)
-{
+{	
 	VertexShaderOutPut OutPut;
 	
 	
@@ -73,7 +73,6 @@ VertexShaderOutPut VertexToWorld_VS(EngineVertex _Vertex)
 	return OutPut;
 }
 
-
 struct OutTargetColor
 {
 	float4 Target0 : SV_Target0; 
@@ -86,9 +85,9 @@ struct OutTargetColor
 	float4 Target7 : SV_Target7; 
 };
 
+
 Texture2D ImageTexture : register(t0);
 SamplerState ImageSampler : register(s0);
-
 
 cbuffer ResultColor : register(b0)
 {

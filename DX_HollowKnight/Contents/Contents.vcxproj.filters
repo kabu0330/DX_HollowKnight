@@ -19,11 +19,8 @@
     <ClInclude Include="Global.h">
       <Filter>04_Global</Filter>
     </ClInclude>
-    <ClInclude Include="MapEditorMode.h">
-      <Filter>03_Level</Filter>
-    </ClInclude>
     <ClInclude Include="MapObject.h">
-      <Filter>07_Editor</Filter>
+      <Filter>07_MapEditor</Filter>
     </ClInclude>
     <ClInclude Include="TitleScene.h">
       <Filter>05_Title</Filter>
@@ -42,6 +39,9 @@
     </ClInclude>
     <ClInclude Include="FightUnit.h">
       <Filter>04_Global\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditorMode.h">
+      <Filter>07_MapEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -63,11 +63,8 @@
     <ClCompile Include="Global.cpp">
       <Filter>04_Global</Filter>
     </ClCompile>
-    <ClCompile Include="MapEditorMode.cpp">
-      <Filter>03_Level</Filter>
-    </ClCompile>
     <ClCompile Include="MapObject.cpp">
-      <Filter>07_Editor</Filter>
+      <Filter>07_MapEditor</Filter>
     </ClCompile>
     <ClCompile Include="TitleScene.cpp">
       <Filter>05_Title</Filter>
@@ -86,6 +83,9 @@
     </ClCompile>
     <ClCompile Include="StatusUnit.cpp">
       <Filter>04_Global\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorMode.cpp">
+      <Filter>07_MapEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -110,14 +110,17 @@
     <Filter Include="06_Play">
       <UniqueIdentifier>{90d40787-bd6c-4314-b86a-fd988ad3fbe1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="07_Editor">
-      <UniqueIdentifier>{17469ec8-26a6-4000-8340-33b98ecd2d11}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04_Global\Knight">
       <UniqueIdentifier>{67f0f42c-79c4-49df-862a-fa3d6732c0ab}</UniqueIdentifier>
     </Filter>
     <Filter Include="04_Global\Unit">
       <UniqueIdentifier>{d5827386-64e6-4cdb-98a2-7aeab606afa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08_Render">
+      <UniqueIdentifier>{487692e4-6b76-4236-8869-624e3b36942f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07_MapEditor">
+      <UniqueIdentifier>{17469ec8-26a6-4000-8340-33b98ecd2d11}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

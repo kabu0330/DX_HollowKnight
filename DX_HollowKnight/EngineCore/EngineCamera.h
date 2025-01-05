@@ -17,8 +17,8 @@ class UEngineCamera : public USceneComponent
 
 public:
 	// constrcuter destructer
-	UEngineCamera();
-	~UEngineCamera();
+	ENGINEAPI UEngineCamera();
+	ENGINEAPI ~UEngineCamera();
 
 	// delete Function
 	UEngineCamera(const UEngineCamera& _Other) = delete;
@@ -26,11 +26,11 @@ public:
 	UEngineCamera& operator=(const UEngineCamera& _Other) = delete;
 	UEngineCamera& operator=(UEngineCamera&& _Other) noexcept = delete;
 
-	void BeginPlay() override;
+	ENGINEAPI void BeginPlay() override;
 
-	void Render(float _DetlaTime);
+	ENGINEAPI void Render(float _DetlaTime);
 
-	void Tick(float _DetlaTime);
+	ENGINEAPI void Tick(float _DetlaTime);
 
 	void CalculateViewAndProjection();
 

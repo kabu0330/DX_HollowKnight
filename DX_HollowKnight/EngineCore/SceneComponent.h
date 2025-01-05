@@ -12,8 +12,8 @@ class USceneComponent : public UActorComponent
 
 public:
 	// constrcuter destructer
-	USceneComponent();
-	virtual ~USceneComponent() = 0;
+	ENGINEAPI USceneComponent();
+	ENGINEAPI virtual ~USceneComponent() = 0;
 
 	// delete Function
 	USceneComponent(const USceneComponent& _Other) = delete;

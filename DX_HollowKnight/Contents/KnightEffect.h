@@ -18,6 +18,8 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
+	void CheckKnightPos();
+
 	void ChangeEffect(std::string_view _AnimationName);
 	void SetLocation(USceneComponent* _Knight, FVector _Pos, bool _Left = true);
 	void SetLocation(FVector _Pos, bool _Left);
@@ -32,5 +34,6 @@ protected:
 
 private:
 	std::shared_ptr<class USpriteRenderer> KnightEffectRenderer;
+	FVector KnightPos = { 0.0f, 0.0f, 0.0f };
 };
 

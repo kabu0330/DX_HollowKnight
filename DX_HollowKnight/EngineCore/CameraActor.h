@@ -6,8 +6,8 @@ class ACameraActor : public AActor
 {
 public:
 	// constrcuter destructer
-	ACameraActor();
-	~ACameraActor();
+	ENGINEAPI ACameraActor();
+	ENGINEAPI ~ACameraActor();
 
 	// delete Function
 	ACameraActor(const ACameraActor& _Other) = delete;
@@ -20,8 +20,8 @@ public:
 		return CameraComponent;
 	}
 
-	void BeginPlay() override;
-	void Tick(float _DeltaTime);
+	ENGINEAPI void BeginPlay() override;
+	ENGINEAPI void Tick(float _DeltaTime);
 
 	ENGINEAPI FVector ScreenMousePosToWorldPos();
 
