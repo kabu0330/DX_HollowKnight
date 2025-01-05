@@ -23,10 +23,10 @@ public:
 	void TimeElapsed(float _DeltaTime);
 	void EndAnimationEffect();
 
-	static std::shared_ptr<AKnight> GetPawn()
-	{
-		return MainPawn;
-	}
+	//static std::shared_ptr<AKnight> GetPawn()
+	//{
+	//	return MainPawn;
+	//}
 
 	std::shared_ptr<USceneComponent> GetRootComponent() const
 	{
@@ -36,7 +36,7 @@ public:
 protected:
 
 private:
-	static std::shared_ptr<AKnight> MainPawn;
+	//static std::shared_ptr<AKnight> MainPawn;
 	std::shared_ptr<class USpriteRenderer> BodyRenderer;
 	std::shared_ptr<class USpriteRenderer> EffectRenderer;
 

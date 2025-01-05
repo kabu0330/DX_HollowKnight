@@ -8,14 +8,14 @@
 
 #include "KnightEffect.h"
 
-std::shared_ptr<AKnight> AKnight::MainPawn = nullptr;
+// std::shared_ptr<AKnight> AKnight::MainPawn = nullptr;
 
 AKnight::AKnight()
 {
 	CreateRenderer();
 	GetWorld()->GetCamera(0);
 
-	MainPawn = static_cast<std::shared_ptr<AKnight>>(this);
+	//MainPawn = static_cast<std::shared_ptr<AKnight>>(this);
 
 	Velocity = 400.0f;
 	InitVelocity = Velocity;

@@ -51,7 +51,7 @@ void AKnightEffect::Tick(float _DeltaTime)
 
 void AKnightEffect::CheckKnightPos()
 {
-	KnightPos = AKnight::GetPawn()->GetRootComponent()->GetTransformRef().RelativeLocation;
+	//KnightPos = AKnight::GetPawn()->GetRootComponent()->GetTransformRef().RelativeLocation;
 }
 
 void AKnightEffect::ChangeEffect(std::string_view _AnimationName)
@@ -66,12 +66,7 @@ void AKnightEffect::SetLocation(USceneComponent* _Knight, FVector _Pos, bool _Le
 
 void AKnightEffect::SetLocation(FVector _Pos, bool _Left)
 {
-	if (nullptr == AKnight::GetPawn())
-	{
-		return;
-	}
 
-	
 
 	//FVector Pos = _RootComponent->GetTransformRef().RelativeLocation;
 	//FVector LRPos = _OffsetPos;

@@ -31,12 +31,12 @@ void UContentsCore::SetWindowSize(UEngineInitData& _Data)
 void UContentsCore::CreateLevel()
 {
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("Title");
-	//UEngineCore::CreateLevel<APlayGameMode, AKnight>("Play");
+	UEngineCore::CreateLevel<APlayGameMode, AKnight>("Play");
 	UEngineCore::CreateLevel<AMapEditorMode, APawn>("MapEditor");
 
 	//UEngineCore::OpenLevel("Title");
-	//UEngineCore::OpenLevel("Play");
-	UEngineCore::OpenLevel("MapEditor");
+	//UEngineCore::OpenLevel("MapEditor");
+	UEngineCore::OpenLevel("Play");
 }
 
 void UContentsCore::LoadResourceDirectory()
