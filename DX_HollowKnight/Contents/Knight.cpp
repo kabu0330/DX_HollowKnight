@@ -2,24 +2,43 @@
 #include "Knight.h"
 
 #include <EnginePlatform/EngineInput.h>
+#include <EnginePlatform/EngineWinImage.h>
 #include <EngineCore/SceneComponent.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/DefaultSceneComponent.h>
+#include <EngineCore/CameraActor.h>
+#include <EngineCore/EngineCamera.h>
 
 #include "KnightEffect.h"
 
-// std::shared_ptr<AKnight> AKnight::MainPawn = nullptr;
+AKnight* AKnight::MainPawn = nullptr;
 
 AKnight::AKnight()
 {
 	CreateRenderer();
-	GetWorld()->GetCamera(0);
+	std::shared_ptr<ACameraActor> Camera =  GetWorld()->GetCamera(0);
+	Camera->AttachToActor(this); // 카메라 부착
 
-	//MainPawn = static_cast<std::shared_ptr<AKnight>>(this);
+	MainPawn = this;
 
 	Velocity = 400.0f;
 	InitVelocity = Velocity;
 	DashSpeed = Velocity * 3.0f;
+
+	// Test
+	{
+		UEngineDirectory Dir;
+		if (false == Dir.MoveParentToDirectory("ContentsResources"))
+		{
+			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+			return;
+		}
+		Dir.Append("Image");
+		//UEngineFile ImageFiles = Dir.GetFile("dartmount_front.bmp");
+		UEngineFile ImageFiles = Dir.GetFile("block.png");
+
+		PixelCollisionImage.Load(nullptr, ImageFiles.GetPathToString());
+	}
 }
 
 void AKnight::BeginPlay()
@@ -37,6 +56,7 @@ void AKnight::Tick(float _DeltaTime)
 	TimeElapsed(_DeltaTime);
 	EndAnimationEffect();
 	InputCheck(_DeltaTime);
+	SetPixelCollision("");
 }
 
 void AKnight::TimeElapsed(float _DeltaTime)
@@ -69,6 +89,13 @@ void AKnight::EndAnimationEffect()
 			EffectRenderer->SetActive(false);
 		}
 	}
+}
+
+void AKnight::SetPixelCollision(std::string_view _BmpImageName)
+{
+	// Test
+	//UColor Color = PixelCollisionImage->GetColor(FIntPoint{ 3, 3 }, UColor(255, 255, 255, 255));
+	int a = 0;
 }
 
 bool AKnight::CanAction()
@@ -227,6 +254,8 @@ void AKnight::ChangeLookAnimation()
 void AKnight::InputCheck(float _DeltaTime)
 {
 	Move(_DeltaTime);
+	float ZValue = BodyRenderer->GetTransformRef().RelativeLocation.Z;
+	int a = 0;
 	if (UEngineInput::IsPress('Z'))
 	{
 		AddRelativeLocation(FVector{ 0.0f, 100.0f * _DeltaTime, 0.0f });
@@ -234,6 +263,18 @@ void AKnight::InputCheck(float _DeltaTime)
 
 	if (UEngineInput::IsFree('X'))
 	{
+
+	}
+
+	if (UEngineInput::IsPress('W'))
+	{
+		BodyRenderer->AddRelativeLocation({ 0.0f, 0.0f, 1.0f * _DeltaTime });
+
+	}
+
+	if (UEngineInput::IsPress('S'))
+	{
+		BodyRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f * _DeltaTime });
 
 	}
 }
@@ -262,6 +303,16 @@ void AKnight::Move(float _DeltaTime)
 	if (UEngineInput::IsPress(VK_RIGHT))
 	{
 		AddRelativeLocation(FVector{ Velocity * _DeltaTime, 0.0f, 0.0f });
+	}
+
+	// Debug Input
+	if (UEngineInput::IsPress(VK_UP))
+	{
+		AddRelativeLocation(FVector{ 0.0f, Velocity * _DeltaTime, 0.0f });
+	}
+	if (UEngineInput::IsPress(VK_DOWN))
+	{
+		AddRelativeLocation(FVector{ 0.0f, -Velocity * _DeltaTime, 0.0f });
 	}
 }
 
@@ -620,6 +671,7 @@ void AKnight::CreateRenderer()
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
+
 	float IdleFrameTime = 0.3f;
 	float RunFrameTime = 0.1f;
 	float ChangeFrameTime = 0.07f;
@@ -628,6 +680,8 @@ void AKnight::CreateRenderer()
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->SetupAttachment(RootComponent);
 	BodyRenderer->SetAutoScaleRatio(1.0f);
+	float ZSort = -100.0f;
+	BodyRenderer->SetWorldLocation({ 0.0f, 0.0f, ZSort });
 
 	// 이동 애니메이션
 	std::string Idle = "Idle";

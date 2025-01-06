@@ -55,6 +55,9 @@ public:
 		}
 	}
 
+	static class UEngineWinImage* LoadResource(std::string_view _Directory, std::string_view _SpriteName, UEngineWinImage* _ResImage);
+
+
 };
 
 enum class ELayer

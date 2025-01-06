@@ -7,6 +7,8 @@ AKnightEffect::AKnightEffect()
 	RootComponent = Default;
 
 	KnightEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	float ZSort = -500.0f;
+	KnightEffectRenderer->SetWorldLocation({ 0.0f, 0.0f, ZSort });
 
 	std::string SlashEffect = "SlashEffect";
 	KnightEffectRenderer->CreateAnimation(SlashEffect, SlashEffect, 0, 5, 0.05f, false);

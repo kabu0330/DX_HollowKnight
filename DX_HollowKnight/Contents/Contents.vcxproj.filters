@@ -25,7 +25,7 @@
     <ClInclude Include="TitleScene.h">
       <Filter>05_Title</Filter>
     </ClInclude>
-    <ClInclude Include="Map.h">
+    <ClInclude Include="Room.h">
       <Filter>06_Play</Filter>
     </ClInclude>
     <ClInclude Include="KnightEffect.h">
@@ -72,7 +72,7 @@
     <ClCompile Include="TitleScene.cpp">
       <Filter>05_Title</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
+    <ClCompile Include="Room.cpp">
       <Filter>06_Play</Filter>
     </ClCompile>
     <ClCompile Include="Knight.cpp">

@@ -4,7 +4,6 @@
 
 UEngineCamera::UEngineCamera()
 {
-
 }
 
 void UEngineCamera::BeginPlay()
@@ -28,7 +27,7 @@ UEngineCamera::~UEngineCamera()
 
 void UEngineCamera::Tick(float _DetlaTime)
 {
-	// 카메라는 틱에서 자신의 뷰와 프로젝트를 계산한다음 랜더러들에게 전달해줄 겁니다.
+	// 카메라는 Tick에서 View와 Projection을 계산 후 렌더러로 전달
 	Transform.View;
 	Transform.Projection;
 }
@@ -38,7 +37,7 @@ void UEngineCamera::Render(float _DetlaTime)
 	// 랜더링 진입하기 전에 한번 뷰포트 세팅하고 
 	UEngineCore::GetDevice().GetContext()->RSSetViewports(1, &ViewPortInfo);
 
-	//// Ranged for를 돌릴때는 복사가 일어나므로
+	// Ranged for를 돌릴때는 복사가 일어난다.
 	for (std::pair<const int, std::list<std::shared_ptr<URenderer>>>& RenderGroup : Renderers)
 	{
 		std::list<std::shared_ptr<URenderer>>& RenderList = RenderGroup.second;
@@ -88,6 +87,4 @@ void UEngineCamera::CalculateViewAndProjection()
 	default:
 		break;
 	}
-
-	int a = 0;
 }

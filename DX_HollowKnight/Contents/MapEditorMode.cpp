@@ -8,8 +8,8 @@
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/CameraActor.h>
 
-std::shared_ptr<class ACameraActor> AMapEditorMode::Camera = nullptr;
-FVector AMapEditorMode::MousePos = { 0.0f, 0.0f, 0.0f };
+//std::shared_ptr<class ACameraActor> AMapEditorMode::Camera = nullptr;
+//FVector AMapEditorMode::MousePos = { 0.0f, 0.0f, 0.0f };
 
 class TestWindow : public UEngineGUIWindow
 {
@@ -26,15 +26,15 @@ public:
 
 	void GetMousePos()
 	{
-		FVector MousePos = AMapEditorMode::MousePos;
-		ImGui::Text("Mouse Pos X : %.0f, Y : %.0f", MousePos.X, MousePos.Y);
+		//FVector MousePos = AMapEditorMode::MousePos;
+		//ImGui::Text("Mouse Pos X : %.0f, Y : %.0f", MousePos.X, MousePos.Y);
 	}
 };
 
 AMapEditorMode::AMapEditorMode()
 {
-	Camera = GetWorld()->GetCamera(0);
-	MousePos = Camera->ScreenMousePosToWorldPos();
+	//Camera = GetWorld()->GetCamera(0);
+	//MousePos = Camera->ScreenMousePosToWorldPos();
 
 	UEngineGUI::CreateGUIWindow<TestWindow>("TestWindow");
 }
@@ -60,22 +60,22 @@ void AMapEditorMode::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 	DrawGrid(100);
-	MousePos = Camera->ScreenMousePosToWorldPos();
+	//MousePos = Camera->ScreenMousePosToWorldPos();
 
-	if (true == UEngineInput::IsPress(VK_LBUTTON))
-	{
-		Wall->SetTileLocation(MousePos, 1);
-	}
+	//if (true == UEngineInput::IsPress(VK_LBUTTON))
+	//{
+	//	//Wall->SetTileLocation(MousePos, 1);
+	//}
 
-	if (true == UEngineInput::IsPress(VK_RBUTTON))
-	{
-		std::shared_ptr<MapObjectData> Tile = Wall->GetTileRef(MousePos);
-		if (nullptr != Tile->SpriteRenderer)
-		{
-			//Tile->SpriteRenderer->Destroy(5.0f);
-			Tile->SpriteRenderer = nullptr;
-		}
-	}
+	//if (true == UEngineInput::IsPress(VK_RBUTTON))
+	//{
+	//	//std::shared_ptr<MapObjectData> Tile = Wall->GetTileRef(MousePos);
+	//	if (nullptr != Tile->SpriteRenderer)
+	//	{
+	//		//Tile->SpriteRenderer->Destroy(5.0f);
+	//		Tile->SpriteRenderer = nullptr;
+	//	}
+	//}
 }
 
 void AMapEditorMode::DrawGrid(int PixelInterval)

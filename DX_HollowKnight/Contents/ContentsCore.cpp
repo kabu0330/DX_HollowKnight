@@ -32,11 +32,11 @@ void UContentsCore::CreateLevel()
 {
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("Title");
 	UEngineCore::CreateLevel<APlayGameMode, AKnight>("Play");
-	UEngineCore::CreateLevel<AMapEditorMode, APawn>("MapEditor");
+	//UEngineCore::CreateLevel<AMapEditorMode, APawn>("MapEditor");
 
 	//UEngineCore::OpenLevel("Title");
-	UEngineCore::OpenLevel("MapEditor");
-	//UEngineCore::OpenLevel("Play");
+	//UEngineCore::OpenLevel("MapEditor");
+	UEngineCore::OpenLevel("Play");
 }
 
 void UContentsCore::LoadResourceDirectory()

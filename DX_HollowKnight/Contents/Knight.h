@@ -1,6 +1,7 @@
 #pragma once
-#include <EngineCore/Pawn.h>
 #include <EngineBase/FSMStateManager.h>
+#include <EnginePlatform/EngineWinImage.h>
+#include <EngineCore/Pawn.h>
 #include "Global.h"
 
 // Ό³Έν : Player
@@ -23,20 +24,29 @@ public:
 	void TimeElapsed(float _DeltaTime);
 	void EndAnimationEffect();
 
-	//static std::shared_ptr<AKnight> GetPawn()
-	//{
-	//	return MainPawn;
-	//}
+	static AKnight* GetPawn()
+	{
+		return MainPawn;
+	}
 
 	std::shared_ptr<USceneComponent> GetRootComponent() const
 	{
 		return RootComponent;
 	}
 
+	std::shared_ptr<class USpriteRenderer> GetKnightRenderer() const
+	{
+		return BodyRenderer;
+	}
+
+	void SetPixelCollision(std::string_view _BmpImageName);
+
 protected:
 
 private:
-	//static std::shared_ptr<AKnight> MainPawn;
+	static AKnight* MainPawn;
+	UEngineWinImage PixelCollisionImage;
+
 	std::shared_ptr<class USpriteRenderer> BodyRenderer;
 	std::shared_ptr<class USpriteRenderer> EffectRenderer;
 

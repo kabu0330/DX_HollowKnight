@@ -188,7 +188,7 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="Map.h">
+    <ClInclude Include="Room.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -238,7 +238,7 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
+    <ClCompile Include="Room.cpp">
       <SubType>
       </SubType>
     </ClCompile>

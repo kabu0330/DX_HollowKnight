@@ -18,9 +18,12 @@ public:
 	void BeginPlay();
 	void Tick(float _DeltaTime);
 
+	static std::shared_ptr<class ACameraActor> Camera;
+	static FVector MousePos;
+	static FVector KnightPos;
 protected:
-
+	
 private:
-
+	class UEngineWinImage* PixelCollisionImage = nullptr;
 };
 

@@ -122,7 +122,7 @@ public:
 		RootComponent->AddRotation(_Value);
 	}
 
-	void AttachToActor(AActor* _Parent);
+	ENGINEAPI void AttachToActor(AActor* _Parent);
 
 	// 트랜스폼 자체를 고칠수는 없다. 복사본을 주는 함수.
 	FTransform GetActorTransform()

@@ -29,11 +29,11 @@ public:
 	void DrawGrid(int PixelInterval);
 
 
-	static FVector MousePos;
+	//static FVector MousePos;
 protected:
 
 private:
-	static std::shared_ptr<class ACameraActor> Camera;
+	//static std::shared_ptr<class ACameraActor> Camera;
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> VertexBuffer = nullptr;
 	UINT VertexSize = 0;
