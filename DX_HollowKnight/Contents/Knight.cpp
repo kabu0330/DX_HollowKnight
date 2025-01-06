@@ -16,8 +16,6 @@ AKnight* AKnight::MainPawn = nullptr;
 AKnight::AKnight()
 {
 	CreateRenderer();
-	std::shared_ptr<ACameraActor> Camera =  GetWorld()->GetCamera(0);
-	Camera->AttachToActor(this); // 카메라 부착
 
 	MainPawn = this;
 
@@ -25,20 +23,6 @@ AKnight::AKnight()
 	InitVelocity = Velocity;
 	DashSpeed = Velocity * 3.0f;
 
-	// Test
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image");
-		//UEngineFile ImageFiles = Dir.GetFile("dartmount_front.bmp");
-		UEngineFile ImageFiles = Dir.GetFile("block.png");
-
-		PixelCollisionImage.Load(nullptr, ImageFiles.GetPathToString());
-	}
 }
 
 void AKnight::BeginPlay()
@@ -56,7 +40,17 @@ void AKnight::Tick(float _DeltaTime)
 	TimeElapsed(_DeltaTime);
 	EndAnimationEffect();
 	InputCheck(_DeltaTime);
-	SetPixelCollision("");
+	SetCameraPosition();
+
+}
+
+void AKnight::SetCameraPosition()
+{
+	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetCamera(0);
+	FVector Pos = RootComponent->GetTransformRef().RelativeLocation;
+	FVector ScreenSize = UEngineCore::GetScreenScale();
+	CameraPos = { Pos.X, Pos.Y + ScreenSize.Y * 0.35f };
+	Camera->SetActorLocation(CameraPos);
 }
 
 void AKnight::TimeElapsed(float _DeltaTime)
@@ -89,13 +83,6 @@ void AKnight::EndAnimationEffect()
 			EffectRenderer->SetActive(false);
 		}
 	}
-}
-
-void AKnight::SetPixelCollision(std::string_view _BmpImageName)
-{
-	// Test
-	//UColor Color = PixelCollisionImage->GetColor(FIntPoint{ 3, 3 }, UColor(255, 255, 255, 255));
-	int a = 0;
 }
 
 bool AKnight::CanAction()

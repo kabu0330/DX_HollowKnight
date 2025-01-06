@@ -25,5 +25,6 @@ protected:
 	
 private:
 	class UEngineWinImage* PixelCollisionImage = nullptr;
+	std::vector<std::shared_ptr<class ARoom>> Rooms;
 };
 

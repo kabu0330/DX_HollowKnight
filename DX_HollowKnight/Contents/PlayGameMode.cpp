@@ -17,6 +17,7 @@ class DebugWindow : public UEngineGUIWindow
 public:
 	void OnGUI() override
 	{
+		GetCurRoom();
 		GetMousePos();
 		GetKnightPos();
 		GetKnightZValue();
@@ -43,26 +44,30 @@ public:
 		ImGui::Text("Knight Z Vaule : %.6f", ZValue);
 	}
 
+	void GetCurRoom()
+	{
+		if (nullptr == ARoom::GetCurRoom())
+		{
+			return;
+		}
+		std::string CurRoomName = ARoom::GetCurRoom()->GetName();
+		ImGui::Text("CurRoom Name : %s", CurRoomName.c_str());
+	}
 };
 
 
 APlayGameMode::APlayGameMode()
 {
-	// Test
-	//{
-	//	UEngineDirectory Dir;
-	//	if (false == Dir.MoveParentToDirectory("ContentsResources"))
-	//	{
-	//		MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-	//		return;
-	//	}
-	//	Dir.Append("Image");
-	//	//UEngineFile ImageFiles = Dir.GetFile("dartmount_front.bmp");
-	//	UEngineFile ImageFiles = Dir.GetFile("block.png");
+	Camera = GetWorld()->GetMainCamera();
+	Camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
+	Camera->GetCameraComponent()->SetZSort(0, true);
 
-	//	// 편한 인터페이스로 안됩니다.
-	//	PixelCollisionImage->Load(nullptr, ImageFiles.GetPathToString());
-	//}
+	std::shared_ptr<ARoom> Dirtmouth = GetWorld()->SpawnActor<ARoom>();
+	Dirtmouth->SetName("Dirtmouth");
+	Rooms.push_back(Dirtmouth);
+	ARoom::GetCurRoom() = Rooms[0];
+	std::string RoomName = ARoom::GetCurRoom()->GetName();
+	UEngineGUI::CreateGUIWindow<DebugWindow>("DebugWindow");
 }
 
 APlayGameMode::~APlayGameMode()
@@ -72,14 +77,6 @@ APlayGameMode::~APlayGameMode()
 void APlayGameMode::BeginPlay()
 {
 	AActor::BeginPlay();
-
-	Camera = GetWorld()->GetMainCamera();
-	Camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
-	Camera->GetCameraComponent()->SetZSort(0, true);
-
-	UEngineGUI::CreateGUIWindow<DebugWindow>("DebugWindow");
-
-	GetWorld()->SpawnActor<ARoom>();
 }
 
 void APlayGameMode::Tick(float _DeltaTime)

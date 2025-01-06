@@ -21,6 +21,8 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
+	void SetCameraPosition();
+
 	void TimeElapsed(float _DeltaTime);
 	void EndAnimationEffect();
 
@@ -39,13 +41,11 @@ public:
 		return BodyRenderer;
 	}
 
-	void SetPixelCollision(std::string_view _BmpImageName);
-
 protected:
 
 private:
 	static AKnight* MainPawn;
-	UEngineWinImage PixelCollisionImage;
+	FVector CameraPos = { 0.0f, 0.0f, 0.0f };
 
 	std::shared_ptr<class USpriteRenderer> BodyRenderer;
 	std::shared_ptr<class USpriteRenderer> EffectRenderer;

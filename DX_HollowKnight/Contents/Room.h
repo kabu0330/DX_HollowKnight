@@ -18,9 +18,27 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
+	const UEngineWinImage& GetPixelCollisionImage()
+	{
+		return PixelCollisionImage;
+	}
+	static std::shared_ptr<ARoom>& GetCurRoom()
+	{
+		return CurRoom;
+	}
+	
+	bool IsLinking(std::shared_ptr<ARoom> _Room);
+	bool InterLinkRoom(std::shared_ptr<ARoom> _Room);
+	std::shared_ptr<ARoom> LinkRoom(std::shared_ptr<ARoom> _Room);
+
 protected:
 
 private:
+	static std::shared_ptr<ARoom> CurRoom;
+	UEngineWinImage PixelCollisionImage;
+
 	std::shared_ptr<class USpriteRenderer> BackgroundRenderer;
+
+	std::vector<std::shared_ptr<ARoom>> Rooms;
 };
 
