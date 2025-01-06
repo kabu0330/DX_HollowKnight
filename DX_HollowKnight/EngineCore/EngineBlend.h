@@ -15,7 +15,6 @@ public:
 	UEngineBlend& operator=(const UEngineBlend& _Other) = delete;
 	UEngineBlend& operator=(UEngineBlend&& _Other) noexcept = delete;
 
-
 	static std::shared_ptr<UEngineBlend> Create(std::string_view _Name, const D3D11_BLEND_DESC& _Value);
 
 	void Setting();

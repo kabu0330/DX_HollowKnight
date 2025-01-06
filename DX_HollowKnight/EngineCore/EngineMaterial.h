@@ -55,7 +55,6 @@ private:
 	std::shared_ptr<UEngineBlend> Blend;
 
 	D3D11_PRIMITIVE_TOPOLOGY TOPOLOGY = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	// UEngineCore::GetDevice().GetContext()->IASetPrimitiveTopology(Topology);
-	
+	// UEngineCore::GetDevice().GetContext()->IASetPrimitiveTopology(Topology);	
 };
 

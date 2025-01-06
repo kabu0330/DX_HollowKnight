@@ -51,7 +51,6 @@ public:
 		_Ser >> SpriteIndex;
 	}
 
-
 };
 
 // Ό³Έν :

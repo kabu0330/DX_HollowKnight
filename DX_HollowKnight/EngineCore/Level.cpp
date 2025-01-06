@@ -95,17 +95,10 @@ void ULevel::Render(float _DeltaTime)
 	if (true == UEngineWindow::IsApplicationOn())
 	{
 		UEngineGUI::GUIRender();
-
-		// IMGUI가 랜더링을하면서 
-		
 	}
 	
-
-
 	UEngineCore::GetDevice().RenderEnd();
 }
-
-
 
 void ULevel::ChangeRenderGroup(int _CameraOrder, int _PrevGroupOrder, std::shared_ptr<URenderer> _Renderer)
 {

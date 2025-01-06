@@ -27,7 +27,6 @@ FIntPoint FVector::ConvertToPoint() const
 	return { iX(), iY() };
 }
 
-
 std::function<bool(const FTransform&, const FTransform&)> FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::Max)][static_cast<int>(ECollisionType::Max)];
 
 class CollisionFunctionInit

@@ -173,6 +173,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="EngineWinImage.h" />
     <ClInclude Include="PreCompile.h" />
   </ItemGroup>
   <ItemGroup>
@@ -182,6 +183,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="EngineWinImage.cpp" />
     <ClCompile Include="PreCompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">PreCompile.h</PrecompiledHeaderFile>

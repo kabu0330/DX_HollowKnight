@@ -3,18 +3,12 @@
 #include <EngineBase/EnginePath.h>
 #include <EngineBase/EngineString.h>
 
-// 템플릿은 다 헤더에 구현되어야 합니다.
-
 class UEngineResources : public UObject
 {
 public:
 	// constrcuter destructer
-	UEngineResources() {
-
-	}
-	~UEngineResources()	{
-
-	}
+	UEngineResources() {}
+	~UEngineResources()	{}
 
 	// delete Function
 	UEngineResources(const UEngineResources& _Other) = delete;
@@ -55,7 +49,6 @@ public:
 
 	// resources 관리 함수들은 전부 다 core에서만 사용
 	ENGINEAPI static void PushRes(std::shared_ptr<UEngineResources> _Res, const std::string_view _Info, std::string_view _Name, std::string_view _Path);
-
 
 	ENGINEAPI UEnginePath GetPath()
 	{

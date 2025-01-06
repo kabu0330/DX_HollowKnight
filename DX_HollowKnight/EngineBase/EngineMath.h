@@ -245,7 +245,7 @@ public:
 		return { iX(), iY() };
 	}
 
-	class FIntPoint ConvertToPoint() const;
+	ENGINEAPI class FIntPoint ConvertToPoint() const;
 
 	void Normalize()
 	{
@@ -589,7 +589,6 @@ public:
 		Identity();
 		DirectMatrix = DirectX::XMMatrixPerspectiveFovLH(_FovAngle, _Width / _Height, _Near, _Far);
 	}
-
 
 	//                 1280          720        640           360            누가 앞에 나오고 누가 뒤에 나올거냐
 	void ViewPort(float _Width, float _Height, float _Left, float _Top, float _ZMin, float _ZMax)

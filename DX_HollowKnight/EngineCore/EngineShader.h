@@ -38,7 +38,6 @@ protected:
 
 	void ShaderResCheck();
 
-
 private:
 };
 

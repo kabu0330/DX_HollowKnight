@@ -43,7 +43,7 @@ private:
 
 	// 피격 관련
 	bool bIsKnockbackable = true;
-	int knockbackDistance = 50.0f;
+	float knockbackDistance = 50.0f;
 	
 	// 재화
 	int Geo = 0;

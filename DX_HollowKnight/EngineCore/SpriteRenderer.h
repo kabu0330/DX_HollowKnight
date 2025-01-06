@@ -80,7 +80,9 @@ public:
 		return Sprite->GetName();
 	}
 
-	ENGINEAPI void SetSprite(std::string_view _Name, size_t _CurIndex = 0);
+	ENGINEAPI void SetSprite(std::string_view _Name, UINT _CurIndex = 0);
+
+	ENGINEAPI void SetTexture(std::string_view _Name, bool AutoScale = false, float _Ratio = 1.0f);
 
 	bool IsCurAnimationEnd()
 	{
@@ -121,7 +123,7 @@ protected:
 
 
 private:
-	URenderUnit* MainUnit;
+	URenderUnit* MainUnit = nullptr;
 
 	int CurIndex = 0;
 	float CurAnimationSpeed = 1.0f;

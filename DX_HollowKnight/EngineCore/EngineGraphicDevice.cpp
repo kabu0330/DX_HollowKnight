@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "EngineGraphicDevice.h"
 #include "EngineTexture.h"
+#include "EngineDepthStencilState.h"
 
 UEngineGraphicDevice::UEngineGraphicDevice()
 {
@@ -345,6 +346,21 @@ void UEngineGraphicDevice::RenderStart()
 
     // 이미지 파란색으로 채색해줘.
     Context->ClearRenderTargetView(RTV.Get(), ClearColor.Arr1D);
+
+    Context->ClearDepthStencilView(DepthTex->GetDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+    // 랜더타겟 랜더타겟 랜더타겟
+    // RTV와 DSV를 합친 개념을 랜더타겟이라고 부른다.
+    // 그걸 n장 사용하게 되면 멀티랜더타겟이라고 부른다.
+
+    // 여기에다가 다시 그려줘
+    ID3D11RenderTargetView* RTV = UEngineCore::GetDevice().GetRTV();
+    ID3D11RenderTargetView* ArrRtv[16] = { 0 };
+    ArrRtv[0] = RTV; // SV_Target0
+    Context->OMSetRenderTargets(1, &ArrRtv[0], DepthTex->GetDSV());
+
+    std::shared_ptr<UEngineDepthStencilState> DepthState = UEngineDepthStencilState::Find<UEngineDepthStencilState>("BaseDepth");
+    DepthState->Setting();
 }
 
 void UEngineGraphicDevice::RenderEnd()

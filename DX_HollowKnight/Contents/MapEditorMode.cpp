@@ -83,8 +83,8 @@ void AMapEditorMode::DrawGrid(int PixelInterval)
 	std::vector<VertexData> Vertices;
 	
 	FVector ScreenSize = UEngineCore::GetScreenScale();
-	int HalfWidth = ScreenSize.X / 2;
-	int HalfHeight = ScreenSize.Y / 2;
+	int HalfWidth = ScreenSize.iX() / 2;
+	int HalfHeight = ScreenSize.iY() / 2;
 
 	// ¼öÆò¼±
 	for (int x = -HalfWidth; x < HalfWidth; x += PixelInterval)

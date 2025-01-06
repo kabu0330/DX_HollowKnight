@@ -142,6 +142,10 @@
     <ClInclude Include="RenderUnit.h">
       <Filter>10_Render</Filter>
     </ClInclude>
+    <ClInclude Include="EngineDepthStencilState.h">
+      <Filter>07_Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeEventComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -273,6 +277,10 @@
     <ClCompile Include="EngineShaderResources.cpp">
       <Filter>10_Render</Filter>
     </ClCompile>
+    <ClCompile Include="EngineDepthStencilState.cpp">
+      <Filter>07_Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeEventComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">

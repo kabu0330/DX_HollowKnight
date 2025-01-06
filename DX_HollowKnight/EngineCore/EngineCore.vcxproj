@@ -179,6 +179,7 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="EngineCoreDebug.h" />
+    <ClInclude Include="EngineDepthStencilState.h" />
     <ClInclude Include="EngineDeviceBuffer.h" />
     <ClInclude Include="EngineEnums.h" />
     <ClInclude Include="EngineGraphicDevice.h" />
@@ -217,6 +218,7 @@
     <ClInclude Include="SceneComponent.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="ThirdParty\DirectxTex\Inc\DirectXTex.h" />
+    <ClInclude Include="TimeEventComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
@@ -231,6 +233,7 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="EngineCoreDebug.cpp" />
+    <ClCompile Include="EngineDepthStencilState.cpp" />
     <ClCompile Include="EngineDeviceBuffer.cpp" />
     <ClCompile Include="EngineGraphicDevice.cpp" />
     <ClCompile Include="EngineGraphicDevice_Resources.cpp" />
@@ -274,6 +277,7 @@
     <ClCompile Include="RenderUnit.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
+    <ClCompile Include="TimeEventComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="ThirdParty\DirectxTex\Debug\DirectXTex_Debug.lib">

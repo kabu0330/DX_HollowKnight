@@ -29,6 +29,16 @@ public:
 
 	ENGINEAPI static std::shared_ptr<UEngineTexture> Load(std::string_view _Name, std::string_view _Path);
 
+	ID3D11DepthStencilView* GetDSV()
+	{
+		return DSV.Get();
+	}
+
+	ID3D11RenderTargetView* GetRTV()
+	{
+		return RTV.Get();
+	}
+
 	ID3D11ShaderResourceView* GetSRV()
 	{
 		return SRV.Get();
