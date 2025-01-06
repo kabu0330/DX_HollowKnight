@@ -1,13 +1,18 @@
 #include "PreCompile.h"
 #include "EngineMath.h"
 
-const FVector FVector::ZERO = { 0.0f, 0.0f };
-const FVector FVector::LEFT = { -1.0f, 0.0f };
-const FVector FVector::RIGHT = { 1.0f, 0.0f };
-const FVector FVector::UP = { 0.0f, 1.0f };
-const FVector FVector::DOWN = { 0.0f, -1.0f };
-const FVector FVector::FORWARD = { 0.0f, 0.0f, 1.0f };
-const FVector FVector::BACK = { 0.0f, 0.0f , -1.0f };
+
+template<>
+FQuat TVector<float>::DegAngleToQuaternion()
+{
+	FQuat Result;
+	Result.DirectVector = DirectX::XMQuaternionRotationRollPitchYawFromVector(DirectVector);
+	return Result;
+}
+
+// 디그리를 라디안으로 바꾸는 값이 된다.
+
+
 
 // const FVector FVector::BLUE = {0.0f, 0.0f, 1.0f, 1.0f};
 
@@ -26,6 +31,7 @@ FIntPoint FVector::ConvertToPoint() const
 {
 	return { iX(), iY() };
 }
+
 
 std::function<bool(const FTransform&, const FTransform&)> FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::Max)][static_cast<int>(ECollisionType::Max)];
 
@@ -215,6 +221,7 @@ FVector FVector::TransformNormal(const FVector& _Vector, const class FMatrix& _M
 	return Copy * _Matrix;
 }
 
+template<>
 FVector FVector::operator*(const class FMatrix& _Matrix) const
 {
 	FVector Result;

@@ -10,6 +10,7 @@
 #include <EngineCore/EngineCamera.h>
 
 #include "KnightEffect.h"
+#include "Room.h"
 
 AKnight* AKnight::MainPawn = nullptr;
 
@@ -42,6 +43,29 @@ void AKnight::Tick(float _DeltaTime)
 	InputCheck(_DeltaTime);
 	SetCameraPosition();
 
+}
+
+void AKnight::CheckGround(FVector _Gravity)
+{
+	std::shared_ptr<ARoom> CurRoom = ARoom::GetCurRoom();
+	if (nullptr == CurRoom)
+	{
+		return;
+	}
+	CurRoom->CheckGround(_Gravity);
+}
+
+void AKnight::Gravity(float _DeltaTime)
+{
+	if (false == bIsGround)
+	{
+		AddRelativeLocation(GravityForce * _DeltaTime);
+		GravityForce += FVector::DOWN * GravityValue * _DeltaTime;
+	}
+	else
+	{
+		GravityForce = FVector::ZERO;
+	}
 }
 
 void AKnight::SetCameraPosition()
@@ -240,7 +264,7 @@ void AKnight::ChangeLookAnimation()
 
 void AKnight::InputCheck(float _DeltaTime)
 {
-	Move(_DeltaTime);
+	//Move(_DeltaTime);
 	float ZValue = BodyRenderer->GetTransformRef().RelativeLocation.Z;
 	int a = 0;
 	if (UEngineInput::IsPress('Z'))
@@ -283,6 +307,9 @@ void AKnight::Move(float _DeltaTime)
 		return;
 	}
 
+	CheckGround(GravityForce * _DeltaTime);
+	Gravity(_DeltaTime);
+
 	if (UEngineInput::IsPress(VK_LEFT))
 	{
 		AddRelativeLocation(FVector{ -Velocity * _DeltaTime, 0.0f, 0.0f });
@@ -300,6 +327,25 @@ void AKnight::Move(float _DeltaTime)
 	if (UEngineInput::IsPress(VK_DOWN))
 	{
 		AddRelativeLocation(FVector{ 0.0f, -Velocity * _DeltaTime, 0.0f });
+	}
+
+	while (true)
+	{
+		if (nullptr == ARoom::GetCurRoom())
+		{
+			break;
+		}
+		UColor Color = ARoom::GetCurRoom()->GetPixelCollisionImage().GetColor(GetActorTransform().WorldLocation);
+		UColor White = { 255, 255, 255, 255 };
+		UColor Blue = { 0, 0, 0, 0 };
+		if (Color != White)
+		{
+			AddRelativeLocation(FVector::UP);
+		}
+		else
+		{
+			break;
+		}
 	}
 }
 
@@ -390,12 +436,14 @@ void AKnight::SetIdle(float _DeltaTime)
 	bIsOnGround = true;
 	bCanRotation = true;
 
+
 	if (UEngineInput::IsPress(VK_LEFT) || UEngineInput::IsPress(VK_RIGHT))
 	{
 		FSM.ChangeState(EKnightState::IDLE_TO_RUN);
 		return;
 	}
 
+	Move(_DeltaTime);
 	ChangeJumpAnimation();  // 점프
 	ChangeDash(); // 대시
 
@@ -410,8 +458,10 @@ void AKnight::SetIdle(float _DeltaTime)
 
 void AKnight::SetRun(float _DeltaTime)
 {
-	bCanRotation = true;
+	CheckGround(GravityForce * _DeltaTime);
+	Gravity(_DeltaTime);
 
+	bCanRotation = true;
 
 	if (UEngineInput::IsFree(VK_LEFT) && UEngineInput::IsFree(VK_RIGHT))
 	{
@@ -427,6 +477,9 @@ void AKnight::SetRun(float _DeltaTime)
 
 void AKnight::SetIdleToRun(float _DeltaTime)
 {
+	CheckGround(GravityForce * _DeltaTime);
+	Gravity(_DeltaTime);
+
 	bCanRotation = true;
 
 	ChangeNextAnimation(EKnightState::RUN);
@@ -439,6 +492,9 @@ void AKnight::SetIdleToRun(float _DeltaTime)
 
 void AKnight::SetRunToIdle(float _DeltaTime)
 {
+	CheckGround(GravityForce * _DeltaTime);
+	Gravity(_DeltaTime);
+
 	bCanRotation = true;
 	bIsDashing = false;
 	ChangeNextAnimation(EKnightState::IDLE);
@@ -457,6 +513,9 @@ void AKnight::SetRunToIdle(float _DeltaTime)
 
 void AKnight::SetJump(float _DeltaTime)
 {
+	CheckGround(GravityForce * _DeltaTime);
+	Gravity(_DeltaTime);
+
 	bCanRotation = true;
 
 	ChangeNextAnimation(EKnightState::AIRBORN);
@@ -466,6 +525,9 @@ void AKnight::SetJump(float _DeltaTime)
 
 void AKnight::SetAirborn(float _DeltaTime)
 {
+	CheckGround(GravityForce * _DeltaTime);
+	Gravity(_DeltaTime);
+
 	bCanRotation = true;
 
 	ChangeNextAnimation(EKnightState::LAND);
@@ -473,11 +535,17 @@ void AKnight::SetAirborn(float _DeltaTime)
 
 void AKnight::SetLand(float _DeltaTime)
 {
+	CheckGround(GravityForce * _DeltaTime);
+	Gravity(_DeltaTime);
+
 	ChangeNextAnimation(EKnightState::IDLE);
 }
 
 void AKnight::SetHardLand(float _DeltaTime)
 {
+	CheckGround(GravityForce * _DeltaTime);
+	Gravity(_DeltaTime);
+
 	ChangeNextAnimation(EKnightState::IDLE);
 }
 
@@ -659,10 +727,10 @@ void AKnight::CreateRenderer()
 	RootComponent = Default;
 
 
-	float IdleFrameTime = 0.3f;
-	float RunFrameTime = 0.1f;
-	float ChangeFrameTime = 0.07f;
-	float SlashFrameTime = 0.05f;
+	float IdleFrameTime = 0.15f;
+	float RunFrameTime = 0.07f;
+	float ChangeFrameTime = 0.05f;
+	float SlashFrameTime = 0.03f;
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->SetupAttachment(RootComponent);

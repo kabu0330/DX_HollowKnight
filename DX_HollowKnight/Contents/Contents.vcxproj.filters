@@ -44,7 +44,7 @@
       <Filter>07_MapEditor</Filter>
     </ClInclude>
     <ClInclude Include="ContentsRenderer.h">
-      <Filter>Render</Filter>
+      <Filter>08_Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -91,7 +91,7 @@
       <Filter>07_MapEditor</Filter>
     </ClCompile>
     <ClCompile Include="ContentsRenderer.cpp">
-      <Filter>Render</Filter>
+      <Filter>08_Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -127,9 +127,6 @@
     </Filter>
     <Filter Include="07_MapEditor">
       <UniqueIdentifier>{17469ec8-26a6-4000-8340-33b98ecd2d11}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Render">
-      <UniqueIdentifier>{df9c11e7-5e7b-4aaf-8f1b-6c07ec7aae31}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -49,7 +49,7 @@ public:
 		return { Info.bmWidth, Info.bmHeight };
 	}
 
-	ENGINEAPI UColor GetColor(FVector _Point, UColor _DefaultColor = UColor::WHITE)
+	ENGINEAPI UColor GetColor(FVector _Point, UColor _DefaultColor = UColor{255, 255, 255, 255})
 	{
 		return GetColor(_Point.ConvertToPoint(), _DefaultColor);
 	}

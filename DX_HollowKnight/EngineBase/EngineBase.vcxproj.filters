@@ -40,6 +40,7 @@
     <ClCompile Include="EngineDelegate.cpp">
       <Filter>08_Event</Filter>
     </ClCompile>
+    <ClCompile Include="EngineRandom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PreCompile.h">
@@ -84,6 +85,7 @@
     <ClInclude Include="EngineDelegate.h">
       <Filter>08_Event</Filter>
     </ClInclude>
+    <ClInclude Include="EngineRandom.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_Precompile">

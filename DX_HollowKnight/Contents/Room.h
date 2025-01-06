@@ -18,7 +18,7 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
-	const UEngineWinImage& GetPixelCollisionImage()
+	UEngineWinImage& GetPixelCollisionImage()
 	{
 		return PixelCollisionImage;
 	}
@@ -28,8 +28,10 @@ public:
 	}
 	
 	bool IsLinking(std::shared_ptr<ARoom> _Room);
-	bool InterLinkRoom(std::shared_ptr<ARoom> _Room);
+	bool InterLinkRoom(std::shared_ptr<ARoom> _Room, FVector _WorldPos);
 	std::shared_ptr<ARoom> LinkRoom(std::shared_ptr<ARoom> _Room);
+
+	void CheckGround(FVector _MovePos);
 
 protected:
 

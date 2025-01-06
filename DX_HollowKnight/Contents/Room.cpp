@@ -2,6 +2,7 @@
 #include "Room.h"
 #include <EngineCore/SpriteRenderer.h>
 #include <EnginePlatform/EngineInput.h>
+#include "PlayGameMode.h"
 
 std::shared_ptr<ARoom> ARoom::CurRoom = nullptr;
 
@@ -18,7 +19,7 @@ ARoom::ARoom()
 
 	float ZSort = 100.0f;
 
-	BackgroundRenderer->SetTexture("dartmount_sample.bmp", true, 1.2f);
+	BackgroundRenderer->SetTexture("dartmount_front2.bmp", true, 1.0f);
 	BackgroundRenderer->SetWorldLocation({ 0.0f, 0.0f, ZSort });
 
 
@@ -35,6 +36,7 @@ ARoom::ARoom()
 
 		PixelCollisionImage.Load(nullptr, ImageFiles.GetPathToString());
 	}
+
 }
 
 ARoom::~ARoom()
@@ -49,6 +51,7 @@ void ARoom::BeginPlay()
 void ARoom::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
+	
 }
 
 bool ARoom::IsLinking(std::shared_ptr<ARoom> _Room)
@@ -63,9 +66,13 @@ bool ARoom::IsLinking(std::shared_ptr<ARoom> _Room)
 	return false;
 }
 
-bool ARoom::InterLinkRoom(std::shared_ptr<ARoom> _Room)
+bool ARoom::InterLinkRoom(std::shared_ptr<ARoom> _Room, FVector _WorldPos)
 {
-	return false;
+	this->LinkRoom(_Room);
+	_Room->LinkRoom(static_cast<std::shared_ptr<ARoom>>(this));
+	_Room->SetActorLocation(_WorldPos);
+
+	return true;
 }
 
 std::shared_ptr<ARoom> ARoom::LinkRoom(std::shared_ptr<ARoom> _Room)
@@ -83,5 +90,24 @@ std::shared_ptr<ARoom> ARoom::LinkRoom(std::shared_ptr<ARoom> _Room)
 
 	Rooms.push_back(_Room);
 	return Rooms[Rooms.size() - 1];
+}
+
+void ARoom::CheckGround(FVector _MovePos)
+{
+	FVector NextPos = APlayGameMode::KnightPos + _MovePos;
+	NextPos.X = floorf(NextPos.X);
+	NextPos.Y = floorf(NextPos.Y);
+
+	UColor Color = PixelCollisionImage.GetColor(APlayGameMode::KnightPos);
+	if (Color == UColor{ 255, 255, 255, 255 })
+	{
+		AKnight::GetPawn()->IsGround() = false;
+	}
+	else // 흰색 아니면 다 바닥으로 보겠다.
+	{
+		AKnight::GetPawn()->IsGround() = true;
+	}
+	bool Result = AKnight::GetPawn()->IsGround();
+
 }
 
