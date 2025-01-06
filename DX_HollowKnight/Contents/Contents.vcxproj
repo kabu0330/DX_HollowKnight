@@ -168,6 +168,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ContentsCore.h" />
+    <ClInclude Include="ContentsRenderer.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="FightUnit.h">
       <SubType>
       </SubType>
@@ -214,6 +218,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp" />
+    <ClCompile Include="ContentsRenderer.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="FightUnit.cpp">
       <SubType>
       </SubType>

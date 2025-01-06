@@ -10,7 +10,6 @@ public:
 	//USpriteRenderer* SpriteRenderer;
 	//bool bIsCollision = false; // 충돌여부
 	//bool bIsInteractable = false; // 통과 여부
-	//
 
 	//FVector Scale;
 	//FVector Position;

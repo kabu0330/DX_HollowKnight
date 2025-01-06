@@ -35,8 +35,8 @@ void UContentsCore::CreateLevel()
 	UEngineCore::CreateLevel<AMapEditorMode, APawn>("MapEditor");
 
 	//UEngineCore::OpenLevel("Title");
-	//UEngineCore::OpenLevel("MapEditor");
-	UEngineCore::OpenLevel("Play");
+	UEngineCore::OpenLevel("MapEditor");
+	//UEngineCore::OpenLevel("Play");
 }
 
 void UContentsCore::LoadResourceDirectory()
@@ -71,6 +71,26 @@ void UContentsCore::LoadResourceDirectory()
 		}
 
 	}
+
+	// Shader
+	{
+		UEngineDirectory CurDir;
+		CurDir.MoveParentToDirectory("ContentsShader");
+
+		std::vector<UEngineFile> ShaderFiles = CurDir.GetAllFile(true, { ".fx", ".hlsl" });
+
+		for (size_t i = 0; i < ShaderFiles.size(); i++)
+		{
+			UEngineShader::ReflectionCompile(ShaderFiles[i]);
+		}
+	}
+
+	{
+		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("MyMaterial");
+		Mat->SetVertexShader("ContentsShader.fx");
+		Mat->SetPixelShader("ContentsShader.fx");
+	}
+
 	LoadContentsResource("MapObjectResources");
 
 	// Knight
