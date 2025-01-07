@@ -30,6 +30,7 @@ void UEngineCamera::Tick(float _DetlaTime)
 	// 카메라는 Tick에서 View와 Projection을 계산 후 렌더러로 전달
 	Transform.View;
 	Transform.Projection;
+	int a = 0;
 }
 
 void UEngineCamera::Render(float _DetlaTime)

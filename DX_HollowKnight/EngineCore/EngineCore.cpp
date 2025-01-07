@@ -9,7 +9,7 @@
 #include "EngineGUI.h"
 #include "Level.h"
 
-
+// EngineCore.dll에 생성된 메모리여야 하므로 cpp 파일에서 Getter 함수를 구현한다. 헤더에서 구현하니 복사된 메모리를 참조하더라.
 UEngineGraphicDevice& UEngineCore::GetDevice()
 {
 	return Device;
@@ -20,16 +20,13 @@ UEngineWindow& UEngineCore::GetMainWindow()
 	return MainWindow;
 }
 
-// 리얼 본체죠?
-// UEngineGraphicDevice EngienCore.dll::UEngineCore::Device;
-UEngineGraphicDevice UEngineCore::Device;
+UEngineGraphicDevice UEngineCore::Device; // UEngineGraphicDevice EngienCore.dll::UEngineCore::Device;
 
 UEngineWindow UEngineCore::MainWindow;
 HMODULE UEngineCore::ContentsDLL = nullptr;
 std::shared_ptr<IContentsCore> UEngineCore::Core;
 UEngineInitData UEngineCore::Data;
 UEngineTimer UEngineCore::Timer;
-
 
 std::shared_ptr<class ULevel> UEngineCore::NextLevel;
 std::shared_ptr<class ULevel> UEngineCore::CurLevel = nullptr;
@@ -70,14 +67,13 @@ void UEngineCore::LoadContents(std::string_view _DllName)
 #endif
 
 	UEngineFile File = Dir.GetFile(_DllName);
-
 	std::string FullPath = File.GetPathToString();
-	// 규칙이 생길수밖에 없다.
+
 	ContentsDLL = LoadLibraryA(FullPath.c_str());
 
 	if (nullptr == ContentsDLL)
 	{
-		MSGASSERT("컨텐츠 기능을 로드할수가 없습니다.");
+		MSGASSERT("Contents dll 파일을 로드할 수 없습니다.");
 		return;
 	}
 
@@ -106,57 +102,45 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 
 	LoadContents(_DllName);
 
-	// 윈도우와는 무관합니다.
 	UEngineWindow::WindowMessageLoop(
 		[]()
 		{
-			// 어딘가에서 이걸 호출하면 콘솔창이 뜨고 그 뒤로는 std::cout 하면 그 콘솔창에 메세지가 뜰겁니다.
 			// UEngineDebug::StartConsole();
-			// 먼저 디바이스 만들고
-			Device.CreateDeviceAndContext();
-			// 로드하고
-			Core->EngineStart(Data);
-			// 윈도우 조정할수 있다.
-			MainWindow.SetWindowPosAndScale(Data.WindowPos, Data.WindowSize);
-			Device.CreateBackBuffer(MainWindow);
-			// 디바이스가 만들어지지 않으면 리소스 로드도 할수가 없다.
-			// 여기부터 리소스 로드가 가능하다.
 			
+			// 1. 그래픽카드 정보를 가져와서 Device와 Context를 생성하고
+			Device.CreateDeviceAndContext();
+
+			// 2. 윈도우 초기 세팅값 및 컨텐츠 리소스를 로드하고
+			Core->EngineStart(Data);
+			
+			// 3. 윈도우 크기를 조절하고
+			MainWindow.SetWindowPosAndScale(Data.WindowPos, Data.WindowSize);
+
+			// 4. 윈도우 크기 정보를 바탕으로 백버퍼를 생성한다.
+			Device.CreateBackBuffer(MainWindow);
+
+			// 5. IMGUI 로드
 			UEngineGUI::Init();
 		},
 		[]()
 		{
+			// 게임 실행
 			EngineFrame();
-			// 엔진이 돌아갈때 하고 싶은것
 		},
 		[]()
 		{
-			// static으로 하자고 했습니다.
-			// 이때 레벨이 다 delete가 되어야 한다.
-			// 레퍼런스 카운트로 관리되면 그 레퍼런스 카운트는 내가 세고 있어요.
+			// 게임 종료 시, 딱 한번만 호출
 			EngineEnd();
-		});
-
-
-	// 게임 엔진이 시작되었다.
-	// 윈도우창은 엔진이 알아서 띄워줘야 하고.
-
-	// Window 띄워줘야 한다.
-
-	
+		});	
 }
 
 // 헤더 순환 참조를 막기 위한 함수분리
 std::shared_ptr<ULevel> UEngineCore::NewLevelCreate(std::string_view _Name)
 {
-	// 만들기만 하고 보관을 안하면 앤 그냥 지워집니다. <= 
-	
-	// 만들면 맵에 넣어서 레퍼런스 카운트를 증가시킵니다.
-	// UObject의 기능이었습니다.
 	std::shared_ptr<ULevel> Ptr = std::make_shared<ULevel>();
 	Ptr->SetName(_Name);
 
-	LevelMap.insert({ _Name.data(), Ptr});
+	LevelMap.insert({ _Name.data(), Ptr}); // 생성된 레벨은 모두 LevelMap에 저장
 
 	std::cout << "NewLevelCreate" << std::endl;
 
@@ -167,48 +151,47 @@ void UEngineCore::OpenLevel(std::string_view _Name)
 {
 	if (false == LevelMap.contains(_Name.data()))
 	{
-		MSGASSERT("만들지 않은 레벨로 변경하려고 했습니다." + std::string(_Name));
+		MSGASSERT(std::string(_Name) + " 은 생성되지 않은 레벨입니다. \n CreateLevel 함수를 사용해 레벨을 생성 후 OpenLevel 함수를 사용해야 합니다.");
 		return;
 	}
-	
 
 	NextLevel = LevelMap[_Name.data()];
 }
 
 void UEngineCore::EngineFrame()
 {
-	if (nullptr != NextLevel)
+	if (nullptr != NextLevel) // 레벨체인지할 Level이 존재하면
 	{
-		if (nullptr != CurLevel)
+		if (nullptr != CurLevel) // 현재 레벨이 종료되면서 할 일이 있으면 마무리 하고
 		{
 			CurLevel->LevelChangeEnd();
 		}
 
-		CurLevel = NextLevel;
+		CurLevel = NextLevel; // 레벨을 바꾼다.
 
-		CurLevel->LevelChangeStart();
-		NextLevel = nullptr;
-		Timer.TimeStart();
+		CurLevel->LevelChangeStart(); // 새로운 레벨에서 처음 세팅할 작업을 먼저 진행하고
+		NextLevel = nullptr; // NextLevel 포인터의 역할은 다했다.
+		Timer.TimeStart(); // 델타 타임도 처음부터 다시 갱신한다. 혹시 모를 오류가 있을까봐
 	}
 
-	Timer.TimeCheck();
-	float DeltaTime = Timer.GetDeltaTime();
-	UEngineInput::KeyCheck(DeltaTime);
+	Timer.TimeCheck(); // 델타 타임 체크
+	float DeltaTime = Timer.GetDeltaTime(); 
+
+	UEngineInput::KeyCheck(DeltaTime); // 키입력
 	
-	CurLevel->Tick(DeltaTime);
+	// Core에서 Level이 관리하는 Actor, Renderer, Collision를 'Windows메시지루프'에서 돌려준다.
+	CurLevel->Tick(DeltaTime); 
 	CurLevel->Render(DeltaTime);
 	// GUI랜더링은 기존 랜더링이 다 끝나고 해주는게 좋다.
+
 	CurLevel->Collision(DeltaTime);
 	CurLevel->Release(DeltaTime);
-
 }
 
 void UEngineCore::EngineEnd()
 {
-
 	UEngineGUI::Release();
 
-	// 리소스 정리도 여기서 할겁니다.
 	Device.Release();
 
 	UEngineResources::Release();
@@ -219,5 +202,4 @@ void UEngineCore::EngineEnd()
 	LevelMap.clear();
 
 	UEngineDebug::EndConsole();
-
 }

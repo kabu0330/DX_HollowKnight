@@ -8,7 +8,7 @@
 #include <memory>
 
 
-// 설명 :
+// 설명 : 게임 루프를 돌릴 핵심 클래스
 class UEngineCore
 {
 public:
@@ -21,11 +21,7 @@ public:
 	template<typename GameModeType, typename MainPawnType>
 	static class std::shared_ptr<class ULevel> CreateLevel(std::string_view _Name)
 	{
-		// 1 유지하고 있겠죠.
-		// shared_ptr을 사용하므로 new UEngineLevel()
 		std::shared_ptr<ULevel> NewLevel = NewLevelCreate(_Name);
-		// std::make_shared
-		// new UEngineLevel();
 
 		NewLevel->SpawnActor<GameModeType>();
 		NewLevel->SpawnActor<MainPawnType>();
@@ -49,13 +45,12 @@ private:
 	ENGINEAPI static UEngineWindow MainWindow;
 
 	ENGINEAPI static UEngineGraphicDevice Device;
-	// 데이터영역에 있죠? => 언제 삭제될까요?
-	// 릭체크는 
+
 	static HMODULE ContentsDLL;
 	static std::shared_ptr<IContentsCore> Core;
 	static UEngineInitData Data;
 
-	static UEngineTimer Timer;
+	static UEngineTimer Timer; // Delta Timer
 
 	static void WindowInit(HINSTANCE _Instance);
 	static void LoadContents(std::string_view _DllName);
@@ -66,7 +61,7 @@ private:
 	ENGINEAPI static std::shared_ptr<ULevel> NewLevelCreate(std::string_view _Name);
 
 	static std::map<std::string, std::shared_ptr<class ULevel>> LevelMap;
-	static std::shared_ptr<class ULevel> CurLevel;
-	static std::shared_ptr<class ULevel> NextLevel;
+	static std::shared_ptr<class ULevel> CurLevel; // 현재 Tick을 돌 레벨
+	static std::shared_ptr<class ULevel> NextLevel; // 현재 Level을 종료하고 다음 프레임에 실행될 Level
 };
 

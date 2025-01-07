@@ -10,7 +10,7 @@
 // PlayCamera
 // UICamera
 
-// 설명 :
+// 설명 : 뷰포트 설정, View / Projection 행렬 갱신
 class UEngineCamera : public USceneComponent
 {
 	friend class ULevel;

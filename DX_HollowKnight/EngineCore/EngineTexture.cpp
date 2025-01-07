@@ -106,6 +106,7 @@ void UEngineTexture::Setting(EShaderType _Type, UINT _BindIndex)
 	}
 }
 
+// 뎁스 스텐실 뷰 객체 생성
 void UEngineTexture::ResCreate(const D3D11_TEXTURE2D_DESC& _Value)
 {
 	Desc = _Value;
@@ -122,10 +123,8 @@ void UEngineTexture::ResCreate(const D3D11_TEXTURE2D_DESC& _Value)
 	{
 		if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateDepthStencilView(Texture2D.Get(), nullptr, &DSV))
 		{
-			MSGASSERT("깊이버퍼 생성에 실패했습니다..");
+			MSGASSERT("뎁스 스텐실 뷰(DSV) 객체 생성에 실패했습니다.");
 			return;
 		}
 	}
-	
-
 }

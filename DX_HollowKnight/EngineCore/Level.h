@@ -103,7 +103,6 @@ private:
 
 	std::list<std::shared_ptr<class AActor>> AllActorList;
 
-	// 0번에 mainamera라고 불리는 애를 만든다.
 	std::map<int, std::shared_ptr<class ACameraActor>> Cameras;
 
 	std::map<std::string, std::list<std::shared_ptr<class UCollision>>> Collisions;

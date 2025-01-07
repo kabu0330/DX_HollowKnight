@@ -24,147 +24,86 @@ void UEngineGraphicDevice::Release()
 
 IDXGIAdapter* UEngineGraphicDevice::GetHighPerFormanceAdapter()
 {
-    // 이걸 통해서 만든 애는 그래픽카드에 메모리가 잡힙니다.
-    IDXGIFactory* Factory = nullptr;
-    unsigned __int64 MaxVideoMemory = 0;
-    IDXGIAdapter* ResultAdapter = nullptr;
-
-
-    // Factory는 다이렉트 x에서 지원하는 그래픽카드 메모리에 생성을 담당해주는 인터페이스 입니다.
-    // #pragma comment(lib, "dxguid")
-    // 다이렉트x와 같은 라이브러리들은 클래스를 인지하는게 아니고
-    // GUID라는 것으로 코드 덩어리를 그때그때마다 로드하는 방식을 취하는데.
-
-    //MIDL_INTERFACE("7b7166ec-21c7-44ae-b21a-c9ae321ae369") => GUID라고 한다.
-    //   IDXGIFactory : public IDXGIObject
-
+    // 1. 그래픽카드가 여러 개일 경우를 대비하여 가장 좋은 그래픽카드를 찾는다.
+    IDXGIFactory* Factory = nullptr; // 팩토리 : 그래픽 카드 정보 열거, 출력 장치 관리
 
     HRESULT HR = CreateDXGIFactory(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&Factory));
-
     if (nullptr == Factory)
     {
-        MSGASSERT("그래픽카드 조사용 팩토리 생성에 실패했습니다.");
+        MSGASSERT("팩토리 객체 생성에 실패했습니다.");
         return nullptr;
     }
 
+    unsigned __int64 MaxVideoMemory = 0; // 최고성능의 기준을 VRAM으로 정했다. 누가? 프로그래머가.
+    IDXGIAdapter* ResultAdapter = nullptr;  // 가장 성능 좋은 그래픽카드 정보를 담을 객체
 
-
+    // 그래픽카드를 열거하여 가장 성능이 좋은 그래픽카드를 선택하겠다.
     for (int Index = 0;; ++Index)
     {
         IDXGIAdapter* CurAdapter = nullptr;
-        Factory->EnumAdapters(Index, &CurAdapter);
+        Factory->EnumAdapters(Index, &CurAdapter); // 그래픽카드를 순차적으로 열거
 
         if (nullptr == CurAdapter)
         {
-            break;
+            // 더이상 열거할 그래픽카드가 없으면 반복문 종료
+            break; // 반복문 탈출
         }
 
-        // 정보구조체가 있고
         DXGI_ADAPTER_DESC Desc;
+        CurAdapter->GetDesc(&Desc); // 그래픽카드 정보를 가져와 Desc에 저장
 
-        // 장치 핸들에서 빼오는 식입니다.
-        CurAdapter->GetDesc(&Desc);
-
-        // 램 크기가 크면 성능도 좋겠지.
-        // 100메가 짜리를      200
-        if (MaxVideoMemory <= Desc.DedicatedVideoMemory)
+        if (MaxVideoMemory <= Desc.DedicatedVideoMemory) // 이전에 최고 성능 기준보다 높다면
         {
-            MaxVideoMemory = Desc.DedicatedVideoMemory;
-            //            100 
-            if (nullptr != ResultAdapter)
+            MaxVideoMemory = Desc.DedicatedVideoMemory;  // VRAM 성능 기준치를 갱신하고
+            if (nullptr != ResultAdapter) // 기존에 있던 어댑터는 해제하고
             {
                 ResultAdapter->Release();
             }
 
-            // 100          200
-            ResultAdapter = CurAdapter;
+            ResultAdapter = CurAdapter; // 지금 얻어온 그래픽카드 정보를 Result 어댑터에 저장한다.
             continue;
         }
-
-        CurAdapter->Release();
+        CurAdapter->Release(); // 최종 어댑터 정보를 가져왔으니 지역변수는 릴리즈해주고
     }
+    // 최종 그래픽카드 정보를 가져와 어댑터 객체에 저장했다.
 
     if (nullptr != Factory)
     {
-        Factory->Release();
+        Factory->Release(); // 그래픽카드 정보를 어댑터에 저장했으니 팩토리도 역할을 다했다.
     }
 
     if (nullptr == ResultAdapter)
     {
-        MSGASSERT("그래픽카드가 달려있지 않은 컴퓨터입니다.");
+        MSGASSERT("그래픽카드가 존재하지 않는 PC입니다.");
         return nullptr;
     }
-
-    // int Test = MaxVideoMemory / (1024 * 1024 * 1024);
 
     return ResultAdapter;
 }
 
 void UEngineGraphicDevice::CreateDeviceAndContext()
 {
-	// 디바이스를 만들려면
-	// 디바이스 버전부터 정해줘야 합니다.
-	// 디바이스의 모드를 정해줘야 합니다
-    
-    //IDXGIAdapter* pAdapter,
-    // 그래픽장지 사양정보를 알려주세요.
-    // nullptr 넣어주면 알아서 찾아.
-    // 그래픽카드 2개 달려있는 사람들이 있다.
-
-    // 가장 성능 좋은 그래픽 카드를 찾았다.
-    MainAdapter = GetHighPerFormanceAdapter();
+    MainAdapter = GetHighPerFormanceAdapter(); // 제일 좋은 성능의 그래픽카드 정보를 MainAdapter에 저장한다.
 
     int iFlag = 0;
 
 #ifdef _DEBUG
-    // 디버그 모드일때만
-//  D3D11_CREATE_DEVICE_SINGLETHREADED = 0x1,
-//	D3D11_CREATE_DEVICE_DEBUG = 0x2,
-//	D3D11_CREATE_DEVICE_SWITCH_TO_REF = 0x4,
-//	D3D11_CREATE_DEVICE_PREVENT_INTERNAL_THREADING_OPTIMIZATIONS = 0x8,
-//	D3D11_CREATE_DEVICE_BGRA_SUPPORT = 0x20,
-//	D3D11_CREATE_DEVICE_DEBUGGABLE = 0x40,
-//	D3D11_CREATE_DEVICE_PREVENT_ALTERING_LAYER_SETTINGS_FROM_REGISTRY = 0x80,
-//	D3D11_CREATE_DEVICE_DISABLE_GPU_TIMEOUT = 0x100,
-//	D3D11_CREATE_DEVICE_VIDEO_SUPPORT = 0x800
     iFlag = D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-    
-    //D3D_DRIVER_TYPE DriverType,
-    // D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_UNKNOWN 내가 넣어줬으니 그걸로 해
-    // D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_HARDWARE 니가 알아서 그래픽 카드 찾아줘.
-    // D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_SOFTWARE 그래픽카드 안쓸께.
-    // 그래픽카드를 안쓰겠다.
-    
-    //HMODULE Software, // 특정 단계용(랜더링 파이프라인의 일부를 내가 만든 코드로 교체하기 위한 dll 핸들)
-    
-    //UINT Flags, // 옵션
-    
-    //_In_reads_opt_(FeatureLevels) CONST D3D_FEATURE_LEVEL* pFeatureLevels,
-    //UINT FeatureLevels,
-    //UINT SDKVersion,
-    //_COM_Outptr_opt_ ID3D11Device** ppDevice,
-    //_Out_opt_ D3D_FEATURE_LEVEL* pFeatureLevel,
-    // D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_UNKNOWN 내가 준 어뎁터로 해라.
-
     D3D_FEATURE_LEVEL ResultLevel;
 
-    // _COM_Outptr_opt_ ID3D11Device** ppDevice,
-    // _Out_opt_ D3D_FEATURE_LEVEL* pFeatureLevel,
-    // _COM_Outptr_opt_ ID3D11DeviceContext** ppImmediateContext
-
     HRESULT Result = D3D11CreateDevice(
-        MainAdapter.Get(),
-        D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_UNKNOWN,
-        nullptr, // 특정 단계를 내가 짠 코드로 대체하겠다.
-        iFlag,
-        nullptr, // 강제레벨 지정 11로 만들거니까. 배열을 넣어줄수
-        0, // 내가 지정한 팩처레벨 개수
-        D3D11_SDK_VERSION, // 현재 다이렉트x sdk 버전
-        &Device,
-        &ResultLevel, 
-        &Context);
+        MainAdapter.Get(),                          // 선택된 GPU 사용
+        D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_UNKNOWN,   // 하드웨어 드라이버 : GPU를 지정한다면 UNKNOWN 선택
+        nullptr,                                    // 소프트웨어 드라이버 : 사용안함
+        iFlag,                                      // 디버깅 또는 기타 옵션 플래그 : 디버그 모드에선 디버그
+        nullptr,                                    // DX 3D 기능 수준 배열 : 기본 수준(nullptr)
+        0,                                          // 기능 수준 배열 크기 : 0
+        D3D11_SDK_VERSION,                          // SDK 버전 : 항상 이 버전을 사용해야 함
+        &Device,                                    // 생성된 Device 객체
+        &ResultLevel,                               // 디바이스가 지원하는 DirectX 버전 반환
+        &Context);                                  // 생성된 DeviceContext 객체
 
     if (nullptr == Device)
     {
@@ -174,200 +113,152 @@ void UEngineGraphicDevice::CreateDeviceAndContext()
 
     if (nullptr == Context)
     {
-        MSGASSERT("그래픽 컨텍스트 생성에 실패했습니다.");
+        MSGASSERT("그래픽 디바이스 컨텍스트 생성에 실패했습니다.");
         return;
     }
 
     if (Result != S_OK)
     {
-        MSGASSERT("뭔가 잘못됨.");
+        MSGASSERT("그래픽 디바이스 및 컨텍스트 생성 작업에 실패했습니다.");
         return;
     }
 
     if (ResultLevel != D3D_FEATURE_LEVEL_11_0 
         && ResultLevel != D3D_FEATURE_LEVEL_11_1)
     {
-        MSGASSERT("다이렉트 11버전을 지원하지 않는 그래픽카드 입니다.");
+        MSGASSERT("해당 그래픽카드는 DirectX 11 버전을 지원하지 않는 장치입니다.");
         return;
     }
 
-    // 다이렉트 x가 기본적으로 쓰레드 안정성을 안챙겨준다.
-    // 고급 랜더링과 서버에서는 쓰레드는 필수이기 때문에
-    // 쓰레드를 사용하겠다는 것을 미리 명시해줄수 있다.
-    Result = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+    Result = CoInitializeEx(nullptr, COINIT_MULTITHREADED); // 멀티 스레드 환경
 
     if (Result != S_OK)
     {
-        MSGASSERT("쓰레드 안정성 적용에 문제가 생겼습니다.");
+        MSGASSERT("스레드 안정성 적용에 실패했습니다.");
         return;
     }
     // 초기화 종료
 
-    // 디바이스가 초기화 되면 기본 리소스들을 만들기 시작할 것이다.
-    // Box Rect Default 레스터라이저
     DefaultResourcesInit();
-
 }
 
+// DSV와 RTV 객체 생성, 스왑체인 및 백버퍼 생성
 void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
 {
-    // 윈도우 크기로 만든게 관례에 가깝다.
-    // 내가 원하는 크기로 만드는게 맞다.
-    // 그런거 안끌어쓰고 직접 만드는 네이티브 다이렉트 x식 리소스는 이게 마지막
-	
-    FVector Size = _Window.GetWindowSize();
+    // 2. 백버퍼 관련 설정값 입력	
+    FVector Size = _Window.GetWindowSize(); // 윈도우 크기에 맞는 백버퍼를 만들기 위해 ContentsCore에서 윈도우 세팅값이 설정된 이후 백버퍼를 만든다.
 
-    // 랜더타겟이라는 구조로 변경될 겁니다. 
-    D3D11_TEXTURE2D_DESC Desc = {0};
-    Desc.ArraySize = 1;
-    Desc.Width = Size.iX();
-    Desc.Height = Size.iY();
-    // 3바이트 실수 1바이트 정수를 스탠실 값이라고 합니다.
-    Desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    // 렌더 타겟 구조
+    // 2-1. 뎁스-스텐실 뷰(DSV) 객체 생성
+    D3D11_TEXTURE2D_DESC Desc = {0}; // 텍스처의 속성을 설정하는 구조체
 
-    Desc.SampleDesc.Count = 1;
-    Desc.SampleDesc.Quality = 0;
+    Desc.ArraySize = 1;         // 텍스처의 배열 크기 : 일반적으로 1로 설정
+    Desc.Width = Size.iX();     // 텍스처의 가로 크기 : 윈도우 사이즈
+    Desc.Height = Size.iY();    // 텍스처의 세로 크기 : 윈도우 사이즈
 
-    Desc.MipLevels = 1;
-    Desc.Usage = D3D11_USAGE_DEFAULT;
-    Desc.CPUAccessFlags = 0;
-    Desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL;
+    Desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // Format : 픽셀 형식
+    // unsigned 24바이트 : 깊이 값 // unsigned 8바이트 : 스텐실 값
+
+    Desc.SampleDesc.Count = 1;      // 멀티샘플링(안티 앨리어싱) : 사용 안함
+    Desc.SampleDesc.Quality = 0;    // 품질 : 기본값
+
+    Desc.MipLevels = 1;                                         // Mipmap(다중 해상도 텍스처) 레벨 설정 : 1(원본 텍스처만 사용) 
+    Desc.Usage = D3D11_USAGE_DEFAULT;                           // 리소스 사용 방식 : GPU
+    Desc.CPUAccessFlags = 0;                                    // CPU 접근 플래그 : CPU 접근 불허
+    Desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL; // 바인딩 플래그 : 뎁스-스텐실 텍스처로 바인딩
 
     DepthTex = std::make_shared<UEngineTexture>();
+    DepthTex->ResCreate(Desc); 
+    // 뎁스 스텐실 뷰(DSV) 객체 생성 성공
 
-    DepthTex->ResCreate(Desc);
 
+    // 2-2. 스왑체인 생성
+    // 스왑 체인 : GPU가 렌더링한 결과를 화면에 출력하기 위해 사용되는 백버퍼의 집합
+    DXGI_SWAP_CHAIN_DESC ScInfo = {0}; // 스왑 체인 속성을 설정하는 구조체
 
-    DXGI_SWAP_CHAIN_DESC ScInfo = {0};
+    ScInfo.BufferCount = 2;                             // 백버퍼 개수 : 2(더블 버퍼링)
+    ScInfo.BufferDesc.Width = Size.iX();                // 백버퍼의 가로 크기 
+    ScInfo.BufferDesc.Height = Size.iY();               // 백버퍼의 세로 크기
+    ScInfo.OutputWindow = _Window.GetWindowHandle();    // 최종 출력 창 핸들 
 
-    ScInfo.BufferCount = 2;
-    ScInfo.BufferDesc.Width = Size.iX();
-    ScInfo.BufferDesc.Height = Size.iY();
-    ScInfo.OutputWindow = _Window.GetWindowHandle();
-    // 전체화면
-    // false면 전체화면
-    // true면 창화면
-    ScInfo.Windowed = true;
+    ScInfo.Windowed = true; // true : 창모드, false : 전체화면
 
-    // 주 사율 모니터에 얼마나 빠르게 갱신할거냐
-    // 할수 있으면 해라.
-    ScInfo.BufferDesc.RefreshRate.Denominator = 1;
-    ScInfo.BufferDesc.RefreshRate.Numerator = 60;
-    // ScInfo.BufferDesc.RefreshRate.Numerator = 144;
+    // 주사율 설정(Refresh Rate) : 초당 화면이 갱신되는 빈도
+    ScInfo.BufferDesc.RefreshRate.Denominator = 1; // 분모
+    ScInfo.BufferDesc.RefreshRate.Numerator = 60;  // 분자
 
-    // 백버퍼의 색갈범위
-    // 65536 단계
-    // 색상의 단위가 더 큰 모니터에서는 의미가 있다.
-    //                                     8 8 8 8 32비트 색상으로 백버퍼를 만들어
-    ScInfo.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    // 모니터 때문에 의미 없음. HDR 모니터면 의미를 가질수도 있다.
-    // ScInfo.BufferDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+    ScInfo.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // 32비트 색상값, 양수 정규화 값(0.0 ~ 1.0)
 
-    // 모니터나 윈도우에 픽셀이 갱신되는 순서를 어떻게 
-    // 그냥 제일 빠른걸로 해줘
-    ScInfo.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-    // 진짜 기억안남 아예 
+    ScInfo.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;   // 픽셀이 갱신되는 순서 : 제일 빠른 방법으로
     ScInfo.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
  
-    // 용도
-    // DXGI_USAGE_RENDER_TARGET_OUTPUT 화면에 그려지는 용도로 사용한다.
-    //                   여기에 그릴수 있음                  쉐이더에서 데이터로도 사용할수 있음
+    // 백버퍼 사용용도            렌더 타겟으로 사용       및   셰이더에서 접근 가능
     ScInfo.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
 
     // 샘플링
-    // 퀄리티도 필요없고
     ScInfo.SampleDesc.Quality = 0;
-    // 점 개수도 1개면 충분하다.
     ScInfo.SampleDesc.Count = 1;
 
-    // 버퍼 n개 만들었네?
-    // n개의 버퍼에 대한 
-    ScInfo.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-    // 전혀 기억안남
-    ScInfo.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+    ScInfo.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // 이전 프레임 데이터 버리고 새 프레임으로 대체
+    ScInfo.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // 전체화면 모드와 창 모드 간 전환 허용
 
-    //MainAdapter->Release();
 
     IDXGIFactory* pF = nullptr;
 
-    // 날 만든 팩토리를 얻어올수 있다.
+    // 현재 어댑터 객체를 만들어준 팩토리 정보를 다시 가져와 pF에 저장한다.
     MainAdapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&pF));
 
-    // IUnknown* pDevice,
-    // DXGI_SWAP_CHAIN_DESC* pDesc,
-    // IDXGISwapChain** ppSwapChain
+    pF->CreateSwapChain(Device.Get(), &ScInfo, &SwapChain); // 스왑 체인 생성
 
-    pF->CreateSwapChain(Device.Get(), &ScInfo, &SwapChain);
+    // 팩토리와 어댑터는 스왑 체인을 생성함으로써 역할을 다 했다.
     pF->Release();
     MainAdapter->Release();
 
     if (nullptr == SwapChain)
     {
-        MSGASSERT("스왑체인 제작에 실패했습니다.");
+        MSGASSERT("스왑체인 생성에 실패했습니다.");
+        return;
     }
 
-    // HDC라고 보면 됩니다.
-    // 스왑체인 내부에 존재하는 
-    // HDC안에 bitmap이 들어있는 개념이었죠?
-    // bitmap => 진짜 색깔 배열에 대한 핸들
-    // FColor Arr[100][100];
-    // directx에서는 이런 bitmap이 id3d11texture2d*
-
-    // SwapChain내부에 id3d11texture2d*들고 있다.
-    // DXBackBufferTexture => 는 BITMAP입니다.
-
-    // DXBackBufferTexture
+    // DXBackBufferTexture는 BITMAP이다. 2차원 배열에 색상 정보가 들어있는 핸들
     if (S_OK != SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), &DXBackBufferTexture))
     {
-        MSGASSERT("백버퍼 텍스처를 얻어오는데 실패했습니다.");
-        
+        MSGASSERT("백버퍼 텍스처를 가져오는 데 실패했습니다.");
+        return;
     };
 
-
-    // id3d11texture2d* 이녀석 만으로는 할수 있는게 많이 없습니다.
-    // 애는 이미지의 2차원 데이터를 나타낼뿐 수정권한은 없기 때문입니다.
-    // 이미지를 수정하거나 사용할수 있는 권한을 id3d11texture2d*을 얻어내야 합니다.
-    // WINAPI에서 HDC 얻어내는 것처럼 id3d11texture2d* 수정권한인
-    // 텍스처에서 만들어내야 합니다.
-
+    // 백버퍼의 수정 권한을 가진 렌더 타겟 뷰(RTV) 생성
     //                             HBITMAP                       HDC
     if (S_OK != Device->CreateRenderTargetView(DXBackBufferTexture.Get(), nullptr, &RTV))
     {
-        MSGASSERT("텍스처 수정권한 획득에 실패했습니다");
+        MSGASSERT("백버퍼 텍스처의 수정권한을 가진 렌더 타겟 뷰 생성에 실패했습니다.");
+        return;
     }
-
 }
-
 
 void UEngineGraphicDevice::RenderStart()
 {
     FVector ClearColor;
-    ClearColor = FVector(0.0f, 0.0f, 1.0f, 1.0f);
-    // 이미지 파란색으로 채색해줘.
-    // 한번 싹지우고
-    Context->ClearRenderTargetView(RTV.Get(), ClearColor.Arr1D);
-    Context->ClearDepthStencilView(DepthTex->GetDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+    ClearColor = FVector(0.0f, 0.0f, 1.0f, 1.0f); // Blue
 
-    // 랜더타겟 랜더타겟 랜더타겟
-    // RTV와 DSV를 합친 개념을 랜더타겟이라고 부른다.
-    // 그걸 n장 사용하게 되면 멀티랜더타겟이라고 부른다.
+    Context->ClearRenderTargetView(RTV.Get(), ClearColor.Arr1D); // 백버퍼 초기화, 특정 색상으로 지운다.
+    Context->ClearDepthStencilView(DepthTex->GetDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0); // 깊이값, 스텐실 값 초기화
+    //                                                                            깊이 초기화값 1.0f / 스텐실 초기화값 0
 
-    // 여기에다가 다시 그려줘
     ID3D11RenderTargetView* RTV = UEngineCore::GetDevice().GetRTV();
-    ID3D11RenderTargetView* ArrRtv[16] = { 0 };
+    ID3D11RenderTargetView* ArrRtv[16] = { 0 }; // 렌더 타겟은 최대 16개까지 가능
     ArrRtv[0] = RTV; // SV_Target0
-    Context->OMSetRenderTargets(1, &ArrRtv[0], DepthTex->GetDSV());
 
-    // 뎁스텍스처가 
-    // 블랜드 스테이트등과 비슷한 녀석이다.
+    //                       RTV 수, RTV 배열, DSV
+    Context->OMSetRenderTargets(1, &ArrRtv[0], DepthTex->GetDSV());     // 출력 병합 단계에서 사용할 렌더타겟과 뎁스-스텐실 뷰 설정
+
     // Context->OMSetDepthStencilState();
 }
 
 void UEngineGraphicDevice::RenderEnd()
 {
-    // 내가 지정한 hwnd에 다이렉트 랜더링 결과를 출력해라.
-    // 
-    HRESULT Result = SwapChain->Present(0, 0);
+    HRESULT Result = SwapChain->Present(0, 0); // 스왑체인이 관리하는 백버퍼와 프론트버퍼를 교환(Swap)
+    //             수직동기화 : 0(미사용) / 추가옵션(Flag) : 0(없음)
 
     //             디바이스가 랜더링 도중 삭제          디바이스가 리셋되었을경우
     if (Result == DXGI_ERROR_DEVICE_REMOVED || Result == DXGI_ERROR_DEVICE_RESET)

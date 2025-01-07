@@ -8,23 +8,17 @@
 #include "CameraActor.h"
 #include "EngineGUI.h"
 
-// 플레이어 Renderer
-
-// 카메라 1 Renderer
-// 카메라 2 Renderer
-
-
-
 std::shared_ptr<class ACameraActor> ULevel::SpawnCamera(int _Order)
 {
 	std::shared_ptr<ACameraActor> Camera = std::make_shared<ACameraActor>();
 
 	if (true == Cameras.contains(_Order))
 	{
-		MSGASSERT("이미 존재하는 카메라를 또 만들려고 했습니다.");
+		MSGASSERT("이미 존재하는 카메라 Order입니다. 다른 값을 입력해주세요. : " + std::to_string(_Order));
+		return nullptr;
 	}
 
-	Camera->BeginPlay();
+	Camera->BeginPlay(); 
 
 	Cameras.insert({ _Order , Camera });
 	return Camera;
@@ -32,16 +26,13 @@ std::shared_ptr<class ACameraActor> ULevel::SpawnCamera(int _Order)
 
 ULevel::ULevel()
 {
-	SpawnCamera(0);
-
+	SpawnCamera(0); // 레벨 생성 시, 기본적으로 0번 카메라는 만든다.
 }
 
 ULevel::~ULevel()
 {
 	BeginPlayList.clear();
-
 	AllActorList.clear();
-
 	Cameras.clear();
 }
 
@@ -55,31 +46,32 @@ void ULevel::LevelChangeEnd()
 
 }
 
-
 void ULevel::Tick(float _DeltaTime)
 {
+	// Tick을 돌리기 전에, 해당 프레임에 생성된 Actor의 BeginPlay를 먼저 호출한다.
 	std::list<std::shared_ptr<class AActor>>::iterator StartIter = BeginPlayList.begin();
 	std::list<std::shared_ptr<class AActor>>::iterator EndIter = BeginPlayList.end();
 	for (; StartIter != EndIter; )
 	{
 		std::shared_ptr<AActor> CurActor = *StartIter;
 
-		if (false == CurActor->IsActive())
+		if (false == CurActor->IsActive()) // 비활성화된 액터는 일단 생략
 		{
 			++StartIter;
 			continue;
 		}
 
-		StartIter = BeginPlayList.erase(StartIter);
+		StartIter = BeginPlayList.erase(StartIter); // BeginPlay가 호출된 액터는 해당 리스트에서 제거한다.
+		// 다음 프레임에는 BeginPlay가 또 호출될 일이 없다.
 
-		CurActor->BeginPlay();
-		AllActorList.push_back(CurActor);
+		CurActor->BeginPlay(); // 호출
+		AllActorList.push_back(CurActor); // BeginPlay가 호출된 Actor만 Tick이 도는 ActorList에 들어간다.
 	}
 
-	// 절대 Ranged for안에서는 erase 리스트의 구조가 변경될 일을 하지 말라고 했ㅅ어요.
+	// BeginPlay가 호출된 Actor
 	for (std::shared_ptr<AActor> CurActor : AllActorList)
 	{
-		if (false == CurActor->IsActive())
+		if (false == CurActor->IsActive()) // 비활성화된 Actor는 Tick을 돌리지 않는다.
 		{
 			continue;
 		}
@@ -90,14 +82,13 @@ void ULevel::Tick(float _DeltaTime)
 
 void ULevel::Render(float _DeltaTime)
 {
-	UEngineCore::GetDevice().RenderStart();
+	UEngineCore::GetDevice().RenderStart(); // 백버퍼 초기화 및 OM단계에서 사용할 RTV와 DSV 설정
 
 	for (std::pair<const int, std::shared_ptr<ACameraActor>>& Camera : Cameras)
 	{
 		Camera.second->Tick(_DeltaTime);
-		Camera.second->GetCameraComponent()->Render(_DeltaTime);
+		Camera.second->GetCameraComponent()->Render(_DeltaTime); 
 	}
-
 
 	{
 		std::shared_ptr<class ACameraActor> Camera = GetMainCamera();
@@ -122,10 +113,11 @@ void ULevel::Render(float _DeltaTime)
 	if (true == UEngineWindow::IsApplicationOn())
 	{
 		UEngineGUI::GUIRender();
-		// IMGUI가 랜더링을하면서 
+		// IMGUI 랜더링
 	}
 
-	UEngineCore::GetDevice().RenderEnd();
+	UEngineCore::GetDevice().RenderEnd(); // 스왑체인이 관리하는 백버퍼와 프론트버퍼를 교환(Swap) 
+	// 프론트버퍼(윈도우 창)에 출력
 }
 
 
