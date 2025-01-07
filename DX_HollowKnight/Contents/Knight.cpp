@@ -335,10 +335,12 @@ void AKnight::Move(float _DeltaTime)
 		{
 			break;
 		}
-		UColor Color = ARoom::GetCurRoom()->GetPixelCollisionImage().GetColor(GetActorTransform().WorldLocation);
+		FVector RelativePos = GetActorTransform().RelativeLocation;
+		FVector WorldPos = GetActorTransform().WorldLocation;
+		UColor Color = ARoom::GetCurRoom()->GetPixelCollisionImage().GetColor(GetActorTransform().RelativeLocation);
 		UColor White = { 255, 255, 255, 255 };
-		UColor Blue = { 0, 0, 0, 0 };
-		if (Color != White)
+		UColor Black = { 0, 0, 0, 0 };
+		if (Color == Black)
 		{
 			AddRelativeLocation(FVector::UP);
 		}

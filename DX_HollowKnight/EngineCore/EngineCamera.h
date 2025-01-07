@@ -28,9 +28,9 @@ public:
 
 	ENGINEAPI void BeginPlay() override;
 
-	ENGINEAPI void Render(float _DetlaTime);
-
 	ENGINEAPI void Tick(float _DetlaTime);
+	ENGINEAPI void Render(float _DetlaTime);
+	ENGINEAPI void Release(float _DeltaTime);
 
 	void CalculateViewAndProjection();
 

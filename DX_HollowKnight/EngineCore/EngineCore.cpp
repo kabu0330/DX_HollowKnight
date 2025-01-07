@@ -199,6 +199,8 @@ void UEngineCore::EngineFrame()
 	CurLevel->Render(DeltaTime);
 	// GUI랜더링은 기존 랜더링이 다 끝나고 해주는게 좋다.
 
+	CurLevel->Release(DeltaTime);
+
 }
 
 void UEngineCore::EngineEnd()

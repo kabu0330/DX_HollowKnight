@@ -146,6 +146,7 @@
       <Filter>07_Resources</Filter>
     </ClInclude>
     <ClInclude Include="TimeEventComponent.h" />
+    <ClInclude Include="Collision.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -281,6 +282,7 @@
       <Filter>07_Resources</Filter>
     </ClCompile>
     <ClCompile Include="TimeEventComponent.cpp" />
+    <ClCompile Include="Collision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">

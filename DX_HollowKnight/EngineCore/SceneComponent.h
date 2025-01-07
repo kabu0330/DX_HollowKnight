@@ -55,6 +55,11 @@ public:
 		TransformUpdate();
 	}
 
+	FVector GetWorldScale3D()
+	{
+		return Transform.WorldScale;
+	}
+
 	void SetScale3D(const FVector& _Value)
 	{
 		IsAbsolute = true;
