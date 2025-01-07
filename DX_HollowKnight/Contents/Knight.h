@@ -40,10 +40,17 @@ public:
 	{
 		return BodyRenderer;
 	}
-
-	bool& IsGround()
+	bool GetIsOnGround()
 	{
-		return bIsGround;
+		return bIsOnGround;
+	}
+	void SetIsOnGround(bool _Value)
+	{
+		bIsOnGround = _Value;
+	}
+	float GetGravityForce()
+	{
+		return GravityForce.Y;
 	}
 
 protected:
@@ -51,7 +58,6 @@ protected:
 private:
 	static AKnight* MainPawn;
 	FVector CameraPos = { 0.0f, 0.0f, 0.0f };
-	bool bIsGround = false;
 
 	//Renderer
 	std::shared_ptr<class USpriteRenderer> BodyRenderer;
@@ -76,23 +82,22 @@ private:
 
 
 private:
-	void InputCheck(float _DeltaTime);
 	void Move(float _DeltaTime);
 	FVector GravityForce = FVector::ZERO;
-	float GravityValue = 100.0f;
+	float GravityValue = 1000.0f;
 	void CheckGround(FVector _Gravity);
 	void Gravity(float _DeltaTime);
 
-	void DebugInput();
+	void DebugInput(float _DeltaTime);
 
 	void CreateRenderer();
 
 	bool CanAction();
 
 	// Jump : ZŰ
-	bool bIsOnGround = true;
-	bool CanJump();
+	bool bIsOnGround = false;
 	bool IsOnGround();
+	bool CanJump();
 
 	// Slash : XŰ
 	bool bIsShowEffect = false;

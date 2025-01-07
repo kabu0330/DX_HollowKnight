@@ -2,6 +2,7 @@
 #include "SceneComponent.h"
 #include "EngineSprite.h"
 #include "RenderUnit.h"
+#include <set>
 
 // 설명 : 어떤 랜더링이든 할수 잇는 구조로 만들겠다.
 // 랜더링이란 랜더러만 하는게 아닙니다. 3D
@@ -37,14 +38,27 @@ public:
 	{
 		CollisionType = _Type;
 	}
+	void CollisionEventCheck(std::shared_ptr<UCollision> _Other);
 
+	ENGINEAPI void SetCollisionEnter(std::function<void(UCollision*, UCollision*)> _Function);
+	ENGINEAPI void SetCollisionStay(std::function<void(UCollision*, UCollision*)> _Function);
+	ENGINEAPI void SetCollisionEnd(std::function<void(UCollision*, UCollision*)> _Function);
+
+	bool IsEvent()
+	{
+		return Enter != nullptr || Stay != nullptr || End != nullptr;
+	}
 
 private:
-
-public:
 	ECollisionType CollisionType = ECollisionType::OBB2D;
+	// 내가 충돌한 상대를 기억하는 용도의 set
+	std::set<UCollision*> CollisionCheckSet;
 
 	// 나는 Monster 그룹이다.
-	std::string ProfileName; 
+	std::string ProfileName = "NONE";
+
+	std::function<void(UCollision*, UCollision*)> Enter;
+	std::function<void(UCollision*, UCollision*)> Stay;
+	std::function<void(UCollision*, UCollision*)> End;
 };
 

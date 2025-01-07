@@ -37,6 +37,36 @@ ARoom::ARoom()
 		PixelCollisionImage.Load(nullptr, ImageFiles.GetPathToString());
 	}
 
+	float X = 0.0f;
+	float Y = 100.0f;
+	UColor Color00 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(  0) });
+	UColor Color0  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(100) });
+	UColor Color1  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(200) });
+	UColor Color2  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(300) });
+	UColor Color3  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(400) });
+	UColor Color4  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(500) });
+	UColor Color5  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(600) });
+	UColor Color6  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(700) });
+	UColor Color7  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(800) });
+	UColor Color8  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(900) });
+	UColor Color9  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1000) });
+	UColor Color10 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1100) });
+	UColor Color11 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1200) });
+	UColor Color12 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1300) });
+	UColor Color13 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1400) });
+	UColor Color14 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1500) });
+	UColor Color15 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1600) });
+	UColor Color16 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1700) });
+	UColor Color17 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1800) });
+	UColor Color18 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1900) });
+	UColor Color19 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(2000) });
+	UColor Color20 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(2100) });
+	UColor Color21 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(2200) });
+	UColor Color22 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(2300) });
+	UColor Color23 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(2400) });
+	UColor Color24 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(2499) });
+
+	int a = 0;
 }
 
 ARoom::~ARoom()
@@ -98,16 +128,21 @@ void ARoom::CheckGround(FVector _MovePos)
 	NextPos.X = floorf(NextPos.X);
 	NextPos.Y = floorf(NextPos.Y);
 
-	UColor Color = PixelCollisionImage.GetColor(APlayGameMode::KnightPos);
-	if (Color == UColor{ 255, 255, 255, 255 })
+	UColor Color = PixelCollisionImage.GetColor({ APlayGameMode::KnightPos.X, - APlayGameMode::KnightPos.Y });
+	UColor White = { 255, 255, 255, 255 };
+	UColor Black = { 0, 0, 0, 0 };
+	if (Color == White)
 	{
-		AKnight::GetPawn()->IsGround() = false;
+		UEngineDebug::OutPutString("White");
+		AKnight::GetPawn()->SetIsOnGround(false);
 	}
-	else // 흰색 아니면 다 바닥으로 보겠다.
+	else if (Color == Black)
 	{
-		AKnight::GetPawn()->IsGround() = true;
+		UEngineDebug::OutPutString("Black");
+		// 흰색 아니면 다 벽과 바닥으로 보겠다.
+		AKnight::GetPawn()->SetIsOnGround(true);
 	}
-	bool Result = AKnight::GetPawn()->IsGround();
 
+	int a = 0;
 }
 

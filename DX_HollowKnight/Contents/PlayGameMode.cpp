@@ -20,6 +20,7 @@ public:
 		GetCurRoom();
 		GetMousePos();
 		GetKnightPos();
+		GetGravityForce();
 		GetKnightZValue();
 
 		//ImGui::Button("WindowButton");
@@ -44,6 +45,22 @@ public:
 		ImGui::Text("Knight Z Vaule : %.6f", ZValue);
 	}
 
+	void GetGravityForce()
+	{
+		ImGui::Text("Knight GravityForce : %.2f", AKnight::GetPawn()->GetGravityForce());
+		int Result = static_cast<int>(AKnight::GetPawn()->GetIsOnGround());
+		std::string ResultString = "";
+		if (0 == Result)
+		{
+			ResultString = "false";
+		}
+		else
+		{
+			ResultString = "true";
+		}
+		ImGui::Text("Knight IsOnGround : %s", ResultString.data());
+	}
+
 	void GetCurRoom()
 	{
 		if (nullptr == ARoom::GetCurRoom())
@@ -65,6 +82,7 @@ APlayGameMode::APlayGameMode()
 	std::shared_ptr<ARoom> Dirtmouth = GetWorld()->SpawnActor<ARoom>();
 	Dirtmouth->SetName("Dirtmouth");
 	Rooms.push_back(Dirtmouth);
+	Dirtmouth->SetActorLocation({ 4148.0f / 2.0f, -2500.0f / 2.0f });
 	ARoom::GetCurRoom() = Rooms[0];
 	std::string RoomName = ARoom::GetCurRoom()->GetName();
 	UEngineGUI::CreateGUIWindow<DebugWindow>("DebugWindow");
@@ -83,6 +101,6 @@ void APlayGameMode::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 	MousePos = Camera->ScreenMousePosToWorldPos();
-	KnightPos = AKnight::GetPawn()->GetRootComponent()->GetTransformRef().WorldLocation;
+	KnightPos = AKnight::GetPawn()->GetRootComponent()->GetTransformRef().RelativeLocation;
 }
 

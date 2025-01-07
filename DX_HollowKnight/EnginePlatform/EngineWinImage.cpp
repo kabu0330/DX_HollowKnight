@@ -47,16 +47,6 @@ void UEngineWinImage::Create(UEngineWinImage* _TargetImage,  FVector _Scale)
 		return;
 	}
 
-	// HDC 아무것도 없곳에서
-	// HDC 넣어달라고 하는데 window HDC
-	// int X; 만들려는 빈 이미지의 x크기
-	// int Y; 만들려는 빈 이미지의 y크기
-
-	// 아무것도 없는곳에 
-	// HDC hdc 타겟 이 이미지를 만들어서 그리려고 하는 타겟
-	// int cx 만들려는 이미지의 크기
-	// int cy 만들려는 이미지의 크기
-
 	
 	
 	HBITMAP NewBitmap = static_cast<HBITMAP>(CreateCompatibleBitmap(_TargetImage->GetDC(), _Scale.iX(), _Scale.iY()));
@@ -93,20 +83,6 @@ void UEngineWinImage::CopyToBit(UEngineWinImage* _TargetImage, const FTransform&
 
 	HDC CopyDC = ImageDC;
 	HDC TargetDC = _TargetImage->ImageDC;
-	// CopyDC => TargetDC에 카피하겠다.
-	// 윈도우는 이런 HDC간의 Copy를 위해서 
-	// 카피용 함수들을 몇개 준비했고 그중에서
-	// 가장 기본적인 함수가 바로 Bitblt
-
-	//HDC hdc, 카피 받을 대상 <= 여기에다가 복사해라
-	//int x, <= 위치x
-	//int y, <= 위치y
-	//int cx, <= 크기x
-	//int cy, <= 크기x
-	// HDC hdcSrc, 카피할 이미지
-	// int x1, 이미지 시작점 0
-	// int y1, 
-	// rop => 카피 옵션
 
 	FVector LeftTop = _Trans.ZAxisCenterLeftTop();
 	FVector RightBot = _Trans.ZAxisCenterRightBottom();
@@ -130,9 +106,6 @@ void UEngineWinImage::CopyToBit(UEngineWinImage* _TargetImage, const FTransform&
 
 void UEngineWinImage::CopyToTrans(UEngineWinImage* _TargetImage, const FTransform& _RenderTrans, const FTransform& _LTImageTrans, UColor _Color /*= UColor(255, 0, 255, 255)*/)
 {
-	// _RenderTrans 액터의 트랜스폼
-
-	// _LTImageTrans 이미지 쪼갠 크기가
 	
 	HDC CopyDC = ImageDC;
 	HDC TargetDC = _TargetImage->ImageDC;
@@ -171,17 +144,6 @@ void UEngineWinImage::CopyToAlpha(UEngineWinImage* _TargetImage,
 	const FTransform& _LTImageTrans,
 	unsigned char _Alpha)
 {
-
-	// 알파 블랜드는 알파 채널이라는 것을 이용해서 알파를 적용시킨다.
-	// 이미지는 
-	// R G B A 로 이루어져 있다. 컬러채널이라고 부른다.
-	
-	// 0이면 검은색
-	// 255면 흰색입니다.
-	// 알파블랜드가 알파를 적용시키는 부분은
-	// 알파채널이 255인 부분만 적용시킵니다.
-	// 이 채널은 포토샵에서 윈도우 => 채널창에서 확인할 수 있습니다.
-
 	BLENDFUNCTION BLEND;
 	BLEND.BlendOp = AC_SRC_OVER;
 	BLEND.BlendFlags = 0;

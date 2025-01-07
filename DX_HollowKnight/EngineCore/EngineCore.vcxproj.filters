@@ -145,8 +145,12 @@
     <ClInclude Include="EngineDepthStencilState.h">
       <Filter>07_Resources</Filter>
     </ClInclude>
-    <ClInclude Include="TimeEventComponent.h" />
-    <ClInclude Include="Collision.h" />
+    <ClInclude Include="Collision.h">
+      <Filter>04_Object\Component\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeEventComponent.h">
+      <Filter>04_Object\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -281,8 +285,12 @@
     <ClCompile Include="EngineDepthStencilState.cpp">
       <Filter>07_Resources</Filter>
     </ClCompile>
-    <ClCompile Include="TimeEventComponent.cpp" />
-    <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="Collision.cpp">
+      <Filter>04_Object\Component\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeEventComponent.cpp">
+      <Filter>04_Object\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
@@ -359,6 +367,9 @@
     </Filter>
     <Filter Include="10_Render">
       <UniqueIdentifier>{b4a2530f-4b09-485a-93bb-5896ba254221}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Object\Component\Collision">
+      <UniqueIdentifier>{e101feb8-a92d-471e-acdb-f621139da07c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

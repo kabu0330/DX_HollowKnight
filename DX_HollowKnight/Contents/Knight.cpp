@@ -24,6 +24,7 @@ AKnight::AKnight()
 	InitVelocity = Velocity;
 	DashSpeed = Velocity * 3.0f;
 
+	SetActorLocation({ 1000.0f, -2000.0f });
 }
 
 void AKnight::BeginPlay()
@@ -36,12 +37,14 @@ void AKnight::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
+	this;
+	Move(_DeltaTime);
 	CheckDirection();
 	FSM.Update(_DeltaTime);
 	TimeElapsed(_DeltaTime);
 	EndAnimationEffect();
-	InputCheck(_DeltaTime);
 	SetCameraPosition();
+	DebugInput(_DeltaTime);
 
 }
 
@@ -57,7 +60,7 @@ void AKnight::CheckGround(FVector _Gravity)
 
 void AKnight::Gravity(float _DeltaTime)
 {
-	if (false == bIsGround)
+	if (false == bIsOnGround)
 	{
 		AddRelativeLocation(GravityForce * _DeltaTime);
 		GravityForce += FVector::DOWN * GravityValue * _DeltaTime;
@@ -65,6 +68,71 @@ void AKnight::Gravity(float _DeltaTime)
 	else
 	{
 		GravityForce = FVector::ZERO;
+	}
+}
+
+void AKnight::Move(float _DeltaTime)
+{
+	if (false == bIsDashing)
+	{
+		Velocity = InitVelocity;
+
+	}
+	if (UEngineInput::IsDown('C'))
+	{
+		Velocity = DashSpeed;
+	}
+
+	if (true == bIsDashing)
+	{
+		return;
+	}
+
+	CheckGround(GravityForce * _DeltaTime);
+	//Gravity(_DeltaTime);
+
+	if (UEngineInput::IsPress(VK_LEFT))
+	{
+		AddRelativeLocation(FVector{ -Velocity * _DeltaTime, 0.0f, 0.0f });
+	}
+	if (UEngineInput::IsPress(VK_RIGHT))
+	{
+		AddRelativeLocation(FVector{ Velocity * _DeltaTime, 0.0f, 0.0f });
+	}
+
+	// Debug Input
+	if (UEngineInput::IsPress(VK_UP))
+	{
+		AddRelativeLocation(FVector{ 0.0f, Velocity * _DeltaTime, 0.0f });
+	}
+	if (UEngineInput::IsPress(VK_DOWN))
+	{
+		AddRelativeLocation(FVector{ 0.0f, -Velocity * _DeltaTime, 0.0f });
+	}
+
+	while (true)
+	{
+		if (nullptr == ARoom::GetCurRoom())
+		{
+			break;
+		}
+
+		UColor Color = ARoom::GetCurRoom()->GetPixelCollisionImage().GetColor({ GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y });
+		FVector Pos = { GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y };
+		UColor White = UColor{ 255, 255, 255, 255 };
+		UColor Black = UColor{ 0, 0, 0, 0 };
+		if (Color == Black)
+		{
+			
+			//UEngineDebug::OutPutString("Black");
+			AddRelativeLocation(FVector::UP);
+			
+		}
+		else
+		{
+			//UEngineDebug::OutPutString("White");
+			break;
+		}
 	}
 }
 
@@ -239,7 +307,6 @@ void AKnight::ChangeLookAnimation()
 
 	if (UEngineInput::IsPress(VK_DOWN))
 	{
-
 		float PressTime = UEngineInput::IsPressTime(VK_DOWN);
 		float TriggerTime = 0.5f;
 
@@ -262,100 +329,28 @@ void AKnight::ChangeLookAnimation()
 	//}
 }
 
-void AKnight::InputCheck(float _DeltaTime)
+void AKnight::DebugInput(float _DeltaTime)
 {
-	//Move(_DeltaTime);
-	float ZValue = BodyRenderer->GetTransformRef().RelativeLocation.Z;
+	if (UEngineInput::IsPress('V'))
+	{
+		FSM.ChangeState(EKnightState::DEATH_DAMAGE);
+	}
+
+		float ZValue = BodyRenderer->GetTransformRef().RelativeLocation.Z;
 	int a = 0;
 	if (UEngineInput::IsPress('Z'))
 	{
-		AddRelativeLocation(FVector{ 0.0f, 100.0f * _DeltaTime, 0.0f });
-	}
-
-	if (UEngineInput::IsFree('X'))
-	{
-
+		AddRelativeLocation(FVector{ 0.0f, 2000.0f * _DeltaTime, 0.0f });
 	}
 
 	if (UEngineInput::IsPress('W'))
 	{
 		BodyRenderer->AddRelativeLocation({ 0.0f, 0.0f, 1.0f * _DeltaTime });
-
 	}
 
 	if (UEngineInput::IsPress('S'))
 	{
 		BodyRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f * _DeltaTime });
-
-	}
-}
-
-void AKnight::Move(float _DeltaTime)
-{
-	if (false == bIsDashing)
-	{
-		Velocity = InitVelocity;
-
-	}
-	if (UEngineInput::IsDown('C'))
-	{
-		Velocity = DashSpeed;
-	}
-
-	if (true == bIsDashing)
-	{
-		return;
-	}
-
-	CheckGround(GravityForce * _DeltaTime);
-	Gravity(_DeltaTime);
-
-	if (UEngineInput::IsPress(VK_LEFT))
-	{
-		AddRelativeLocation(FVector{ -Velocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	if (UEngineInput::IsPress(VK_RIGHT))
-	{
-		AddRelativeLocation(FVector{ Velocity * _DeltaTime, 0.0f, 0.0f });
-	}
-
-	// Debug Input
-	if (UEngineInput::IsPress(VK_UP))
-	{
-		AddRelativeLocation(FVector{ 0.0f, Velocity * _DeltaTime, 0.0f });
-	}
-	if (UEngineInput::IsPress(VK_DOWN))
-	{
-		AddRelativeLocation(FVector{ 0.0f, -Velocity * _DeltaTime, 0.0f });
-	}
-
-	while (true)
-	{
-		if (nullptr == ARoom::GetCurRoom())
-		{
-			break;
-		}
-		FVector RelativePos = GetActorTransform().RelativeLocation;
-		FVector WorldPos = GetActorTransform().WorldLocation;
-		UColor Color = ARoom::GetCurRoom()->GetPixelCollisionImage().GetColor(GetActorTransform().RelativeLocation);
-		UColor White = { 255, 255, 255, 255 };
-		UColor Black = { 0, 0, 0, 0 };
-		if (Color == Black)
-		{
-			AddRelativeLocation(FVector::UP);
-		}
-		else
-		{
-			break;
-		}
-	}
-}
-
-void AKnight::DebugInput()
-{
-	if (UEngineInput::IsPress('V'))
-	{
-		FSM.ChangeState(EKnightState::DEATH_DAMAGE);
 	}
 }
 
@@ -435,9 +430,9 @@ void AKnight::ChangeAttackAnimation(EKnightState _PrevState)
 
 void AKnight::SetIdle(float _DeltaTime)
 {
-	bIsOnGround = true;
+	//bIsOnGround = true;
 	bCanRotation = true;
-
+	Gravity(_DeltaTime);
 
 	if (UEngineInput::IsPress(VK_LEFT) || UEngineInput::IsPress(VK_RIGHT))
 	{
@@ -445,7 +440,7 @@ void AKnight::SetIdle(float _DeltaTime)
 		return;
 	}
 
-	Move(_DeltaTime);
+	//Move(_DeltaTime);
 	ChangeJumpAnimation();  // 점프
 	ChangeDash(); // 대시
 
@@ -455,7 +450,6 @@ void AKnight::SetIdle(float _DeltaTime)
 	CastFocus(); // 집중
 	CastFireball(); // 파이어볼
 
-	DebugInput();
 }
 
 void AKnight::SetRun(float _DeltaTime)

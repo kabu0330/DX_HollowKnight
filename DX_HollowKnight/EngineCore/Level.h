@@ -26,6 +26,7 @@ public:
 
 	void Tick(float _DeltaTime);
 	void Render(float _DeltaTime);
+	void Collision(float _DeltaTime);
 	void Release(float _DeltaTime);
 
 	std::shared_ptr<class ACameraActor> GetMainCamera()
@@ -89,9 +90,11 @@ public:
 
 	ENGINEAPI void ChangeCollisionProfileName(std::string_view _ProfileName, std::string_view _PrevProfileName, std::shared_ptr<class UCollision> _Collision);
 
+	ENGINEAPI void PushCollisionProfileEvent(std::shared_ptr<class URenderer> _Renderer);
 
 	ENGINEAPI void CreateCollisionProfile(std::string_view _ProfileName);
 
+	ENGINEAPI void LinkCollisionProfile(std::string_view _LeftProfileName, std::string_view _RightProfileName);
 
 protected:
 
@@ -103,6 +106,11 @@ private:
 	// 0번에 mainamera라고 불리는 애를 만든다.
 	std::map<int, std::shared_ptr<class ACameraActor>> Cameras;
 
-	std::map<std::string_view, std::list<std::shared_ptr<class UCollision>>> Collisions;
+	std::map<std::string, std::list<std::shared_ptr<class UCollision>>> Collisions;
+
+	// 이벤트가 존재하는 애들만 충돌 체크하려고.
+	std::map<std::string, std::list<std::shared_ptr<class UCollision>>> CheckCollisions;
+
+	std::map<std::string, std::list<std::string>> CollisionLinks;
 };
 
