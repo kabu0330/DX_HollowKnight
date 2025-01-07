@@ -21,7 +21,7 @@ public:
 
 	ENGINEAPI void SetCollisionProfileName(std::string_view _ProfileName);
 	ENGINEAPI void BeginPlay() override;
-	// ENGINEAPI void DebugRender(UEngineCamera* _Camera, float _DeltaTime);
+	ENGINEAPI void DebugRender(UEngineCamera* _Camera, float _DeltaTime);
 
 	std::string GetCollisionProfileName()
 	{
@@ -34,10 +34,13 @@ public:
 	// unreal에서 vector
 	ENGINEAPI bool CollisionCheck(std::string_view _OtherName, std::vector<UCollision*>& _Vector);
 
+	ENGINEAPI bool CollisionCheck(std::string_view _OtherName, FVector _NextPos, std::vector<UCollision*>& _Vector);
+
 	void SetCollisionType(ECollisionType _Type)
 	{
 		CollisionType = _Type;
 	}
+
 	void CollisionEventCheck(std::shared_ptr<UCollision> _Other);
 
 	ENGINEAPI void SetCollisionEnter(std::function<void(UCollision*, UCollision*)> _Function);
@@ -57,8 +60,13 @@ private:
 	// 나는 Monster 그룹이다.
 	std::string ProfileName = "NONE";
 
+	// 최초 충돌
 	std::function<void(UCollision*, UCollision*)> Enter;
+
+	// 지속 충돌 <= 언리얼은 이게 없습니다.
 	std::function<void(UCollision*, UCollision*)> Stay;
+
+	// 충돌 끝.
 	std::function<void(UCollision*, UCollision*)> End;
 };
 

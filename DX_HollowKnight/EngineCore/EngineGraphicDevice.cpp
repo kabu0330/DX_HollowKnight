@@ -217,6 +217,7 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
 	
     FVector Size = _Window.GetWindowSize();
 
+    // 랜더타겟이라는 구조로 변경될 겁니다. 
     D3D11_TEXTURE2D_DESC Desc = {0};
     Desc.ArraySize = 1;
     Desc.Width = Size.iX();
@@ -341,12 +342,10 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
 void UEngineGraphicDevice::RenderStart()
 {
     FVector ClearColor;
-
     ClearColor = FVector(0.0f, 0.0f, 1.0f, 1.0f);
-
     // 이미지 파란색으로 채색해줘.
+    // 한번 싹지우고
     Context->ClearRenderTargetView(RTV.Get(), ClearColor.Arr1D);
-
     Context->ClearDepthStencilView(DepthTex->GetDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
     // 랜더타겟 랜더타겟 랜더타겟
@@ -359,8 +358,9 @@ void UEngineGraphicDevice::RenderStart()
     ArrRtv[0] = RTV; // SV_Target0
     Context->OMSetRenderTargets(1, &ArrRtv[0], DepthTex->GetDSV());
 
-    std::shared_ptr<UEngineDepthStencilState> DepthState = UEngineDepthStencilState::Find<UEngineDepthStencilState>("BaseDepth");
-    DepthState->Setting();
+    // 뎁스텍스처가 
+    // 블랜드 스테이트등과 비슷한 녀석이다.
+    // Context->OMSetDepthStencilState();
 }
 
 void UEngineGraphicDevice::RenderEnd()

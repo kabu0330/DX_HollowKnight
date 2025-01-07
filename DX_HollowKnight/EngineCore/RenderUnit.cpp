@@ -43,9 +43,11 @@ void URenderUnit::MaterialResourcesCheck()
 				continue;
 			}
 
+
 			FTransform& Ref = ParentRenderer->GetTransformRef();
 			Resources[i].ConstantBufferLinkData("FTransform", Ref);
-		}		
+		}
+		
 	}
 }
 
@@ -134,11 +136,27 @@ void URenderUnit::SetMaterial(std::string_view _Name)
 	if (nullptr != Mesh)
 	{
 		InputLayOutCreate();
+
 	}
+
+
 }
 
 void URenderUnit::Render(class UEngineCamera* _Camera, float _DeltaTime)
 {
+	// ¿’«≤æÓº¿∫Ì∑Ø 
+	
+	// Ω¶¿Ã¥ı ∏Æº“Ω∫
+
+	//	ShaderResSetting();
+	
+	//for (std::pair<EShaderType, UEngineShaderResources>& ShaderRes : Resources)
+	//{
+	//	UEngineShaderResources& Res = ShaderRes.second;
+	//	Res.Setting();
+	//}
+	
+
 	for (std::pair<const EShaderType, UEngineShaderResources>& Pair : Resources)
 	{
 		Pair.second.Setting();
@@ -163,7 +181,11 @@ void URenderUnit::Render(class UEngineCamera* _Camera, float _DeltaTime)
 	Material->GetPixelShader()->Setting();
 
 	//	OutPutMergeSetting();
+	// ∑£¥ı≈∏∞Ÿ¿Ã∂Û¥¬ ∞Õ¿ª πŸ≤∞Ã¥œ¥Ÿ.
 	Material->GetBlend()->Setting();
+
+	Material->GetDepthStencilState()->Setting();
+
 	UEngineCore::GetDevice().GetContext()->DrawIndexed(Mesh->GetIndexBuffer()->GetIndexCount(), 0, 0);
 }
 
@@ -179,4 +201,6 @@ void URenderUnit::InputLayOutCreate()
 		Blob->GetBufferPointer(),
 		Blob->GetBufferSize(),
 		&InputLayOut);
+
+	int a = 0;
 }
