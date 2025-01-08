@@ -27,11 +27,13 @@ public:
 		return CurRoom;
 	}
 	
-	bool IsLinking(std::shared_ptr<ARoom> _Room);
-	bool InterLinkRoom(std::shared_ptr<ARoom> _Room, FVector _WorldPos);
-	std::shared_ptr<ARoom> LinkRoom(std::shared_ptr<ARoom> _Room);
+	bool IsLinking(ARoom* _Room);
+	bool InterLinkRoom(ARoom* _Room, FVector _WorldPos);
+	ARoom* LinkRoom(ARoom* _Room);
+	//std::shared_ptr<ARoom> LinkRoom(ARoom* _Room);
 
 	void CheckGround(FVector _MovePos);
+	void CreatePixelCollisionTexture(std::string_view _FileName);
 
 protected:
 

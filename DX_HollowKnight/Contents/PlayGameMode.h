@@ -1,8 +1,8 @@
 #pragma once
-#include <EngineCore/Actor.h>
+#include <EngineCore/GameMode.h>
 
 // Ό³Έν :
-class APlayGameMode : public AActor
+class APlayGameMode : public AGameMode
 {
 public:
 	// constrcuter destructer
@@ -22,9 +22,14 @@ public:
 	static FVector MousePos;
 	static FVector KnightPos;
 protected:
-	
+
 private:
+	void SetCamera();
+	std::shared_ptr<class ARoom> CreateRoom(std::string_view _RoomName, std::string_view _FileName, FVector _Location);
+	void SetInitCurRoom(std::shared_ptr<class ARoom> _InitRoom);
+	void LoadPixelCollisionTexture(class ARoom* _Room, UEngineWinImage* _BmpTexture, std::string_view _FileName, FVector _Location);
+	
 	class UEngineWinImage* PixelCollisionImage = nullptr;
-	std::vector<std::shared_ptr<class ARoom>> Rooms;
+
 };
 

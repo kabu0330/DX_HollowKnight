@@ -71,7 +71,6 @@ void UContentsCore::LoadResourceDirectory()
 		}
 
 	}
-
 	// Shader
 	{
 		UEngineDirectory CurDir;

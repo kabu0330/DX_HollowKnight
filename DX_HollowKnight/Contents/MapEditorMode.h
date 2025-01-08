@@ -1,5 +1,5 @@
 #pragma once
-#include <EngineCore/Actor.h>
+#include <EngineCore/GameMode.h>
 #include "MapObject.h"
 
 struct VertexData
@@ -10,7 +10,7 @@ struct VertexData
 };
 
 // Ό³Έν :
-class AMapEditorMode : public AActor
+class AMapEditorMode : public AGameMode
 {
 public:
 	// constrcuter destructer

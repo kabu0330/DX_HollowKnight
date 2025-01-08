@@ -25,6 +25,8 @@ private:
 	void LoadResourceDirectory();
 	void LoadFolder();
 	void LoadSprite();
+
+
 	void CreateLevel();
 	void LoadContentsResource(std::string_view _Path);
 	

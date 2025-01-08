@@ -87,6 +87,7 @@ private:
 
 private:
 	void DebugInput(float _DeltaTime);
+	bool DebugNonGravity = false;
 
 	bool CanAction();
 

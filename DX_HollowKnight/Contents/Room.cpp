@@ -16,57 +16,6 @@ ARoom::ARoom()
 	BackgroundRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BackgroundRenderer->SetupAttachment(RootComponent);
 	BackgroundRenderer->SetAutoScaleRatio(1.0f);
-
-	float ZSort = 100.0f;
-
-	BackgroundRenderer->SetTexture("dartmount_front2.bmp", true, 1.0f);
-	BackgroundRenderer->SetWorldLocation({ 0.0f, 0.0f, ZSort });
-
-
-	// Test
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("ContentsResources"))
-		{
-			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-			return;
-		}
-		Dir.Append("Image");
-		UEngineFile ImageFiles = Dir.GetFile("dartmount_front2.bmp");
-
-		PixelCollisionImage.Load(nullptr, ImageFiles.GetPathToString());
-	}
-
-	float X = 0.0f;
-	float Y = 100.0f;
-	UColor Color00 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(  0) });
-	UColor Color0  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(100) });
-	UColor Color1  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(200) });
-	UColor Color2  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(300) });
-	UColor Color3  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(400) });
-	UColor Color4  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(500) });
-	UColor Color5  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(600) });
-	UColor Color6  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(700) });
-	UColor Color7  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(800) });
-	UColor Color8  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(900) });
-	UColor Color9  = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1000) });
-	UColor Color10 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1100) });
-	UColor Color11 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1200) });
-	UColor Color12 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1300) });
-	UColor Color13 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1400) });
-	UColor Color14 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1500) });
-	UColor Color15 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1600) });
-	UColor Color16 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1700) });
-	UColor Color17 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1800) });
-	UColor Color18 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(1900) });
-	UColor Color19 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(2000) });
-	UColor Color20 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(2100) });
-	UColor Color21 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(2200) });
-	UColor Color22 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(2300) });
-	UColor Color23 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(2400) });
-	UColor Color24 = PixelCollisionImage.GetColor({ static_cast<float>(X), static_cast<float>(2499) });
-
-	int a = 0;
 }
 
 ARoom::~ARoom()
@@ -84,11 +33,11 @@ void ARoom::Tick(float _DeltaTime)
 	
 }
 
-bool ARoom::IsLinking(std::shared_ptr<ARoom> _Room)
+bool ARoom::IsLinking(ARoom* _Room)
 {
 	for (std::shared_ptr<ARoom> Room : Rooms)
 	{
-		if (Room == _Room)
+		if (Room.get() == _Room)
 		{
 			return true;
 		}
@@ -96,18 +45,18 @@ bool ARoom::IsLinking(std::shared_ptr<ARoom> _Room)
 	return false;
 }
 
-bool ARoom::InterLinkRoom(std::shared_ptr<ARoom> _Room, FVector _WorldPos)
+bool ARoom::InterLinkRoom(ARoom* _Room, FVector _WorldPos)
 {
 	this->LinkRoom(_Room);
-	_Room->LinkRoom(static_cast<std::shared_ptr<ARoom>>(this));
-	_Room->SetActorLocation(_WorldPos);
+	_Room->LinkRoom(this);
+	_Room->SetActorLocation(this->GetActorLocation() + _WorldPos);
 
 	return true;
 }
 
-std::shared_ptr<ARoom> ARoom::LinkRoom(std::shared_ptr<ARoom> _Room)
+ARoom* ARoom::LinkRoom(ARoom* _Room)
 {
-	if (_Room == static_cast<std::shared_ptr<ARoom>>(this))
+	if (_Room == this)
 	{
 		MSGASSERT("자기 자신을 연결할 수 없습니다.");
 		return nullptr;
@@ -117,9 +66,10 @@ std::shared_ptr<ARoom> ARoom::LinkRoom(std::shared_ptr<ARoom> _Room)
 		MSGASSERT("이미 연결된 맵입니다.");
 		return nullptr;
 	}
-
+	
+	// 어케한담
 	Rooms.push_back(_Room);
-	return Rooms[Rooms.size() - 1];
+	return Rooms[Rooms.size() - 1].get();
 }
 
 void ARoom::CheckGround(FVector _MovePos)
@@ -144,5 +94,13 @@ void ARoom::CheckGround(FVector _MovePos)
 	}
 
 	int a = 0;
+}
+
+void ARoom::CreatePixelCollisionTexture(std::string_view _FileName)
+{
+	float ZSort = 100.0f;
+
+	BackgroundRenderer->SetTexture(_FileName, true, 1.0f);
+	BackgroundRenderer->SetWorldLocation({ 0.0f, 0.0f, ZSort });
 }
 

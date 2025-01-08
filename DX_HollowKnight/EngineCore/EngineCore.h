@@ -23,10 +23,11 @@ public:
 	{
 		std::shared_ptr<ULevel> NewLevel = NewLevelCreate(_Name);
 
-		NewLevel->SpawnActor<GameModeType>();
-		NewLevel->SpawnActor<MainPawnType>();
+		std::shared_ptr<GameModeType> GameMode = NewLevel->SpawnActor<GameModeType>();
+		std::shared_ptr<MainPawnType> Pawn = NewLevel->SpawnActor<MainPawnType>();
 
-		// 2가 됩니다
+		NewLevel->InitLevel(GameMode.get(), Pawn.get());
+
 		return NewLevel;
 	}
 

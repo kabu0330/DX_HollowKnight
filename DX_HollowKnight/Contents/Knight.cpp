@@ -27,14 +27,15 @@ AKnight::AKnight()
 
 	SetActorLocation({ 1000.0f, -2185.0f });
 
+	// Debug
 	BodyRenderer->BillboardOn();
+	DebugNonGravity = true;
 }
 
 void AKnight::BeginPlay()
 {
 	AActor::BeginPlay();
 	SetFSM();
-	SetCameraPosition();
 }
 
 void AKnight::Tick(float _DeltaTime)
@@ -47,12 +48,17 @@ void AKnight::Tick(float _DeltaTime)
 	TimeElapsed(_DeltaTime);
 	EndAnimationEffect();
 
+	SetCameraPosition();
 	DebugInput(_DeltaTime);
 
 }
 
 void AKnight::CheckGround(FVector _Gravity)
 {
+	if (true == DebugNonGravity)
+	{
+		return;
+	}
 	std::shared_ptr<ARoom> CurRoom = ARoom::GetCurRoom();
 	if (nullptr == CurRoom)
 	{
@@ -64,6 +70,11 @@ void AKnight::CheckGround(FVector _Gravity)
 
 void AKnight::Gravity(float _DeltaTime)
 {
+	if (true == DebugNonGravity)
+	{
+		return;
+	}
+
 	if (false == bIsOnGround)
 	{
 		AddRelativeLocation(GravityForce * _DeltaTime);
@@ -111,6 +122,12 @@ void AKnight::Move(float _DeltaTime)
 		AddRelativeLocation(FVector{ 0.0f, -Velocity * _DeltaTime, 0.0f });
 	}
 
+	// 미래의 위치를 파악해서 이동을 취소시킬 방법을 생각해보기
+	if (true == DebugNonGravity)
+	{
+		return;
+	}
+
 	while (true)
 	{
 		if (nullptr == ARoom::GetCurRoom())
@@ -122,10 +139,13 @@ void AKnight::Move(float _DeltaTime)
 		FVector Pos = { GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y };
 		UColor White = UColor{ 255, 255, 255, 255 };
 		UColor Black = UColor{ 0, 0, 0, 0 };
+
+		
 		if (GroundColor == Black)
 		{
 			UEngineDebug::OutPutString("On Ground");
-			AddRelativeLocation(FVector::UP);			
+			GravityForce = FVector::ZERO;
+			//AddRelativeLocation(FVector::UP);			
 		}
 		else if (GroundColor == White || GroundColor == UColor(255, 255, 255, 0))
 		{
@@ -627,18 +647,24 @@ void AKnight::SetDash(float _DeltaTime)
 
 void AKnight::SetSlash(float _DeltaTime)
 {
+	Move(_DeltaTime);
+
 	CreateSlashEffect();
 	ChangePrevAnimation();
 }
 
 void AKnight::SetUpSlash(float _DeltaTime)
 {
+	Move(_DeltaTime);
+
 	CreateUpSlashEffect();
 	ChangePrevAnimation();
 }
 
 void AKnight::SetDownSlash(float _DeltaTime)
 {
+	Move(_DeltaTime);
+
 	CreateDownSlashEffect();
 	ChangePrevAnimation();
 }
@@ -787,7 +813,7 @@ void AKnight::CreateRenderer()
 
 
 	float IdleFrameTime = 0.15f;
-	float RunFrameTime = 0.07f;
+	float RunFrameTime = 0.06f;
 	float ChangeFrameTime = 0.05f;
 	float SlashFrameTime = 0.03f;
 
