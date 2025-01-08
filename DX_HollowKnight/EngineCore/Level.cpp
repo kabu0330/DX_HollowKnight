@@ -48,6 +48,11 @@ void ULevel::LevelChangeEnd()
 
 void ULevel::Tick(float _DeltaTime)
 {
+	if (GetMainCamera()->IsFreeCamera()) // 프리 카메라를 켜면 액터의 Tick은 일시정지
+	{
+		return;
+	}
+
 	// Tick을 돌리기 전에, 해당 프레임에 생성된 Actor의 BeginPlay를 먼저 호출한다.
 	std::list<std::shared_ptr<class AActor>>::iterator StartIter = BeginPlayList.begin();
 	std::list<std::shared_ptr<class AActor>>::iterator EndIter = BeginPlayList.end();
@@ -86,7 +91,7 @@ void ULevel::Render(float _DeltaTime)
 
 	for (std::pair<const int, std::shared_ptr<ACameraActor>>& Camera : Cameras)
 	{
-		Camera.second->Tick(_DeltaTime);
+		Camera.second->Tick(_DeltaTime); // View 행렬과 Projection 행렬 계산
 		Camera.second->GetCameraComponent()->Render(_DeltaTime); 
 	}
 
@@ -112,7 +117,7 @@ void ULevel::Render(float _DeltaTime)
 
 	if (true == UEngineWindow::IsApplicationOn())
 	{
-		UEngineGUI::GUIRender();
+		UEngineGUI::GUIRender(this);
 		// IMGUI 랜더링
 	}
 

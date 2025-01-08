@@ -23,6 +23,9 @@ public:
 	ENGINEAPI void SetOrder(int _Order);
 	ENGINEAPI void BeginPlay() override;
 	ENGINEAPI virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
+
+	ENGINEAPI virtual void RenderTransUpdate(UEngineCamera* _Camera);
+
 	ENGINEAPI URenderUnit& GetRenderUnit(UINT  _Index = 0);
 	ENGINEAPI URenderUnit& CreateRenderUnit();
 	ENGINEAPI void SetMesh(std::string_view _Name, UINT _Index = 0);

@@ -82,6 +82,16 @@ public:
 		RootComponent->SetWorldLocation(_Value);
 	}
 
+	void AddActorLocation(const FVector& _Value)
+	{
+		if (nullptr == RootComponent)
+		{
+			return;
+		}
+
+		RootComponent->AddWorldLocation(_Value);
+	}
+
 	void SetActorRelativeScale3D(const FVector& _Scale)
 	{
 		if (nullptr == RootComponent)
@@ -119,7 +129,7 @@ public:
 			return;
 		}
 
-		RootComponent->AddRotation(_Value);
+		RootComponent->AddWorldRotation(_Value);
 	}
 
 	ENGINEAPI void AttachToActor(AActor* _Parent);
@@ -137,6 +147,18 @@ public:
 		}
 
 		return RootComponent->GetTransformRef();
+	}
+
+	void SetActorTransform(const FTransform& _Transform)
+	{
+		if (nullptr == RootComponent)
+		{
+			return;
+		}
+
+		RootComponent->Transform = _Transform;
+
+		return;
 	}
 
 

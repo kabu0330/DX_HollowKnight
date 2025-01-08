@@ -36,18 +36,32 @@ public:
 		TransformUpdate();
 	}
 
+	void AddWorldLocation(const FVector& _Value)
+	{
+		IsAbsolute = true;
+		Transform.Location += _Value;
+		TransformUpdate();
+	}
+
 	void SetRelativeLocation(const FVector& _Value)
 	{
 		Transform.Location = _Value;
 		TransformUpdate();
 	}
 
-
-	void AddRotation(const FVector& _Value)
+	void AddLocalRotation(const FVector& _Value)
 	{
 		Transform.Rotation += _Value;
 		TransformUpdate();
 	}
+
+	void AddWorldRotation(const FVector& _Value)
+	{
+		IsAbsolute = true;
+		Transform.Rotation += _Value;
+		TransformUpdate();
+	}
+
 
 	void SetRotation(const FVector& _Value)
 	{

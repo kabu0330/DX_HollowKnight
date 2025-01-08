@@ -10,10 +10,11 @@
 // PlayCamera
 // UICamera
 
-// 설명 : 뷰포트 설정, View / Projection 행렬 갱신
+// 설명 : 뷰포트 설정, View / Projection 행렬 갱신, 렌더랑
 class UEngineCamera : public USceneComponent
 {
 	friend class ULevel;
+	friend class ACameraActor;
 
 public:
 	// constrcuter destructer
@@ -51,7 +52,7 @@ public:
 
 	ENGINEAPI void SetProjectionType(EProjectionType _Type)
 	{
-		Type = _Type;
+		ProjectionType = _Type;
 	}
 
 	ENGINEAPI void SetZSort(int _Order, bool _Value);
@@ -64,7 +65,7 @@ private:
 	float Far = 5000.0f;
 	float FOV = 60.0f;
 
-	EProjectionType Type = EProjectionType::Orthographic;
+	EProjectionType ProjectionType = EProjectionType::Orthographic;
 
 	D3D11_VIEWPORT ViewPortInfo;
 

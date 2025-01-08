@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "SpriteRenderer.h"
+#include "EngineCamera.h"
 
 USpriteRenderer::USpriteRenderer()
 {
@@ -57,7 +58,6 @@ void USpriteRenderer::SetTexture(std::string_view _Name, bool AutoScale, float _
 void USpriteRenderer::BeginPlay()
 {
 	URenderer::BeginPlay();
-
 }
 
 USpriteRenderer::FrameAnimation* USpriteRenderer::FindAnimation(std::string_view _AnimationName)
@@ -90,6 +90,35 @@ void USpriteRenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 	}
 
 	URenderer::Render(_Camera, _DeltaTime);
+
+	if (true == IsBillboard)
+	{
+		Transform.WVP;
+	}
+}
+
+void USpriteRenderer::RenderTransUpdate(UEngineCamera* _Camera)
+{
+	FTransform& CameraTrans = _Camera->GetTransformRef();
+	FTransform& RendererTrans = GetTransformRef();
+	//	// 랜더러는 월드 뷰 프로젝트를 다 세팅받았고
+	// RendererTrans.View = CameraTrans.View;
+
+	RendererTrans.View = CameraTrans.View;
+
+	FMatrix CurWorld = RendererTrans.World;
+
+	if (true == IsBillboard)
+	{
+		RendererTrans.View.ArrVector[0] = { 1.0f, 0.0f, 0.0f, 0.0f };
+		RendererTrans.View.ArrVector[1] = { 0.0f, 1.0f, 0.0f, 0.0f };
+		RendererTrans.View.ArrVector[2] = { 0.0f, 0.0f, 1.0f, 0.0f };
+
+		// CurWorld = RendererTrans.ScaleMat * RendererTrans.LocationMat * RendererTrans.ParentMat;
+	}
+
+	RendererTrans.Projection = CameraTrans.Projection;
+	RendererTrans.WVP = CurWorld * RendererTrans.View * RendererTrans.Projection;
 }
 
 void USpriteRenderer::ComponentTick(float _DeltaTime)
@@ -99,6 +128,9 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 	// 애니메이션 진행시키는 코드를 ComponentTick으로 옮겼다. 
 	if (nullptr != CurAnimation)
 	{
+		FrameAnimation* EventAnimation = nullptr;
+		int EventFrame = -1;
+
 		CurAnimation->IsEnd = false;
 		std::vector<int>& Indexs = CurAnimation->FrameIndex;
 		std::vector<float>& Times = CurAnimation->FrameTime;
@@ -113,13 +145,14 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 		//                           0.1 0.1 0.1
 		if (CurAnimation->CurTime > CurFrameTime)
 		{
-
 			CurAnimation->CurTime -= CurFrameTime;
 			++CurAnimation->CurIndex;
 
 			if (CurAnimation->Events.contains(CurIndex))
 			{
-				CurAnimation->Events[CurIndex]();
+				EventAnimation = CurAnimation;
+				EventFrame = CurIndex;
+				// CurAnimation->Events[CurIndex]();
 			}
 
 			// 애니메이션 앤드
@@ -131,7 +164,6 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 				CurAnimation->IsEnd = false;
 			}
 
-
 			if (CurAnimation->CurIndex >= Indexs.size())
 			{
 				if (true == CurAnimation->Loop)
@@ -140,7 +172,9 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 
 					if (CurAnimation->Events.contains(CurIndex))
 					{
-						CurAnimation->Events[CurIndex]();
+						EventAnimation = CurAnimation;
+						EventFrame = CurIndex;
+						// CurAnimation->Events[CurIndex]();
 					}
 				}
 				else
@@ -149,17 +183,19 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 					--CurAnimation->CurIndex;
 				}
 			}
-
 		}
 
-
 		CurIndex = Indexs[CurAnimation->CurIndex];
+
+		if (nullptr != EventAnimation)
+		{
+			if (EventAnimation->Events.contains(CurIndex))
+			{
+				EventAnimation->Events[CurIndex]();
+			}
+		}
 	}
-
-
 }
-
-
 
 void USpriteRenderer::CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, int _Start, int _End, float Time /*= 0.1f*/, bool _Loop /*= true*/)
 {
@@ -190,10 +226,8 @@ void USpriteRenderer::CreateAnimation(std::string_view _AnimationName, std::stri
 		}
 	}
 
-
 	CreateAnimation(_AnimationName, _SpriteName, Indexs, Times, _Loop);
 }
-
 
 void USpriteRenderer::CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, std::vector<int> _Indexs, float _Frame, bool _Loop /*= true*/)
 {
@@ -275,7 +309,6 @@ void USpriteRenderer::ChangeAnimation(std::string_view _AnimationName, bool _For
 	}
 }
 
-
 void USpriteRenderer::SetAnimationEvent(std::string_view _AnimationName, int _Frame, std::function<void()> _Function)
 {
 	std::string UpperName = UEngineString::ToUpper(_AnimationName);
@@ -308,8 +341,6 @@ void USpriteRenderer::SetAnimationEvent(std::string_view _AnimationName, int _Fr
 	ChangeAnimation->Events[_Frame] += _Function;
 
 }
-
-
 
 void USpriteRenderer::SetSprite(UEngineSprite* _Sprite)
 {

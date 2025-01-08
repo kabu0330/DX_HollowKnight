@@ -12,7 +12,7 @@ ARoom::ARoom()
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
-	// std::shared_ptr<ACameraActor> Camera = GetWorld()->GetCamera(0);
+	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetCamera(0);
 	BackgroundRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BackgroundRenderer->SetupAttachment(RootComponent);
 	BackgroundRenderer->SetAutoScaleRatio(1.0f);
@@ -128,17 +128,17 @@ void ARoom::CheckGround(FVector _MovePos)
 	NextPos.X = floorf(NextPos.X);
 	NextPos.Y = floorf(NextPos.Y);
 
-	UColor Color = PixelCollisionImage.GetColor({ APlayGameMode::KnightPos.X, - APlayGameMode::KnightPos.Y });
+	UColor Color = PixelCollisionImage.GetColor({ NextPos.X, -NextPos.Y });
 	UColor White = { 255, 255, 255, 255 };
 	UColor Black = { 0, 0, 0, 0 };
-	if (Color == White)
+	if (Color == White || Color == UColor(255, 255, 255, 0))
 	{
-		UEngineDebug::OutPutString("White");
+		//UEngineDebug::OutPutString("White");
 		AKnight::GetPawn()->SetIsOnGround(false);
 	}
 	else if (Color == Black)
 	{
-		UEngineDebug::OutPutString("Black");
+		//UEngineDebug::OutPutString("Black");
 		// 흰색 아니면 다 벽과 바닥으로 보겠다.
 		AKnight::GetPawn()->SetIsOnGround(true);
 	}

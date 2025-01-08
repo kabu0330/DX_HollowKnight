@@ -53,6 +53,9 @@ public:
 		return GravityForce.Y;
 	}
 
+	float JumpForce = 0.0f;
+
+
 protected:
 
 private:
@@ -81,23 +84,27 @@ private:
 	int MaxHealth = 5;
 
 
+
 private:
-	void Move(float _DeltaTime);
-	FVector GravityForce = FVector::ZERO;
-	float GravityValue = 1000.0f;
-	void CheckGround(FVector _Gravity);
-	void Gravity(float _DeltaTime);
-
 	void DebugInput(float _DeltaTime);
-
-	void CreateRenderer();
 
 	bool CanAction();
 
+	FVector GravityForce = FVector::ZERO;
+	float GravityValue = 1400.0f;
+	void Move(float _DeltaTime);
+
+	void CheckGround(FVector _Gravity);
+	void Gravity(float _DeltaTime);
+
+
 	// Jump : Z키
-	bool bIsOnGround = false;
+	bool bIsOnGround = false; // 픽셀충돌로 true / false 검사
+	bool bCanJump = true;
+	float InitJumpForce = 600.0f;
 	bool IsOnGround();
 	bool CanJump();
+	void Jump(float _DeltaTime);
 
 	// Slash : X키
 	bool bIsShowEffect = false;
@@ -118,6 +125,7 @@ private:
 	void CastFireball();
 
 	// Animation
+	void CreateRenderer();
 	void ChangeNextAnimation(EKnightState _NextState);
 	void ChangePrevAnimation();
 

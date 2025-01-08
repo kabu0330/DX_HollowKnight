@@ -23,14 +23,18 @@ AKnight::AKnight()
 	Velocity = 400.0f;
 	InitVelocity = Velocity;
 	DashSpeed = Velocity * 3.0f;
+	JumpForce = InitJumpForce;
 
-	SetActorLocation({ 1000.0f, -2000.0f });
+	SetActorLocation({ 1000.0f, -2185.0f });
+
+	BodyRenderer->BillboardOn();
 }
 
 void AKnight::BeginPlay()
 {
 	AActor::BeginPlay();
 	SetFSM();
+	SetCameraPosition();
 }
 
 void AKnight::Tick(float _DeltaTime)
@@ -38,12 +42,11 @@ void AKnight::Tick(float _DeltaTime)
 	AActor::Tick(_DeltaTime);
 
 	this;
-	Move(_DeltaTime);
 	CheckDirection();
 	FSM.Update(_DeltaTime);
 	TimeElapsed(_DeltaTime);
 	EndAnimationEffect();
-	SetCameraPosition();
+
 	DebugInput(_DeltaTime);
 
 }
@@ -55,6 +58,7 @@ void AKnight::CheckGround(FVector _Gravity)
 	{
 		return;
 	}
+
 	CurRoom->CheckGround(_Gravity);
 }
 
@@ -88,9 +92,6 @@ void AKnight::Move(float _DeltaTime)
 		return;
 	}
 
-	CheckGround(GravityForce * _DeltaTime);
-	//Gravity(_DeltaTime);
-
 	if (UEngineInput::IsPress(VK_LEFT))
 	{
 		AddRelativeLocation(FVector{ -Velocity * _DeltaTime, 0.0f, 0.0f });
@@ -117,20 +118,22 @@ void AKnight::Move(float _DeltaTime)
 			break;
 		}
 
-		UColor Color = ARoom::GetCurRoom()->GetPixelCollisionImage().GetColor({ GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y });
+		UColor GroundColor = ARoom::GetCurRoom()->GetPixelCollisionImage().GetColor({ GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y });
 		FVector Pos = { GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y };
 		UColor White = UColor{ 255, 255, 255, 255 };
 		UColor Black = UColor{ 0, 0, 0, 0 };
-		if (Color == Black)
+		if (GroundColor == Black)
 		{
-			
-			//UEngineDebug::OutPutString("Black");
-			AddRelativeLocation(FVector::UP);
-			
+			UEngineDebug::OutPutString("On Ground");
+			AddRelativeLocation(FVector::UP);			
+		}
+		else if (GroundColor == White || GroundColor == UColor(255, 255, 255, 0))
+		{
+			UEngineDebug::OutPutString("Airborn");
+			break;
 		}
 		else
 		{
-			//UEngineDebug::OutPutString("White");
 			break;
 		}
 	}
@@ -247,6 +250,15 @@ void AKnight::CastFireball()
 	}
 }
 
+bool AKnight::IsOnGround()
+{
+	if (false == bIsOnGround)
+	{
+		return false;
+	}
+	return true;
+}
+
 bool AKnight::CanJump()
 {
 	if (false == CanAction())
@@ -257,31 +269,44 @@ bool AKnight::CanJump()
 	{
 		return false;
 	}
+
 	return true;
 }
 
-bool AKnight::IsOnGround()
+void AKnight::Jump(float _DeltaTime)
 {
-	if (false == bIsOnGround)
+	if (true == CanAction())
 	{
-		return false;
+		if (UEngineInput::IsPress('Z'))
+		{		
+			float JumpAccTime = 0.4f;
+			float JumpKeyDuration = UEngineInput::IsPressTime('Z');
+			if (JumpAccTime >= JumpKeyDuration)
+			{
+				JumpForce += 200.0f;
+				float JumpForceMax = 1000.0f;
+				if (JumpForce >= JumpForceMax)
+				{
+					JumpForce = JumpForceMax;
+				}
+			}
+			AddRelativeLocation(FVector{ 0.0f, JumpForce * _DeltaTime, 0.0f });
+		}
 	}
-	return true;
 }
 
 void AKnight::ChangeJumpAnimation()
 {
 	if (true == CanJump())
 	{
-		if (UEngineInput::IsPress('Z'))
+		if (false == IsOnGround())
 		{
-			bIsOnGround = false;
-			FSM.ChangeState(EKnightState::JUMP);
 			return;
 		}
-		if (UEngineInput::IsFree('Z')) // 키를 떼면 업벡터를 0로 해야함
+		if (UEngineInput::IsPress('Z'))
 		{
-
+			FSM.ChangeState(EKnightState::JUMP);
+			return;
 		}
 	}
 }
@@ -336,12 +361,8 @@ void AKnight::DebugInput(float _DeltaTime)
 		FSM.ChangeState(EKnightState::DEATH_DAMAGE);
 	}
 
-		float ZValue = BodyRenderer->GetTransformRef().RelativeLocation.Z;
+	float ZValue = BodyRenderer->GetTransformRef().RelativeLocation.Z;
 	int a = 0;
-	if (UEngineInput::IsPress('Z'))
-	{
-		AddRelativeLocation(FVector{ 0.0f, 2000.0f * _DeltaTime, 0.0f });
-	}
 
 	if (UEngineInput::IsPress('W'))
 	{
@@ -430,9 +451,11 @@ void AKnight::ChangeAttackAnimation(EKnightState _PrevState)
 
 void AKnight::SetIdle(float _DeltaTime)
 {
-	//bIsOnGround = true;
-	bCanRotation = true;
+	Move(_DeltaTime);
+	CheckGround(GravityForce * _DeltaTime);
 	Gravity(_DeltaTime);
+
+	bCanRotation = true;
 
 	if (UEngineInput::IsPress(VK_LEFT) || UEngineInput::IsPress(VK_RIGHT))
 	{
@@ -440,7 +463,7 @@ void AKnight::SetIdle(float _DeltaTime)
 		return;
 	}
 
-	//Move(_DeltaTime);
+
 	ChangeJumpAnimation();  // 점프
 	ChangeDash(); // 대시
 
@@ -454,6 +477,7 @@ void AKnight::SetIdle(float _DeltaTime)
 
 void AKnight::SetRun(float _DeltaTime)
 {
+	Move(_DeltaTime);
 	CheckGround(GravityForce * _DeltaTime);
 	Gravity(_DeltaTime);
 
@@ -473,6 +497,7 @@ void AKnight::SetRun(float _DeltaTime)
 
 void AKnight::SetIdleToRun(float _DeltaTime)
 {
+	Move(_DeltaTime);
 	CheckGround(GravityForce * _DeltaTime);
 	Gravity(_DeltaTime);
 
@@ -488,11 +513,14 @@ void AKnight::SetIdleToRun(float _DeltaTime)
 
 void AKnight::SetRunToIdle(float _DeltaTime)
 {
+	Move(_DeltaTime);
 	CheckGround(GravityForce * _DeltaTime);
 	Gravity(_DeltaTime);
 
 	bCanRotation = true;
 	bIsDashing = false;
+
+
 	ChangeNextAnimation(EKnightState::IDLE);
 
 	if (UEngineInput::IsPress(VK_LEFT) || UEngineInput::IsPress(VK_RIGHT))
@@ -509,30 +537,52 @@ void AKnight::SetRunToIdle(float _DeltaTime)
 
 void AKnight::SetJump(float _DeltaTime)
 {
+	Jump(_DeltaTime);
+
+	Move(_DeltaTime);
 	CheckGround(GravityForce * _DeltaTime);
 	Gravity(_DeltaTime);
 
 	bCanRotation = true;
 
-	ChangeNextAnimation(EKnightState::AIRBORN);
+	ChangeDash(); // 대시
 
-	ChangeAttackAnimation(EKnightState::AIRBORN);
+	if (true == bIsOnGround)
+	{
+		FSM.ChangeState(EKnightState::LAND);
+	}
+	else
+	{
+		ChangeNextAnimation(EKnightState::AIRBORN);
+		ChangeAttackAnimation(EKnightState::AIRBORN);
+	}
 }
 
 void AKnight::SetAirborn(float _DeltaTime)
 {
+	Move(_DeltaTime);
 	CheckGround(GravityForce * _DeltaTime);
 	Gravity(_DeltaTime);
 
 	bCanRotation = true;
 
-	ChangeNextAnimation(EKnightState::LAND);
+	ChangeDash(); // 대시
+
+	if (true == bIsOnGround)
+	{
+		FSM.ChangeState(EKnightState::LAND);
+	}
+
 }
 
 void AKnight::SetLand(float _DeltaTime)
 {
+	Move(_DeltaTime);
 	CheckGround(GravityForce * _DeltaTime);
 	Gravity(_DeltaTime);
+
+	float InitJumpForce = 600.0f;
+	JumpForce = InitJumpForce;
 
 	ChangeNextAnimation(EKnightState::IDLE);
 }
@@ -541,6 +591,9 @@ void AKnight::SetHardLand(float _DeltaTime)
 {
 	CheckGround(GravityForce * _DeltaTime);
 	Gravity(_DeltaTime);
+
+	float InitJumpForce = 600.0f;
+	JumpForce = InitJumpForce;
 
 	ChangeNextAnimation(EKnightState::IDLE);
 }
@@ -559,7 +612,17 @@ void AKnight::SetDash(float _DeltaTime)
 		AddRelativeLocation(FVector{ Velocity * _DeltaTime, 0.0f, 0.0f });
 	}
 
-	ChangeNextAnimation(EKnightState::RUN_TO_IDLE);
+	if (true == IsOnGround())
+	{
+		ChangeNextAnimation(EKnightState::RUN_TO_IDLE);
+		return;
+	}
+	else
+	{
+		ChangeNextAnimation(EKnightState::AIRBORN);
+		return;
+	}
+
 }
 
 void AKnight::SetSlash(float _DeltaTime)
@@ -757,7 +820,7 @@ void AKnight::CreateRenderer()
 	BodyRenderer->CreateAnimation(Airborn, Airborn, 0, 2, RunFrameTime);
 
 	std::string Land = "Land";
-	BodyRenderer->CreateAnimation(Land, Land, 0, 2, RunFrameTime);
+	BodyRenderer->CreateAnimation(Land, Land, 0, 2, ChangeFrameTime);
 
 	std::string HardLand = "HardLand";
 	BodyRenderer->CreateAnimation(HardLand, HardLand, 0, 9, RunFrameTime, false);

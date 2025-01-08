@@ -12,6 +12,7 @@ void UEngineCamera::BeginPlay()
 
 	ProjectionScale = Scale;
 
+	// 뷰포트 세팅을 여기서 한다.
 	ViewPortInfo.Width = UEngineCore::GetScreenScale().X;
 	ViewPortInfo.Height = UEngineCore::GetScreenScale().Y;
 	ViewPortInfo.TopLeftX = 0.0f;
@@ -33,6 +34,7 @@ void UEngineCamera::Tick(float _DetlaTime)
 	int a = 0;
 }
 
+// 카메라에서 렌더링한다.
 void UEngineCamera::Render(float _DetlaTime)
 {
 	// 랜더링 진입하기 전에 한번 뷰포트 세팅하고 
@@ -43,7 +45,7 @@ void UEngineCamera::Render(float _DetlaTime)
 	{
 		std::list<std::shared_ptr<URenderer>>& RenderList = RenderGroup.second;
 
-		if (true == RendererZSort[RenderGroup.first])
+		if (true == RendererZSort[RenderGroup.first]) // Z Sort
 		{
 			// 둘의 z값이 완전히 겹쳐있을때는 답이 없다.
 			// 크기 비교해서 크기가 더 작은쪽을 왼쪽으로 옮긴다.
@@ -55,7 +57,7 @@ void UEngineCamera::Render(float _DetlaTime)
 
 		for (std::shared_ptr<URenderer> Renderer : RenderList)
 		{
-			if (false == Renderer->IsActive())
+			if (false == Renderer->IsActive()) // 렌더러가 비활성화 상태면 무시하고
 			{
 				continue;
 			}
@@ -67,7 +69,6 @@ void UEngineCamera::Render(float _DetlaTime)
 
 void UEngineCamera::Release(float _DeltaTime)
 {
-
 	// Ranged for를 돌릴때는 복사가 일어나므로
 	for (std::pair<const int, std::list<std::shared_ptr<URenderer>>>& RenderGroup : Renderers)
 	{
@@ -78,18 +79,18 @@ void UEngineCamera::Release(float _DeltaTime)
 		// 언리얼은 중간에 삭제할수 없어.
 		for (; StartIter != EndIter; )
 		{
-			if (false == (*StartIter)->IsDestroy())
+			if (false == (*StartIter)->IsDestroy()) // Destory가 false면 삭제하지 않는다.
 			{
 				++StartIter;
 				continue;
 			}
 
 			// 컴포넌트의 메모리를 삭제할수 권한은 오로지 액터만 가지고 있다.
+			// 그저 RenderList에서 제거할 뿐.
 			StartIter = RenderList.erase(StartIter);
 		}
 	}
 }
-
 
 void UEngineCamera::SetZSort(int _Order, bool _Value)
 {
@@ -98,8 +99,8 @@ void UEngineCamera::SetZSort(int _Order, bool _Value)
 
 void UEngineCamera::ChangeRenderGroup(int _PrevGroupOrder, std::shared_ptr<URenderer> _Renderer)
 {
-	Renderers[_PrevGroupOrder].remove(_Renderer);
-	Renderers[_Renderer->GetOrder()].push_back(_Renderer);
+	Renderers[_PrevGroupOrder].remove(_Renderer); // 이전 렌더 그룹에서 삭제하고
+	Renderers[_Renderer->GetOrder()].push_back(_Renderer); // 새로운 렌더 그룹에 넣는다.
 }
 
 void UEngineCamera::CalculateViewAndProjection()
@@ -108,7 +109,7 @@ void UEngineCamera::CalculateViewAndProjection()
 
 	Trans.View.View(Trans.World.ArrVector[3], Trans.World.GetFoward(), Trans.World.GetUp());
 
-	switch (Type)
+	switch (ProjectionType)
 	{
 	case EProjectionType::Perspective:
 		Trans.Projection.PerspectiveFovDeg(FOV, ProjectionScale.X, ProjectionScale.Y, Near, Far);

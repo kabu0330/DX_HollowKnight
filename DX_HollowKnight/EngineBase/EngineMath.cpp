@@ -381,8 +381,8 @@ void FTransform::TransformUpdate(bool _IsAbsolut /*= false*/)
 	else 
 	{
 		//      크         자             이            공           부
-		LocalWorld = ScaleMat * RotationMat * LocationMat;
-		World = ScaleMat * RotationMat * LocationMat * RevolveMat * ParentMat;
+		LocalWorld = CheckWorld;
+		World = CheckWorld * RevolveMat * ParentMat;
 		// 나의 로컬은 알지만 부모가 아직 안곱해져서 부모를 굽해서 나의 월드 값을 찾아낸다.
 
 		// World.ArrVector[3]; => 

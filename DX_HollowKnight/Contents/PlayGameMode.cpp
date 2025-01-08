@@ -17,11 +17,16 @@ class DebugWindow : public UEngineGUIWindow
 public:
 	void OnGUI() override
 	{
+		if (true == ImGui::Button("FreeCameraOn"))
+		{
+			GetWorld()->GetMainCamera()->FreeCameraSwitch();
+
+		}
+
 		GetCurRoom();
 		GetMousePos();
-		GetKnightPos();
-		GetGravityForce();
-		GetKnightZValue();
+		GetKnightInfo();
+
 
 		//ImGui::Button("WindowButton");
 		//ImGui::SameLine(); // ÇÑ Ä­ ¶ç¿ì±â
@@ -34,15 +39,28 @@ public:
 		ImGui::Text("Mouse Pos X : %.0f, Y : %.0f", MousePos.X, MousePos.Y);
 	}
 
-	void GetKnightPos()
+	void GetCurRoom()
 	{
+		if (nullptr == ARoom::GetCurRoom())
+		{
+			return;
+		}
+		std::string CurRoomName = ARoom::GetCurRoom()->GetName();
+		ImGui::Text("CurRoom Name : %s", CurRoomName.c_str());
+	}
+
+	void GetKnightInfo()
+	{
+		AKnight* Knight = AKnight::GetPawn();
 		FVector KnightPos = APlayGameMode::KnightPos;
 		ImGui::Text("Knight Pos X : %.0f, Y : %.0f", KnightPos.X, KnightPos.Y);
-	}
-	void GetKnightZValue()
-	{
+
 		float ZValue = AKnight::GetPawn()->GetKnightRenderer()->GetTransformRef().RelativeLocation.Z;
 		ImGui::Text("Knight Z Vaule : %.6f", ZValue);
+
+		GetGravityForce();
+
+		ImGui::Text("Knight JumpPower : %.2f", Knight->JumpForce);
 	}
 
 	void GetGravityForce()
@@ -61,15 +79,7 @@ public:
 		ImGui::Text("Knight IsOnGround : %s", ResultString.data());
 	}
 
-	void GetCurRoom()
-	{
-		if (nullptr == ARoom::GetCurRoom())
-		{
-			return;
-		}
-		std::string CurRoomName = ARoom::GetCurRoom()->GetName();
-		ImGui::Text("CurRoom Name : %s", CurRoomName.c_str());
-	}
+
 };
 
 
