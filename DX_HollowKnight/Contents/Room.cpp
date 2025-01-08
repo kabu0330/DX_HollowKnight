@@ -35,9 +35,9 @@ void ARoom::Tick(float _DeltaTime)
 
 bool ARoom::IsLinking(ARoom* _Room)
 {
-	for (std::shared_ptr<ARoom> Room : Rooms)
+	for (ARoom* Room : Rooms)
 	{
-		if (Room.get() == _Room)
+		if (Room == _Room)
 		{
 			return true;
 		}
@@ -67,9 +67,8 @@ ARoom* ARoom::LinkRoom(ARoom* _Room)
 		return nullptr;
 	}
 	
-	// 어케한담
 	Rooms.push_back(_Room);
-	return Rooms[Rooms.size() - 1].get();
+	return Rooms[Rooms.size() - 1];
 }
 
 void ARoom::CheckGround(FVector _MovePos)

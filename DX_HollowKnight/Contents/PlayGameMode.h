@@ -25,9 +25,9 @@ protected:
 
 private:
 	void SetCamera();
-	std::shared_ptr<class ARoom> CreateRoom(std::string_view _RoomName, std::string_view _FileName, FVector _Location);
+	std::shared_ptr<class ARoom> CreateRoom(std::string_view _RoomName, std::string_view _FileName, FVector _Size);
 	void SetInitCurRoom(std::shared_ptr<class ARoom> _InitRoom);
-	void LoadPixelCollisionTexture(class ARoom* _Room, UEngineWinImage* _BmpTexture, std::string_view _FileName, FVector _Location);
+	void LoadPixelCollisionTexture(class ARoom* _Room, UEngineWinImage* _BmpTexture, std::string_view _FileName, FVector _Size);
 	
 	class UEngineWinImage* PixelCollisionImage = nullptr;
 

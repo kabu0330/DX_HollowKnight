@@ -30,6 +30,12 @@ AKnight::AKnight()
 	// Debug
 	BodyRenderer->BillboardOn();
 	DebugNonGravity = true;
+	if (true == DebugNonGravity)
+	{
+		Velocity = 800.0f;	
+		InitVelocity = Velocity;
+		DashSpeed = Velocity * 3.0f;
+	}
 }
 
 void AKnight::BeginPlay()
@@ -632,6 +638,12 @@ void AKnight::SetDash(float _DeltaTime)
 		AddRelativeLocation(FVector{ Velocity * _DeltaTime, 0.0f, 0.0f });
 	}
 
+	if (true == DebugNonGravity)
+	{
+		ChangeNextAnimation(EKnightState::RUN_TO_IDLE);
+		return;
+	}
+
 	if (true == IsOnGround())
 	{
 		ChangeNextAnimation(EKnightState::RUN_TO_IDLE);
@@ -909,7 +921,7 @@ void AKnight::CreateRenderer()
 	BodyRenderer->CreateAnimation(Death, Death, 0, 12, DeathFrameTime, false);
 
 	std::string DeathHead = "DeathHead";
-	BodyRenderer->CreateAnimation(DeathHead, DeathHead, 0, 0, 1.0f, false);
+	BodyRenderer->CreateAnimation(DeathHead, DeathHead, 0, 1, 1.0f, false);
 }
 
 void AKnight::SetFSM()

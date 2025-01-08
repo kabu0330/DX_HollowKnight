@@ -35,14 +35,24 @@ public:
 	void CheckGround(FVector _MovePos);
 	void CreatePixelCollisionTexture(std::string_view _FileName);
 
+	FVector GetSize() const
+	{
+		return Size;
+	}
+	void SetSize(const FVector& _Size)
+	{
+		Size = _Size;
+	}
+
 protected:
 
 private:
 	static std::shared_ptr<ARoom> CurRoom;
 	UEngineWinImage PixelCollisionImage;
+	FVector Size = FVector::ZERO;
 
 	std::shared_ptr<class USpriteRenderer> BackgroundRenderer;
 
-	std::vector<std::shared_ptr<ARoom>> Rooms;
+	std::vector<ARoom*> Rooms;
 };
 

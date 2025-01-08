@@ -104,7 +104,6 @@ void ULevel::Render(float _DeltaTime)
 	{
 		std::shared_ptr<class ACameraActor> Camera = GetMainCamera();
 
-		// 충돌체 릴리즈
 		for (std::pair<const std::string, std::list<std::shared_ptr<UCollision>>>& Group : Collisions)
 		{
 			std::list<std::shared_ptr<UCollision>>& List = Group.second;
@@ -116,7 +115,7 @@ void ULevel::Render(float _DeltaTime)
 					continue;
 				}
 
-				_Collision->DebugRender(Camera->GetCameraComponent().get(), _DeltaTime);
+				_Collision->DebugRender(Camera->GetCameraComponent().get(), _DeltaTime); // 디버그
 			}
 		}
 	}
@@ -137,9 +136,6 @@ void ULevel::ChangeRenderGroup(int _CameraOrder, int _PrevGroupOrder, std::share
 {
 	if (false == Cameras.contains(_CameraOrder))
 	{
-		// 이거 왜만들었을까?
-		// 카메라라서 이렇게 했네요
-		// 카메라 먼저 만들어야 니가 랜더러를 관리할수 있다.
 		MSGASSERT("존재하지 않는 카메라에 랜더러를 집어넣으려고 했습니다.");
 		return;
 	}
