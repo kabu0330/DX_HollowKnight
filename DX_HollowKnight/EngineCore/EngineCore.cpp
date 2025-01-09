@@ -190,8 +190,13 @@ void UEngineCore::EngineFrame()
 	Timer.TimeCheck(); // 델타 타임 체크
 	float DeltaTime = Timer.GetDeltaTime(); 
 
-	UEngineInput::KeyCheck(DeltaTime); // 키입력
-	
+	if (true == MainWindow.IsFocus()) // 윈도우가 포커스되었을 때만
+	{
+		UEngineInput::KeyCheck(DeltaTime); // 키 입력 체크
+	}
+	else {
+		UEngineInput::KeyReset();
+	}
 	// Core에서 Level이 관리하는 Actor, Renderer, Collision를 'Windows메시지루프'에서 돌려준다.
 	CurLevel->Tick(DeltaTime); 
 	CurLevel->Render(DeltaTime);

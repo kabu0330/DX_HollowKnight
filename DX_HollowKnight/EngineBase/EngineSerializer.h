@@ -18,29 +18,29 @@ public:
 	UEngineSerializer& operator=(UEngineSerializer&& _Other) noexcept = delete;
 
 	// 데이터의 크기
-	ENGINEAPI void Write(void* _Data, unsigned int _Size);
+	ENGINEAPI void Write(const void* _Data, unsigned int _Size);
 
-	ENGINEAPI void operator<<(int& _Data)
+	ENGINEAPI void operator<<(const int& _Data)
 	{
 		Write(&_Data, sizeof(int));
 	}
 
-	ENGINEAPI void operator<<(bool& _Data)
+	ENGINEAPI void operator<<(const bool& _Data)
 	{
 		Write(&_Data, sizeof(bool));
 	}
 
-	ENGINEAPI void operator<<(FVector& _Data)
+	ENGINEAPI void operator<<(const FVector& _Data)
 	{
 		Write(&_Data, sizeof(FVector));
 	}
 
-	ENGINEAPI void operator<<(FIntPoint& _Data)
+	ENGINEAPI void operator<<(const FIntPoint& _Data)
 	{
 		Write(&_Data, sizeof(FIntPoint));
 	}
 
-	ENGINEAPI void operator<<(std::string& _Data)
+	ENGINEAPI void operator<<(const std::string& _Data)
 	{
 		int Size = static_cast<int>(_Data.size());
 		operator<<(Size);
@@ -142,8 +142,15 @@ private:
 class ISerializeObject
 {
 public:
+	ENGINEAPI ISerializeObject() {}
+	ENGINEAPI virtual ~ISerializeObject() = 0
+	{
+
+	}
+
+
 	// 데이터를 직렬화(압축)
-	ENGINEAPI virtual void Serialize(UEngineSerializer& _Ser) = 0;
+	ENGINEAPI virtual void Serialize(UEngineSerializer& _Ser);
 	// 데이터를 복구(할때)
-	ENGINEAPI virtual void DeSerialize(UEngineSerializer& _Ser) = 0;
+	ENGINEAPI virtual void DeSerialize(UEngineSerializer& _Ser);
 };

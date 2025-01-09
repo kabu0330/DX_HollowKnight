@@ -22,13 +22,13 @@ public:
 	}
 
 	template<typename ResType>
-	static std::shared_ptr<ResType> Find(std::string_view _Name)
+	ENGINEAPI static std::shared_ptr<ResType> Find(std::string_view _Name)
 	{
 		const type_info& Info = typeid(ResType);
 		return std::dynamic_pointer_cast<ResType>(Find(Info.name(), _Name.data()));
 	}
 
-	static std::shared_ptr<UEngineResources> Find(std::string_view _ResName, std::string_view _Name);
+	ENGINEAPI static std::shared_ptr<UEngineResources> Find(std::string_view _ResName, std::string_view _Name);
 
 	static bool Contains(std::string_view _Name)
 	{

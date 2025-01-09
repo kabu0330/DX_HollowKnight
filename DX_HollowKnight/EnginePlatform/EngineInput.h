@@ -57,6 +57,16 @@ private:
 		void EventCheck();
 
 		void KeyCheck(float _DeltaTime);
+
+		void Reset()
+		{
+			IsDown = false;
+			IsPress = false;
+			IsUp = false;
+			IsFree = true;
+			PressTime = 0.0f;
+			FreeTime = 0.0f;
+		}
 		
 	};
 
@@ -65,6 +75,8 @@ private:
 
 public:
 	ENGINEAPI static void KeyCheck(float _DeltaTime);
+
+	ENGINEAPI static void KeyReset();
 
 	bool IsDoubleClick(int _KeyIndex, float _Time)
 	{

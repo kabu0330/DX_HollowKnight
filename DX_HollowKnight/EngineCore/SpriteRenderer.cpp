@@ -39,10 +39,10 @@ void USpriteRenderer::SetSprite(std::string_view _Name, UINT _Index)
 void USpriteRenderer::SetTexture(std::string_view _Name, bool AutoScale, float _Ratio)
 {
 	std::shared_ptr<UEngineTexture> Texture = UEngineTexture::Find<UEngineTexture>(_Name);
-
+	std::string Name = _Name.data();
 	if (nullptr == Texture)
 	{
-		MSGASSERT("로드하지 않은 텍스처를 사용하려고 했습니다.");
+		MSGASSERT("로드하지 않은 텍스처를 사용하려고 했습니다." + Name);
 	}
 
 	GetRenderUnit().SetTexture("ImageTexture", _Name);
@@ -87,6 +87,7 @@ void USpriteRenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 		FVector Scale = Sprite->GetSpriteScaleToReal(CurIndex);
 		Scale.Z = 1.0f;
 		SetRelativeScale3D(Scale * AutoScaleRatio);
+		SpriteScale = Scale;
 	}
 
 	URenderer::Render(_Camera, _DeltaTime);

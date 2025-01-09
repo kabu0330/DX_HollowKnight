@@ -17,11 +17,18 @@ public:
 
 	void Tick(float _DeltaTime);
 
+	void LevelChangeStart() override;
+
+	static std::shared_ptr<class AMapObject>& GetMapObject()
+	{
+		return MapObject;
+	}
 protected:
 	FVector NewTest = FVector::RIGHT;
 
 private:
-	std::shared_ptr<class ATitleLogo> Logo;
+	std::shared_ptr<class MapEditorGUI> MapEditorWindow;
+	static std::shared_ptr<class AMapObject> MapObject;
 
 };
 

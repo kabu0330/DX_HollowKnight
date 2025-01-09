@@ -23,13 +23,13 @@ protected:
 
 private:
 	void SetWindowSize(UEngineInitData& _Data);
-	void LoadResourceDirectory();
-	void LoadFolder();
-	void LoadSprite();
+	//void LoadResourceDirectory();
+	//void LoadFolder();
+	//void LoadSprite();
 
 
 	void CreateLevel();
-	void LoadContentsResource(std::string_view _Path);
+	//void LoadContentsResource(std::string_view _Path);
 	
 	void CheckInput();
 	void SwitchGameMode();

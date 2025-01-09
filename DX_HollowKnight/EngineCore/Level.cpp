@@ -38,12 +38,29 @@ ULevel::~ULevel()
 
 void ULevel::LevelChangeStart()
 {
+	for (std::shared_ptr<class AActor> Actor : BeginPlayList)
+	{
+		Actor->LevelChangeStart();
+	}
 
+
+	for (std::shared_ptr<class AActor> Actor : AllActorList)
+	{
+		Actor->LevelChangeStart();
+	}
 }
 
 void ULevel::LevelChangeEnd()
 {
+	for (std::shared_ptr<class AActor> Actor : BeginPlayList)
+	{
+		Actor->LevelChangeEnd();
+	}
 
+	for (std::shared_ptr<class AActor> Actor : AllActorList)
+	{
+		Actor->LevelChangeEnd();
+	}
 }
 
 void ULevel::Tick(float _DeltaTime)

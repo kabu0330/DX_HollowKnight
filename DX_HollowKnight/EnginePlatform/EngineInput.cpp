@@ -259,3 +259,15 @@ void UEngineInput::BindAction(int _KeyIndex, KeyEvent _EventType, std::function<
 		break;
 	}
 }
+
+void UEngineInput::KeyReset()
+{
+	std::map<int, UEngineKey>::iterator StartIter = GetInst().Keys.begin();
+	std::map<int, UEngineKey>::iterator EndIter = GetInst().Keys.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		UEngineKey& CurKey = StartIter->second;
+		CurKey.Reset();
+	}
+}

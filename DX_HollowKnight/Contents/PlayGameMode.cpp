@@ -12,71 +12,71 @@ std::shared_ptr<ACameraActor> APlayGameMode::Camera = nullptr;
 FVector APlayGameMode::MousePos = { 0.0f, 0.0f, 0.0f };
 FVector APlayGameMode::KnightPos = { 0.0f, 0.0f, 0.0f };
 
-class DebugWindow : public UEngineGUIWindow
-{
-public:
-	void OnGUI() override
-	{
-		if (true == ImGui::Button("FreeCameraOn"))
-		{
-			GetWorld()->GetMainCamera()->FreeCameraSwitch();
-
-		}
-
-		GetCurRoom();
-		GetMousePos();
-		GetKnightInfo();
-
-		//ImGui::Button("WindowButton");
-		//ImGui::SameLine(); // ÇÑ Ä­ ¶ç¿ì±â
-	}
-
-	void GetMousePos()
-	{
-		FVector MousePos = APlayGameMode::MousePos;
-		ImGui::Text("Mouse Pos X : %.0f, Y : %.0f", MousePos.X, MousePos.Y);
-	}
-
-	void GetCurRoom()
-	{
-		if (nullptr == ARoom::GetCurRoom())
-		{
-			return;
-		}
-		std::string CurRoomName = ARoom::GetCurRoom()->GetName();
-		ImGui::Text("CurRoom Name : %s", CurRoomName.c_str());
-	}
-
-	void GetKnightInfo()
-	{
-		AKnight* Knight = AKnight::GetPawn();
-		FVector KnightPos = APlayGameMode::KnightPos;
-		ImGui::Text("Knight Pos X : %.0f, Y : %.0f", KnightPos.X, KnightPos.Y);
-
-		float ZValue = AKnight::GetPawn()->GetKnightRenderer()->GetTransformRef().RelativeLocation.Z;
-		ImGui::Text("Knight Z Vaule : %.6f", ZValue);
-
-		GetGravityForce();
-
-		ImGui::Text("Knight JumpPower : %.2f", Knight->JumpForce);
-	}
-
-	void GetGravityForce()
-	{
-		ImGui::Text("Knight GravityForce : %.2f", AKnight::GetPawn()->GetGravityForce());
-		int Result = static_cast<int>(AKnight::GetPawn()->GetIsOnGround());
-		std::string ResultString = "";
-		if (0 == Result)
-		{
-			ResultString = "false";
-		}
-		else
-		{
-			ResultString = "true";
-		}
-		ImGui::Text("Knight IsOnGround : %s", ResultString.data());
-	}
-};
+//class DebugWindow : public UEngineGUIWindow
+//{
+//public:
+//	void OnGUI() override
+//	{
+//		if (true == ImGui::Button("FreeCameraOn"))
+//		{
+//			GetWorld()->GetMainCamera()->FreeCameraSwitch();
+//
+//		}
+//
+//		GetCurRoom();
+//		GetMousePos();
+//		GetKnightInfo();
+//
+//		//ImGui::Button("WindowButton");
+//		//ImGui::SameLine(); // ÇÑ Ä­ ¶ç¿ì±â
+//	}
+//
+//	void GetMousePos()
+//	{
+//		FVector MousePos = APlayGameMode::MousePos;
+//		ImGui::Text("Mouse Pos X : %.0f, Y : %.0f", MousePos.X, MousePos.Y);
+//	}
+//
+//	void GetCurRoom()
+//	{
+//		if (nullptr == ARoom::GetCurRoom())
+//		{
+//			return;
+//		}
+//		std::string CurRoomName = ARoom::GetCurRoom()->GetName();
+//		ImGui::Text("CurRoom Name : %s", CurRoomName.c_str());
+//	}
+//
+//	void GetKnightInfo()
+//	{
+//		AKnight* Knight = AKnight::GetPawn();
+//		FVector KnightPos = APlayGameMode::KnightPos;
+//		ImGui::Text("Knight Pos X : %.0f, Y : %.0f", KnightPos.X, KnightPos.Y);
+//
+//		float ZValue = AKnight::GetPawn()->GetKnightRenderer()->GetTransformRef().RelativeLocation.Z;
+//		ImGui::Text("Knight Z Vaule : %.6f", ZValue);
+//
+//		GetGravityForce();
+//
+//		ImGui::Text("Knight JumpPower : %.2f", Knight->JumpForce);
+//	}
+//
+//	void GetGravityForce()
+//	{
+//		ImGui::Text("Knight GravityForce : %.2f", AKnight::GetPawn()->GetGravityForce());
+//		int Result = static_cast<int>(AKnight::GetPawn()->GetIsOnGround());
+//		std::string ResultString = "";
+//		if (0 == Result)
+//		{
+//			ResultString = "false";
+//		}
+//		else
+//		{
+//			ResultString = "true";
+//		}
+//		ImGui::Text("Knight IsOnGround : %s", ResultString.data());
+//	}
+//};
 
 APlayGameMode::APlayGameMode()
 {
@@ -98,7 +98,7 @@ APlayGameMode::APlayGameMode()
 
 
 	SetInitCurRoom(Dirtmouth);
-	UEngineGUI::CreateGUIWindow<DebugWindow>("DebugWindow");
+
 }
 
 void APlayGameMode::SetCamera()
@@ -112,6 +112,7 @@ void APlayGameMode::CreateAndLinkCollisionGroup()
 {
 	GetWorld()->CreateCollisionProfile("Knight");
 	GetWorld()->CreateCollisionProfile("Monster");
+	GetWorld()->CreateCollisionProfile("Object");
 
 	// Ãæµ¹Ã¼Å© ÇØ¾ßÇÑ´Ù.
 	GetWorld()->LinkCollisionProfile("Knight", "Monster");

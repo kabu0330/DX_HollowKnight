@@ -2,149 +2,176 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="PreCompile.h">
-      <Filter>00_PreCompile</Filter>
+      <Filter>PreCompile</Filter>
     </ClInclude>
     <ClInclude Include="ContentsCore.h">
-      <Filter>02_Core</Filter>
+      <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="TitleGameMode.h">
-      <Filter>03_Level</Filter>
+      <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="PlayGameMode.h">
-      <Filter>03_Level</Filter>
+      <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="TitleLogo.h">
-      <Filter>05_Title</Filter>
+      <Filter>Title</Filter>
     </ClInclude>
     <ClInclude Include="Global.h">
-      <Filter>04_Global</Filter>
-    </ClInclude>
-    <ClInclude Include="MapObject.h">
-      <Filter>Umm...</Filter>
+      <Filter>Global</Filter>
     </ClInclude>
     <ClInclude Include="TitleScene.h">
-      <Filter>05_Title</Filter>
+      <Filter>Title</Filter>
     </ClInclude>
     <ClInclude Include="Room.h">
-      <Filter>06_Play</Filter>
+      <Filter>Play</Filter>
     </ClInclude>
     <ClInclude Include="KnightEffect.h">
-      <Filter>04_Global\Knight</Filter>
+      <Filter>Global\Knight</Filter>
     </ClInclude>
     <ClInclude Include="Knight.h">
-      <Filter>04_Global\Knight</Filter>
+      <Filter>Global\Knight</Filter>
     </ClInclude>
     <ClInclude Include="StatusUnit.h">
-      <Filter>04_Global\Unit</Filter>
+      <Filter>Global\Unit</Filter>
     </ClInclude>
     <ClInclude Include="FightUnit.h">
-      <Filter>04_Global\Unit</Filter>
-    </ClInclude>
-    <ClInclude Include="MapEditorMode.h">
-      <Filter>Umm...</Filter>
+      <Filter>Global\Unit</Filter>
     </ClInclude>
     <ClInclude Include="ContentsRenderer.h">
-      <Filter>08_Render</Filter>
-    </ClInclude>
-    <ClInclude Include="MapEditorGameMode.h">
-      <Filter>MapEditior</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="ContentsEditorGUI.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsResource.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditorGameMode.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="MapObject.h">
+      <Filter>Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>Play</Filter>
+    </ClInclude>
+    <ClInclude Include="TestMapEditorMode.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="TestMapObject.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugWindowGUI.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditorGUI.h">
       <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
-      <Filter>00_PreCompile</Filter>
+      <Filter>PreCompile</Filter>
     </ClCompile>
     <ClCompile Include="ContentsCore.cpp">
-      <Filter>02_Core</Filter>
+      <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="PlayGameMode.cpp">
-      <Filter>03_Level</Filter>
+      <Filter>Level</Filter>
     </ClCompile>
     <ClCompile Include="TitleGameMode.cpp">
-      <Filter>03_Level</Filter>
+      <Filter>Level</Filter>
     </ClCompile>
     <ClCompile Include="TitleLogo.cpp">
-      <Filter>05_Title</Filter>
+      <Filter>Title</Filter>
     </ClCompile>
     <ClCompile Include="Global.cpp">
-      <Filter>04_Global</Filter>
-    </ClCompile>
-    <ClCompile Include="MapObject.cpp">
-      <Filter>Umm...</Filter>
+      <Filter>Global</Filter>
     </ClCompile>
     <ClCompile Include="TitleScene.cpp">
-      <Filter>05_Title</Filter>
+      <Filter>Title</Filter>
     </ClCompile>
     <ClCompile Include="Room.cpp">
-      <Filter>06_Play</Filter>
+      <Filter>Play</Filter>
     </ClCompile>
     <ClCompile Include="Knight.cpp">
-      <Filter>04_Global\Knight</Filter>
+      <Filter>Global\Knight</Filter>
     </ClCompile>
     <ClCompile Include="KnightEffect.cpp">
-      <Filter>04_Global\Knight</Filter>
+      <Filter>Global\Knight</Filter>
     </ClCompile>
     <ClCompile Include="FightUnit.cpp">
-      <Filter>04_Global\Unit</Filter>
+      <Filter>Global\Unit</Filter>
     </ClCompile>
     <ClCompile Include="StatusUnit.cpp">
-      <Filter>04_Global\Unit</Filter>
-    </ClCompile>
-    <ClCompile Include="MapEditorMode.cpp">
-      <Filter>Umm...</Filter>
+      <Filter>Global\Unit</Filter>
     </ClCompile>
     <ClCompile Include="ContentsRenderer.cpp">
-      <Filter>08_Render</Filter>
-    </ClCompile>
-    <ClCompile Include="MapEditorGameMode.cpp">
-      <Filter>MapEditior</Filter>
+      <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="ContentsEditorGUI.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="ContentsResource.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorGameMode.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="MapObject.cpp">
+      <Filter>Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>Play</Filter>
+    </ClCompile>
+    <ClCompile Include="TestMapEditorMode.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="TestMapObject.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugWindowGUI.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorGUI.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="00_PreCompile">
-      <UniqueIdentifier>{e77ec849-f508-4c7f-93bd-8088b5abd8c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01_Debug">
-      <UniqueIdentifier>{5eda3c6f-8d50-4a71-ae6f-500a6ba5d854}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Core">
-      <UniqueIdentifier>{09ff3bdc-96dc-4229-8b75-39c1c3dc0dd8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Global">
-      <UniqueIdentifier>{73895d3d-87b8-4ffd-a962-7cd03df8a97f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03_Level">
-      <UniqueIdentifier>{58d3821e-f186-4e77-a861-8f16b9ad13ed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05_Title">
-      <UniqueIdentifier>{3800a162-1370-4574-8d59-4350535b3ba0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="06_Play">
-      <UniqueIdentifier>{90d40787-bd6c-4314-b86a-fd988ad3fbe1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Global\Knight">
-      <UniqueIdentifier>{67f0f42c-79c4-49df-862a-fa3d6732c0ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Global\Unit">
-      <UniqueIdentifier>{d5827386-64e6-4cdb-98a2-7aeab606afa1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="08_Render">
-      <UniqueIdentifier>{487692e4-6b76-4236-8869-624e3b36942f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Umm...">
-      <UniqueIdentifier>{17469ec8-26a6-4000-8340-33b98ecd2d11}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MapEditior">
-      <UniqueIdentifier>{6b24ad34-7d59-440e-a910-242325a716c6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GUI">
       <UniqueIdentifier>{8d190253-6f67-4848-947a-2155a14ebc95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PreCompile">
+      <UniqueIdentifier>{e77ec849-f508-4c7f-93bd-8088b5abd8c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{5eda3c6f-8d50-4a71-ae6f-500a6ba5d854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{09ff3bdc-96dc-4229-8b75-39c1c3dc0dd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Level">
+      <UniqueIdentifier>{58d3821e-f186-4e77-a861-8f16b9ad13ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global">
+      <UniqueIdentifier>{73895d3d-87b8-4ffd-a962-7cd03df8a97f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global\Knight">
+      <UniqueIdentifier>{67f0f42c-79c4-49df-862a-fa3d6732c0ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global\Unit">
+      <UniqueIdentifier>{d5827386-64e6-4cdb-98a2-7aeab606afa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Title">
+      <UniqueIdentifier>{3800a162-1370-4574-8d59-4350535b3ba0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Play">
+      <UniqueIdentifier>{90d40787-bd6c-4314-b86a-fd988ad3fbe1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{487692e4-6b76-4236-8869-624e3b36942f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{06b144dd-98f6-449c-ada2-5305d26e33fd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

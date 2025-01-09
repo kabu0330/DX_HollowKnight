@@ -167,12 +167,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Background.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="ContentsEditorGUI.h">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="ContentsRenderer.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="ContentsResource.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="DebugWindowGUI.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -196,15 +208,15 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="Room.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
-    <ClInclude Include="MapEditorMode.h">
+    <ClInclude Include="MapEditorGUI.h">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="MapObject.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Room.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -217,6 +229,8 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="TestMapEditorMode.h" />
+    <ClInclude Include="TestMapObject.h" />
     <ClInclude Include="TitleGameMode.h" />
     <ClInclude Include="TitleLogo.h" />
     <ClInclude Include="TitleScene.h">
@@ -225,12 +239,24 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Background.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="ContentsEditorGUI.cpp">
       <SubType>
       </SubType>
     </ClCompile>
     <ClCompile Include="ContentsRenderer.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="ContentsResource.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="DebugWindowGUI.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -254,15 +280,15 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="Room.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="MapEditorMode.cpp">
+    <ClCompile Include="MapEditorGUI.cpp">
       <SubType>
       </SubType>
     </ClCompile>
     <ClCompile Include="MapObject.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -284,6 +310,8 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="TestMapEditorMode.cpp" />
+    <ClCompile Include="TestMapObject.cpp" />
     <ClCompile Include="TitleGameMode.cpp" />
     <ClCompile Include="TitleLogo.cpp" />
     <ClCompile Include="TitleScene.cpp">

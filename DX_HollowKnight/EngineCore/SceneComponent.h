@@ -94,6 +94,11 @@ public:
 		TransformUpdate();
 	}
 
+	FVector GetRelativeScale3D()
+	{
+		return Transform.Scale;
+	}
+
 
 	FTransform& GetTransformRef()
 	{

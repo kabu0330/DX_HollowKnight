@@ -35,7 +35,7 @@ public:
 
 		if (nullptr != FindGUIWindow(UpperName))
 		{
-			MSGASSERT("이미 존재하는 IMGUI Window입니다. ");
+			MSGASSERT("이미 만들어진 윈도우를 또 만들수는 없습니다.");
 			return nullptr;
 		}
 
@@ -55,8 +55,8 @@ public:
 
 	static void GUIRender(ULevel* _Level);
 
-
 	ENGINEAPI static void AllWindowOff();
+
 	ENGINEAPI static void AllWindowOn();
 
 protected:

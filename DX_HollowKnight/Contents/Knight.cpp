@@ -26,12 +26,13 @@ AKnight::AKnight()
 	InitVelocity = Velocity;
 	DashSpeed = Velocity * 3.0f;
 	JumpForce = InitJumpForce;
+	bCanRotation = true;
 
 	SetActorLocation({ 1000.0f, -2185.0f });
 
 	// Debug
 	BodyRenderer->BillboardOn();
-	//DebugNonGravity = true;
+	DebugNonGravity = true;
 	if (true == DebugNonGravity)
 	{
 		Velocity = 800.0f;	
@@ -152,8 +153,8 @@ void AKnight::Move(float _DeltaTime)
 		if (GroundColor == Black)
 		{
 			UEngineDebug::OutPutString("On Ground");
-			GravityForce = FVector::ZERO;
-			//AddRelativeLocation(FVector::UP);			
+			//GravityForce = FVector::ZERO;
+			AddRelativeLocation(FVector::UP);			
 		}
 		else if (GroundColor == White || GroundColor == UColor(255, 255, 255, 0))
 		{

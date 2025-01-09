@@ -1,9 +1,10 @@
 #pragma once
 #include <string>
 #include <memory>
+#include "EngineSerializer.h"
 
 // Ό³Έν : std::enable_shared_from_this<UObject>
-class UObject : public std::enable_shared_from_this<UObject>
+class UObject : public std::enable_shared_from_this<UObject>, public ISerializeObject
 {
 public:
 	// constrcuter destructer

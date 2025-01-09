@@ -119,6 +119,10 @@ public:
 		IsBillboard = false;
 	}
 
+	FVector GetScale()
+	{
+		return SpriteScale;
+	}
 
 	void SetSprite(UEngineSprite* _Sprite);
 
@@ -145,5 +149,6 @@ private:
 	UEngineSprite* Sprite = nullptr;
 	bool IsAutoScale = true;
 	float AutoScaleRatio = 1.0f;
+	FVector SpriteScale = FVector::ZERO;
 };
 

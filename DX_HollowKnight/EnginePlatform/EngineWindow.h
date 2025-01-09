@@ -62,6 +62,11 @@ public:
 
 	ENGINEAPI static  void SetCustomProc(std::function<bool(HWND, UINT, WPARAM, LPARAM)> _CustomProc);
 
+	ENGINEAPI bool IsFocus()
+	{
+		return IsFocusValue;
+	}
+
 protected:
 
 private:
@@ -74,6 +79,11 @@ private:
 	inline static bool LoopActive = true;
 
 	ENGINEAPI static std::map<std::string, WNDCLASSEXA> WindowClasss;
+
+	ENGINEAPI static std::map<HWND, UEngineWindow*> AllWindows;
+
+	bool IsFocusValue = false;
+
 
 	FVector WindowSize;
 	HWND WindowHandle = nullptr;
