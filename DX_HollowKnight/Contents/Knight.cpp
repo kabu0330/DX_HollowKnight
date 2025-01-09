@@ -31,7 +31,7 @@ AKnight::AKnight()
 
 	// Debug
 	BodyRenderer->BillboardOn();
-	DebugNonGravity = true;
+	//DebugNonGravity = true;
 	if (true == DebugNonGravity)
 	{
 		Velocity = 800.0f;	
@@ -931,7 +931,8 @@ void AKnight::CreateCollision()
 	BodyCollision = CreateDefaultSubObject<UCollision>();
 	BodyCollision->SetupAttachment(RootComponent);
 	BodyCollision->SetCollisionProfileName("Knight");
-	BodyCollision->SetScale3D({ 100.0f, 300.0f });
+	BodyCollision->SetScale3D({ 100.0f, 130.0f });
+	BodyCollision->GetTransformRef().Location.Y += 50.0f;
 
 	BodyCollision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 		{
