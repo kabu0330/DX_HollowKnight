@@ -168,6 +168,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ContentsCore.h" />
+    <ClInclude Include="ContentsEditorGUI.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="ContentsRenderer.h">
       <SubType>
       </SubType>
@@ -185,6 +189,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="KnightEffect.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="MapEditorGameMode.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -218,6 +226,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp" />
+    <ClCompile Include="ContentsEditorGUI.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="ContentsRenderer.cpp">
       <SubType>
       </SubType>
@@ -235,6 +247,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="KnightEffect.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="MapEditorGameMode.cpp">
       <SubType>
       </SubType>
     </ClCompile>

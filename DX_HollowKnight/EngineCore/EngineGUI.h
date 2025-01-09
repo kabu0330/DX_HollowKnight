@@ -29,15 +29,35 @@ public:
 	ENGINEAPI static void PushGUIWindow(std::shared_ptr<class UEngineGUIWindow> _Window);
 
 	template<typename WindowType>
-	static std::shared_ptr<WindowType> CreateGUIWindow(std::string _Text)
+	static std::shared_ptr<WindowType> CreateGUIWindow(std::string_view _Text)
 	{
+		std::string UpperName = UEngineString::ToUpper(_Text);
+
+		if (nullptr != FindGUIWindow(UpperName))
+		{
+			MSGASSERT("이미 존재하는 IMGUI Window입니다. ");
+			return nullptr;
+		}
+
 		std::shared_ptr<WindowType> Window = std::make_shared<WindowType>();
-		Window->SetName(_Text);
+		Window->SetName(UpperName);
 		PushGUIWindow(Window);
 		return Window;
 	}
 
+	template<typename WindowType>
+	static std::shared_ptr<WindowType> FindGUIWindow(std::string_view _Text)
+	{
+		return std::dynamic_pointer_cast<WindowType>(FindGUIWindow(_Text));
+	}
+
+	ENGINEAPI static std::shared_ptr<UEngineGUIWindow> FindGUIWindow(std::string_view _Text);
+
 	static void GUIRender(ULevel* _Level);
+
+
+	ENGINEAPI static void AllWindowOff();
+	ENGINEAPI static void AllWindowOn();
 
 protected:
 

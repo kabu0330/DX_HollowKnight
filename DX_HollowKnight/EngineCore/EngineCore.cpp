@@ -20,6 +20,11 @@ UEngineWindow& UEngineCore::GetMainWindow()
 	return MainWindow;
 }
 
+std::map<std::string, std::shared_ptr<class ULevel>> UEngineCore::GetAllLevelMap()
+{
+	return LevelMap;
+}
+
 UEngineGraphicDevice UEngineCore::Device; // UEngineGraphicDevice EngienCore.dll::UEngineCore::Device;
 
 UEngineWindow UEngineCore::MainWindow;
@@ -137,6 +142,12 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 // 헤더 순환 참조를 막기 위한 함수분리
 std::shared_ptr<ULevel> UEngineCore::NewLevelCreate(std::string_view _Name)
 {
+	if (true == LevelMap.contains(_Name.data()))
+	{
+		MSGASSERT("같은 이름의 레벨을 또 만들수는 없습니다." + std::string(_Name.data()));
+		return nullptr;
+	}
+
 	std::shared_ptr<ULevel> Ptr = std::make_shared<ULevel>();
 	Ptr->SetName(_Name);
 
@@ -149,13 +160,15 @@ std::shared_ptr<ULevel> UEngineCore::NewLevelCreate(std::string_view _Name)
 
 void UEngineCore::OpenLevel(std::string_view _Name)
 {
-	if (false == LevelMap.contains(_Name.data()))
+	std::string UpperString = UEngineString::ToUpper(_Name);
+
+	if (false == LevelMap.contains(UpperString))
 	{
 		MSGASSERT(std::string(_Name) + " 은 생성되지 않은 레벨입니다. \n CreateLevel 함수를 사용해 레벨을 생성 후 OpenLevel 함수를 사용해야 합니다.");
 		return;
 	}
 
-	NextLevel = LevelMap[_Name.data()];
+	NextLevel = LevelMap[UpperString];
 }
 
 void UEngineCore::EngineFrame()

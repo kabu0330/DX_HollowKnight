@@ -5,9 +5,13 @@
 #include <EngineCore/Level.h>
 #include <EngineCore/EngineTexture.h>
 #include <EngineCore/EngineSprite.h>
+#include <EngineCore/EngineGUI.h>
+#include <EngineCore/EngineGUIWindow.h>
+
 #include "TitleGameMode.h"
 #include "PlayGameMode.h"
-#include "MapEditorMode.h"
+#include "MapEditorGameMode.h"
+#include "ContentsEditorGUI.h"
 
 // 상위 엔진 레벨에 해당 클래스를 EngineCore에 간접적인 제어권한을 가지는 컨텐츠 코어로 설정한다.
 CreateContentsCoreDefine(UContentsCore);
@@ -20,6 +24,12 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	LoadSprite();
 
 	CreateLevel();
+
+	UEngineGUI::AllWindowOff();
+
+	UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+	std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+	Window->SetActive(true);
 }
 
 void UContentsCore::SetWindowSize(UEngineInitData& _Data)
@@ -32,11 +42,13 @@ void UContentsCore::CreateLevel()
 {
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("Title");
 	UEngineCore::CreateLevel<APlayGameMode, AKnight>("Play");
+	UEngineCore::CreateLevel<AMapEditorGameMode, APawn>("MapEditorMode");
 	//UEngineCore::CreateLevel<AMapEditorMode, APawn>("MapEditor");
 
 	//UEngineCore::OpenLevel("Title");
 	//UEngineCore::OpenLevel("MapEditor");
-	UEngineCore::OpenLevel("Play");
+	//UEngineCore::OpenLevel("Play");
+	UEngineCore::OpenLevel("MapEditorMode");
 }
 
 void UContentsCore::LoadResourceDirectory()

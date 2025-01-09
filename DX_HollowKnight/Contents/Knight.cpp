@@ -8,6 +8,7 @@
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/EngineCamera.h>
+#include <EngineCore/Collision.h>
 
 #include "KnightEffect.h"
 #include "Room.h"
@@ -17,6 +18,7 @@ AKnight* AKnight::MainPawn = nullptr;
 AKnight::AKnight()
 {
 	CreateRenderer();
+	CreateCollision();
 
 	MainPawn = this;
 
@@ -922,6 +924,21 @@ void AKnight::CreateRenderer()
 
 	std::string DeathHead = "DeathHead";
 	BodyRenderer->CreateAnimation(DeathHead, DeathHead, 0, 1, 1.0f, false);
+}
+
+void AKnight::CreateCollision()
+{
+	BodyCollision = CreateDefaultSubObject<UCollision>();
+	BodyCollision->SetupAttachment(RootComponent);
+	BodyCollision->SetCollisionProfileName("Knight");
+	BodyCollision->SetScale3D({ 100.0f, 300.0f });
+
+	BodyCollision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
+		{
+			//_Other->GetActor()->Destroy();
+			// _Other->Destroy();
+			UEngineDebug::OutPutString("Enter");
+		});
 }
 
 void AKnight::SetFSM()

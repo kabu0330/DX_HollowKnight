@@ -126,6 +126,12 @@ public:
 		Order = _Order;
 	}
 
+	// 수정 가능
+	bool& GetIsActiveValueRef()
+	{
+		return IsActiveValue;
+	}
+
 protected:
 
 private:

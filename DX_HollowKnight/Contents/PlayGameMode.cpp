@@ -81,6 +81,7 @@ public:
 APlayGameMode::APlayGameMode()
 {
 	SetCamera();
+	CreateAndLinkCollisionGroup();
 
 	// 맵 세팅
 	std::shared_ptr<ARoom> Dirtmouth = CreateRoom("Dirtmouth", "dartmount_back.bmp", { 4148, 2500 });
@@ -100,9 +101,20 @@ APlayGameMode::APlayGameMode()
 	UEngineGUI::CreateGUIWindow<DebugWindow>("DebugWindow");
 }
 
-void APlayGameMode::BeginPlay()
+void APlayGameMode::SetCamera()
 {
-	AActor::BeginPlay();
+	Camera = GetWorld()->GetMainCamera();
+	Camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
+	Camera->GetCameraComponent()->SetZSort(0, true);
+}
+
+void APlayGameMode::CreateAndLinkCollisionGroup()
+{
+	GetWorld()->CreateCollisionProfile("Knight");
+	GetWorld()->CreateCollisionProfile("Monster");
+
+	// 충돌체크 해야한다.
+	GetWorld()->LinkCollisionProfile("Knight", "Monster");
 }
 
 void APlayGameMode::Tick(float _DeltaTime)
@@ -110,13 +122,6 @@ void APlayGameMode::Tick(float _DeltaTime)
 	AActor::Tick(_DeltaTime);
 	MousePos = Camera->ScreenMousePosToWorldPos();
 	KnightPos = AKnight::GetPawn()->GetRootComponent()->GetTransformRef().RelativeLocation;
-}
-
-void APlayGameMode::SetCamera()
-{
-	Camera = GetWorld()->GetMainCamera();
-	Camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
-	Camera->GetCameraComponent()->SetZSort(0, true);
 }
 
 std::shared_ptr<class ARoom> APlayGameMode::CreateRoom(std::string_view _RoomName, std::string_view _FileName, FVector _Size)
@@ -150,6 +155,11 @@ void APlayGameMode::SetInitCurRoom(std::shared_ptr<class ARoom> _InitRoom)
 {
 	ARoom::GetCurRoom() = _InitRoom;
 	std::string RoomName = ARoom::GetCurRoom()->GetName();
+}
+
+void APlayGameMode::BeginPlay()
+{
+	AActor::BeginPlay();
 }
 
 APlayGameMode::~APlayGameMode()

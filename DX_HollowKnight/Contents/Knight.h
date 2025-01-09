@@ -62,9 +62,14 @@ private:
 	static AKnight* MainPawn;
 	FVector CameraPos = { 0.0f, 0.0f, 0.0f };
 
-	//Renderer
+	// Renderer
 	std::shared_ptr<class USpriteRenderer> BodyRenderer;
 	std::shared_ptr<class USpriteRenderer> EffectRenderer;
+	void CreateRenderer();
+
+	// Collision
+	std::shared_ptr<class UCollision> BodyCollision;
+	void CreateCollision();
 
 
 	// 공격 또는 피격 동작 중일 때
@@ -126,7 +131,6 @@ private:
 	void CastFireball();
 
 	// Animation
-	void CreateRenderer();
 	void ChangeNextAnimation(EKnightState _NextState);
 	void ChangePrevAnimation();
 
