@@ -21,5 +21,6 @@ protected:
 private:
 	int SelectItem = 0;
 	int SelectButtonIndex = 0;
+	int ObjectItem = -1;
 };
 

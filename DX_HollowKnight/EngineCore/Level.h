@@ -126,6 +126,24 @@ public:
 		return List;
 	}
 
+	template<typename ConvertType>
+	ENGINEAPI std::vector<std::shared_ptr<ConvertType>> GetAllActorArrayByClass()
+	{
+		std::vector<std::shared_ptr<ConvertType>> List;
+
+		for (std::shared_ptr<class AActor> Actor : AllActorList)
+		{
+			std::shared_ptr<ConvertType> Convert = std::dynamic_pointer_cast<ConvertType>(Actor);
+			if (nullptr == Convert)
+			{
+				continue;
+			}
+			List.push_back(Convert);
+		}
+
+		return List;
+	}
+
 protected:
 
 private:
