@@ -43,6 +43,8 @@ public:
 
 	ENGINEAPI static UEngineWindow& GetMainWindow();
 
+	ENGINEAPI static const float& GetDeltaTime();
+
 	ENGINEAPI static std::map<std::string, std::shared_ptr<class ULevel>> GetAllLevelMap();
 
 protected:

@@ -90,4 +90,11 @@ enum class EKnightState
 	MAX
 };
 
-
+enum EMapObjectType
+{
+	BACKGROUND_COLOR,
+	BACKGROUND_OBJECT,
+	COLLISION_OBJECT,
+	NONE_COLLISION_OBJECT,
+	MAX
+};

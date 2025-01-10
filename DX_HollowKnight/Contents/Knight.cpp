@@ -45,12 +45,18 @@ void AKnight::BeginPlay()
 {
 	AActor::BeginPlay();
 	SetFSM();
+	//BodyRenderer->ColorData.MulColor += {0.0f, 1.0f, 0.0f, 1.0f};
+	FVector WorldScale = BodyRenderer->GetWorldScale3D();
+	FVector LocalScale = BodyRenderer->GetRelativeScale3D();
+
+	int a = 0;
 }
 
 void AKnight::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
+	
 	this;
 	CheckDirection();
 	FSM.Update(_DeltaTime);

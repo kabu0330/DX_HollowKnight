@@ -37,9 +37,6 @@
     <ClInclude Include="FightUnit.h">
       <Filter>Global\Unit</Filter>
     </ClInclude>
-    <ClInclude Include="ContentsRenderer.h">
-      <Filter>Render</Filter>
-    </ClInclude>
     <ClInclude Include="ContentsEditorGUI.h">
       <Filter>GUI</Filter>
     </ClInclude>
@@ -104,9 +101,6 @@
     </ClCompile>
     <ClCompile Include="StatusUnit.cpp">
       <Filter>Global\Unit</Filter>
-    </ClCompile>
-    <ClCompile Include="ContentsRenderer.cpp">
-      <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="ContentsEditorGUI.cpp">
       <Filter>GUI</Filter>

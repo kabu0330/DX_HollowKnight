@@ -20,6 +20,11 @@ UEngineWindow& UEngineCore::GetMainWindow()
 	return MainWindow;
 }
 
+const float& UEngineCore::GetDeltaTime()
+{
+	return Timer.GetDeltaTime();
+}
+
 std::map<std::string, std::shared_ptr<class ULevel>> UEngineCore::GetAllLevelMap()
 {
 	return LevelMap;

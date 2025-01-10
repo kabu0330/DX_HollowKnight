@@ -176,10 +176,6 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="ContentsRenderer.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="ContentsResource.h">
       <SubType>
       </SubType>
@@ -245,10 +241,6 @@
     </ClCompile>
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="ContentsEditorGUI.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="ContentsRenderer.cpp">
       <SubType>
       </SubType>
     </ClCompile>

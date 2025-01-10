@@ -16,6 +16,7 @@ public:
 	AMapEditorGameMode& operator=(AMapEditorGameMode&& _Other) noexcept = delete;
 
 	void Tick(float _DeltaTime);
+	void CheckInput(float _DeltaTime);
 
 	void LevelChangeStart() override;
 
@@ -29,6 +30,7 @@ protected:
 private:
 	std::shared_ptr<class MapEditorGUI> MapEditorWindow;
 	static std::shared_ptr<class AMapObject> MapObject;
-
+	std::shared_ptr<ACameraActor> Camera;
+	std::shared_ptr<class USpriteRenderer> BackTexture;
 };
 

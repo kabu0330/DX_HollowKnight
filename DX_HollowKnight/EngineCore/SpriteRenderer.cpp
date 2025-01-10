@@ -87,7 +87,6 @@ void USpriteRenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 		FVector Scale = Sprite->GetSpriteScaleToReal(CurIndex);
 		Scale.Z = 1.0f;
 		SetRelativeScale3D(Scale * AutoScaleRatio);
-		SpriteScale = Scale;
 	}
 
 	URenderer::Render(_Camera, _DeltaTime);

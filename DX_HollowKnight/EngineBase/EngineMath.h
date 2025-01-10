@@ -2,6 +2,8 @@
 #include <Windows.h>
 #include <string>
 #include <functional>
+#include <format> 
+#include <locale>
 
 // 충돌 함수를 제공해줍니다.
 #include <DirectXMath.h>
@@ -416,6 +418,7 @@ public:
 	{
 		X -= _Other.X;
 		Y -= _Other.Y;
+		Z -= _Other.Z;
 		return *this;
 	}
 
@@ -425,6 +428,7 @@ public:
 		TVector Result;
 		Result.X = X - _Other.X;
 		Result.Y = Y - _Other.Y;
+		Result.Z = Z - _Other.Z;
 		return Result;
 	}
 
@@ -501,15 +505,19 @@ public:
 	std::string ToString()
 	{
 		std::string Stream;
+		std::string XValue = std::format("{:08.2f}", X);
+		std::string YValue = std::format("{:08.2f}", Y);
+		std::string ZValue = std::format("{:05.0f}", Z);
+		std::string WValue = std::format("{:03.2f}", W);
 
 		Stream += "X : [";
-		Stream += std::to_string(X);
+		Stream += XValue;
 		Stream += "] Y : [";
-		Stream += std::to_string(Y);
+		Stream += YValue;
 		Stream += "] Z : [";
-		Stream += std::to_string(Z);
+		Stream += ZValue;
 		Stream += "] W : [";
-		Stream += std::to_string(W);
+		Stream += WValue;
 		Stream += "]";
 		return Stream;
 	}

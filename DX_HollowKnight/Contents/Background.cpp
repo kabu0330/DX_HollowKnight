@@ -7,6 +7,7 @@
 ABackground::ABackground()
 {
 	MapObjectTypeValue = EMapObjectType::BACKGROUND_OBJECT;
+
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
@@ -28,7 +29,7 @@ ABackground::ABackground()
 	Collision = CreateDefaultSubObject<UCollision>();
 	Collision->SetupAttachment(RootComponent);
 	Collision->SetCollisionProfileName("Object");
-	Collision->SetScale3D({ 50.0f, 50.0f });
+	Collision->SetScale3D({ 6.0f, 6.0f });
 }
 
 ABackground::~ABackground()
@@ -52,11 +53,15 @@ void ABackground::Tick(float _DeltaTime)
 void ABackground::Serialize(UEngineSerializer& _Ser)
 {
 	_Ser << GetActorLocation();
+	_Ser << Index;
 }
 
 void ABackground::DeSerialize(UEngineSerializer& _Ser)
 {
-	FVector SavePos;
+	FVector SavePos = FVector::ZERO;
 	_Ser >> SavePos;
+	_Ser >> Index;
+
 	SetActorLocation(SavePos);
+	SetSpriteIndex(Index);
 }
