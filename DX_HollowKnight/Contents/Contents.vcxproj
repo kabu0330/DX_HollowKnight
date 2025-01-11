@@ -180,6 +180,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="ContentsRenderer.h" />
     <ClInclude Include="ContentsResource.h">
       <SubType>
       </SubType>
@@ -260,6 +261,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="ContentsRenderer.cpp" />
     <ClCompile Include="ContentsResource.cpp">
       <SubType>
       </SubType>
@@ -280,10 +282,12 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Knight_AnimSetting.cpp" />
     <ClCompile Include="KnightEffect.cpp">
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Knight_FSM.cpp" />
     <ClCompile Include="MapEditorGameMode.cpp">
       <SubType>
       </SubType>

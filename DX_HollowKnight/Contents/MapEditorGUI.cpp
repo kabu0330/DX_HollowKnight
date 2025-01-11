@@ -106,7 +106,7 @@ void MapEditorGUI::ShowSpriteImageButton()
 	for (int i = 0; i < Sprite->GetSpriteCount(); i++)
 	{
 		std::string Name = std::to_string(i);
-
+		
 		Texture = Sprite->GetTexture(i);
 		
 		// 이미지를 가져오기 위해 SRV를 넘겨준다.
@@ -246,11 +246,10 @@ void MapEditorGUI::ShowActorListBox()
 			if (true == ImGui::Button("Delete"))
 			{
 				AllMonsterList[ObjectItem]->Destroy();
-				ObjectItem = -1;
 
+				ObjectItem = -1;
 				LastSelectedItem = -1; // 선택 상태 초기화
 			}
-
 		}
 	}
 }

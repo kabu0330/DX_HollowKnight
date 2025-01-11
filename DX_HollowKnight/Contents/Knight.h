@@ -33,7 +33,7 @@ public:
 		return RootComponent;
 	}
 
-	std::shared_ptr<class USpriteRenderer> GetRenderer() const
+	std::shared_ptr<class UContentsRenderer> GetRenderer() const
 	{
 		return BodyRenderer;
 	}
@@ -62,7 +62,7 @@ private:
 	FVector CameraPos = { 0.0f, 0.0f, 0.0f };
 
 	// Renderer
-	std::shared_ptr<class USpriteRenderer> BodyRenderer;
+	std::shared_ptr<class UContentsRenderer> BodyRenderer;
 	std::shared_ptr<class USpriteRenderer> EffectRenderer;
 	void CreateRenderer();
 
@@ -130,6 +130,7 @@ private:
 	void CastFireball();
 
 	// Animation
+	void InitAnimation();
 	void ChangeNextAnimation(EKnightState _NextState);
 	void ChangePrevAnimation();
 

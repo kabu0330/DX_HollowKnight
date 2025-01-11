@@ -1,20 +1,21 @@
 #pragma once
 #include <EngineBase/EngineMath.h>
 #include <EngineCore/SpriteRenderer.h>
+#include "ContentsRenderer.h"
 
 class GlobalFunc
 {
 public:
-	static void AutoScale(std::shared_ptr<USpriteRenderer> _Renderer, std::string_view _AnimationName)
+	static void AutoScale(std::shared_ptr<UContentsRenderer> _Renderer, std::string_view _AnimationName)
 	{
-		USpriteRenderer::FrameAnimation* Animation = _Renderer->FindAnimation(_AnimationName);
+		UContentsRenderer::FrameAnimation* Animation = _Renderer->FindAnimation(_AnimationName);
 		//Animation->IsAutoScale = true;
 		//Animation->AutoScaleRatio = 1.0f;
 		_Renderer->SetAutoScaleRatio(1.0f);
 	}
 
 	// 좌우반전 적용
-	static void SetLocation(std::shared_ptr<class USceneComponent> _RootComponent, std::shared_ptr<USpriteRenderer> _Renderer, bool _Left = true, const FVector& _OffsetPos = { 0.0f, 0.0f, 0.0f }, const FVector& _Rotation = { 0.0f, 0.0f, 0.0f })
+	static void SetLocation(std::shared_ptr<class USceneComponent> _RootComponent, std::shared_ptr<UContentsRenderer> _Renderer, bool _Left = true, const FVector& _OffsetPos = { 0.0f, 0.0f, 0.0f }, const FVector& _Rotation = { 0.0f, 0.0f, 0.0f })
 	{
 		FVector Pos = _RootComponent->GetTransformRef().RelativeLocation;
 		FVector LRPos = _OffsetPos;
@@ -36,7 +37,7 @@ public:
 	}
 
 	// 상하 모션일 때 좌우 반전
-	static void SetLocationTB(std::shared_ptr<class USceneComponent> _RootComponent, std::shared_ptr<USpriteRenderer> _Renderer, bool _Left = true, const FVector& _OffsetPos = { 0.0f, 0.0f, 0.0f }, const FVector& _Rotation = { 0.0f, 0.0f, 0.0f })
+	static void SetLocationTB(std::shared_ptr<class USceneComponent> _RootComponent, std::shared_ptr<UContentsRenderer> _Renderer, bool _Left = true, const FVector& _OffsetPos = { 0.0f, 0.0f, 0.0f }, const FVector& _Rotation = { 0.0f, 0.0f, 0.0f })
 	{
 		FVector Pos = _RootComponent->GetTransformRef().RelativeLocation;
 		FVector LRPos = _OffsetPos;
@@ -58,6 +59,17 @@ public:
 	static class UEngineWinImage* LoadResource(std::string_view _Directory, std::string_view _SpriteName, UEngineWinImage* _ResImage);
 
 
+};
+
+enum class EZOrder
+{
+	NONE = -900,
+	SKILL_FRONT = -100,
+	PLAYER = 0,
+	MONSTER = 100,
+	SKILL_BACK = 200,
+	BACKGROUND = 3999,
+	MAX
 };
 
 enum class EKnightState
@@ -96,5 +108,11 @@ enum EMapObjectType
 	BACKGROUND_OBJECT,
 	COLLISION_OBJECT,
 	NONE_COLLISION_OBJECT,
+	MAX
+};
+
+enum class EMonsterState
+{
+	IDLE,
 	MAX
 };

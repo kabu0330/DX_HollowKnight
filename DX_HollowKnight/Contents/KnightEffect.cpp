@@ -6,26 +6,30 @@ AKnightEffect::AKnightEffect()
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
-	KnightEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	KnightEffectRenderer->SetupAttachment(RootComponent);
-	KnightEffectRenderer->SetAutoScaleRatio(1.0f);
+	BodyRenderer = CreateDefaultSubObject<UContentsRenderer>();
+	BodyRenderer->SetupAttachment(RootComponent);
+	BodyRenderer->SetAutoScaleRatio(1.0f);
+	float ZSort = static_cast<float>(EZOrder::SKILL_FRONT);
+	BodyRenderer->SetWorldLocation({ 0.0f, 0.0f, ZSort });
+
+	float FrameTime = 0.03f;
 
 	std::string SlashEffect = "SlashEffect";
-	KnightEffectRenderer->CreateAnimation(SlashEffect, SlashEffect, 0, 5, 0.05f, false);
+	BodyRenderer->CreateAnimation(SlashEffect, SlashEffect, 0, 5, FrameTime, false);
 
 	std::string UpSlashEffect = "UpSlashEffect";
-	KnightEffectRenderer->CreateAnimation(UpSlashEffect, UpSlashEffect, 0, 5, 0.05f, false);
+	BodyRenderer->CreateAnimation(UpSlashEffect, UpSlashEffect, 0, 5, FrameTime, false);
 
 	std::string DownSlashEffect = "DownSlashEffect";
-	KnightEffectRenderer->CreateAnimation(DownSlashEffect, DownSlashEffect, 0, 5, 0.05f, false);
+	BodyRenderer->CreateAnimation(DownSlashEffect, DownSlashEffect, 0, 5, FrameTime, false);
 
 	std::string FocusEffect = "FocusEffect";
-	KnightEffectRenderer->CreateAnimation(FocusEffect, FocusEffect, 0, 12, 0.08f, false);
+	BodyRenderer->CreateAnimation(FocusEffect, FocusEffect, 0, 12, FrameTime, false);
 
 	std::string FocusEffectEnd = "FocusEffectEnd";
-	KnightEffectRenderer->CreateAnimation(FocusEffectEnd, FocusEffectEnd, 0, 1, 0.07f, false);
+	BodyRenderer->CreateAnimation(FocusEffectEnd, FocusEffectEnd, 0, 1, FrameTime, false);
 
-	KnightEffectRenderer->ChangeAnimation(SlashEffect);
+	BodyRenderer->ChangeAnimation(SlashEffect);
 }
 
 AKnightEffect::~AKnightEffect()
@@ -45,7 +49,6 @@ void AKnightEffect::Tick(float _DeltaTime)
 	this;
 	CheckKnightPos();
 	Release();
-	KnightEffectRenderer->GetTransformRef().WorldLocation.Z = 1000000000.0f;
 }
 
 void AKnightEffect::CheckKnightPos()
@@ -55,46 +58,20 @@ void AKnightEffect::CheckKnightPos()
 
 void AKnightEffect::ChangeEffect(std::string_view _AnimationName)
 {
-	KnightEffectRenderer->ChangeAnimation(_AnimationName);
-}
-
-void AKnightEffect::SetLocation(USceneComponent* _Knight, FVector _Pos, bool _Left)
-{
-	
-}
-
-void AKnightEffect::SetLocation(FVector _Pos, bool _Left)
-{
-
-
-	//FVector Pos = _RootComponent->GetTransformRef().RelativeLocation;
-	//FVector LRPos = _OffsetPos;
-	//if (true == _Left)
-	//{
-	//	LRPos += Pos;
-	//	_Renderer->SetRelativeLocation(LRPos);
-	//	_Renderer->SetRotation(_Rotation);
-	//	return;
-	//}
-	//else
-	//{
-	//	float Inverse = 180.0f;
-	//	LRPos -= Pos;
-	//	_Renderer->SetRelativeLocation(-LRPos);
-	//	_Renderer->SetRotation({ _Rotation.X, _Rotation.Y + Inverse, _Rotation.Z });
-	//	return;
-	//}
+	BodyRenderer->ChangeAnimation(_AnimationName);
 }
 
 void AKnightEffect::Release()
 {
-	if (nullptr == KnightEffectRenderer)
+	if (nullptr == BodyRenderer)
 	{
 		return;
 	}
 
-	// Release ¹Ì±¸Çö
-	//Destroy(1.0f);
+	if (true == BodyRenderer->IsCurAnimationEnd())
+	{
+		Destroy();
+	}
 
 }
 

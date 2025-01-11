@@ -13,3 +13,4 @@
 
 #include "Global.h"
 #include "Knight.h"
+#include "ContentsRenderer.h"

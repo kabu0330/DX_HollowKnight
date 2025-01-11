@@ -21,19 +21,17 @@ public:
 	void CheckKnightPos();
 
 	void ChangeEffect(std::string_view _AnimationName);
-	void SetLocation(USceneComponent* _Knight, FVector _Pos, bool _Left = true);
-	void SetLocation(FVector _Pos, bool _Left);
 	void Release();
 
-	std::shared_ptr<class USpriteRenderer> GetRenderer()
+	std::shared_ptr<class UContentsRenderer> GetRenderer()
 	{
-		return KnightEffectRenderer;
+		return BodyRenderer;
 	}
 
 protected:
 
 private:
-	std::shared_ptr<class USpriteRenderer> KnightEffectRenderer;
+	std::shared_ptr<class UContentsRenderer> BodyRenderer;
 	FVector KnightPos = { 0.0f, 0.0f, 0.0f };
 };
 

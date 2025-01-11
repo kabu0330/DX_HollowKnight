@@ -6,7 +6,7 @@ ATitleScene::ATitleScene()
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
-	BackgroundRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	BackgroundRenderer = CreateDefaultSubObject<UContentsRenderer>();
 
 	std::string TitleBackGround = "TitleBackGround";
 	BackgroundRenderer->CreateAnimation(TitleBackGround, TitleBackGround, 0, 111, 0.1f);
