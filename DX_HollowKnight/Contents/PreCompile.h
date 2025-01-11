@@ -5,6 +5,7 @@
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/CameraActor.h>
+#include <EngineCore/Collision.h>
 
 #pragma comment(lib, "EngineBase.lib")
 #pragma comment(lib, "EnginePlatform.lib")

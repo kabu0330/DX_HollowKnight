@@ -28,11 +28,11 @@ AKnight::AKnight()
 	JumpForce = InitJumpForce;
 	bCanRotation = true;
 
-	SetActorLocation({ 1000.0f, -2185.0f });
+	SetActorLocation({ 1000.0f, -2105.0f });
 
 	// Debug
 	BodyRenderer->BillboardOn();
-	DebugNonGravity = true;
+	//DebugNonGravity = true;
 	if (true == DebugNonGravity)
 	{
 		Velocity = 800.0f;	
@@ -56,9 +56,10 @@ void AKnight::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-	
+	bool Result = bLeftDir;
+	std::string Debug = std::to_string(Result);
+	UEngineDebug::OutPutString(Debug);
 	this;
-	CheckDirection();
 	FSM.Update(_DeltaTime);
 	TimeElapsed(_DeltaTime);
 	EndAnimationEffect();
@@ -118,9 +119,12 @@ void AKnight::Move(float _DeltaTime)
 		return;
 	}
 
+	CheckDirection();
+
 	if (UEngineInput::IsPress(VK_LEFT))
 	{
 		AddRelativeLocation(FVector{ -Velocity * _DeltaTime, 0.0f, 0.0f });
+
 	}
 	if (UEngineInput::IsPress(VK_RIGHT))
 	{
@@ -150,7 +154,7 @@ void AKnight::Move(float _DeltaTime)
 			break;
 		}
 
-		UColor GroundColor = ARoom::GetCurRoom()->GetPixelCollisionImage().GetColor({ GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y });
+		UColor GroundColor = ARoom::GetCurRoom()->GetPixelCollisionImage().GetColor({ GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y + (BodyRenderer->GetRelativeScale3D().Y * 0.5f)});
 		FVector Pos = { GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y };
 		UColor White = UColor{ 255, 255, 255, 255 };
 		UColor Black = UColor{ 0, 0, 0, 0 };
@@ -158,13 +162,13 @@ void AKnight::Move(float _DeltaTime)
 		
 		if (GroundColor == Black)
 		{
-			UEngineDebug::OutPutString("On Ground");
+			//UEngineDebug::OutPutString("On Ground");
 			//GravityForce = FVector::ZERO;
 			AddRelativeLocation(FVector::UP);			
 		}
 		else if (GroundColor == White || GroundColor == UColor(255, 255, 255, 0))
 		{
-			UEngineDebug::OutPutString("Airborn");
+			//UEngineDebug::OutPutString("Airborn");
 			break;
 		}
 		else
@@ -419,11 +423,12 @@ void AKnight::CreateSlashEffect()
 
 	std::shared_ptr<AKnightEffect> SlashEffect = GetWorld()->SpawnActor<AKnightEffect>();
 	SlashEffect->ChangeEffect("SlashEffect");
+	//SlashEffect->GetRenderer()->SetupAttachment(RootComponent);
 	FVector LRPos = FVector{ -100.0f, 0.0f, 0.0f };
 	bIsShowEffect = true;
 	
 	FVector Pos = RootComponent->GetTransformRef().RelativeLocation;
-	GlobalFunc::SetLocation(RootComponent, SlashEffect->GetKnightEffectRenderer(), bLeftDir, LRPos);
+	GlobalFunc::SetLocation(RootComponent, SlashEffect->GetRenderer(), bLeftDir, LRPos);
 
 	return;
 }
@@ -438,7 +443,7 @@ void AKnight::CreateUpSlashEffect()
 	std::shared_ptr<AKnightEffect> SlashEffect = GetWorld()->SpawnActor<AKnightEffect>();
 	SlashEffect->ChangeEffect("UpSlashEffect");
 	FVector LRPos = FVector{ 0.0f, 50.0f, 0.0f };
-	GlobalFunc::SetLocationTB(RootComponent, SlashEffect->GetKnightEffectRenderer(), bLeftDir, LRPos);
+	GlobalFunc::SetLocationTB(RootComponent, SlashEffect->GetRenderer(), bLeftDir, LRPos);
 	bIsShowEffect = true;
 }
 
@@ -452,7 +457,7 @@ void AKnight::CreateDownSlashEffect()
 	std::shared_ptr<AKnightEffect> SlashEffect = GetWorld()->SpawnActor<AKnightEffect>();
 	SlashEffect->ChangeEffect("DownSlashEffect");
 	FVector LRPos = FVector{ 0.0f, -100.0f, 0.0f };
-	GlobalFunc::SetLocationTB(RootComponent, SlashEffect->GetKnightEffectRenderer(), bLeftDir, LRPos);
+	GlobalFunc::SetLocationTB(RootComponent, SlashEffect->GetRenderer(), bLeftDir, LRPos);
 	bIsShowEffect = true;
 }
 
@@ -669,6 +674,8 @@ void AKnight::SetDash(float _DeltaTime)
 void AKnight::SetSlash(float _DeltaTime)
 {
 	Move(_DeltaTime);
+	CheckGround(GravityForce * _DeltaTime);
+	Gravity(_DeltaTime);
 
 	CreateSlashEffect();
 	ChangePrevAnimation();
@@ -677,6 +684,8 @@ void AKnight::SetSlash(float _DeltaTime)
 void AKnight::SetUpSlash(float _DeltaTime)
 {
 	Move(_DeltaTime);
+	CheckGround(GravityForce * _DeltaTime);
+	Gravity(_DeltaTime);
 
 	CreateUpSlashEffect();
 	ChangePrevAnimation();
@@ -685,6 +694,8 @@ void AKnight::SetUpSlash(float _DeltaTime)
 void AKnight::SetDownSlash(float _DeltaTime)
 {
 	Move(_DeltaTime);
+	CheckGround(GravityForce * _DeltaTime);
+	Gravity(_DeltaTime);
 
 	CreateDownSlashEffect();
 	ChangePrevAnimation();
@@ -708,7 +719,7 @@ void AKnight::SetFocusGet(float _DeltaTime)
 	{
 		std::shared_ptr<AKnightEffect> FocusEffect = GetWorld()->SpawnActor<AKnightEffect>();
 		FocusEffect->ChangeEffect("FocusEffect");
-		GlobalFunc::SetLocation(RootComponent, FocusEffect->GetKnightEffectRenderer());
+		GlobalFunc::SetLocation(RootComponent, FocusEffect->GetRenderer());
 		bIsEffectActive = true;
 	}
 
@@ -734,7 +745,7 @@ void AKnight::SetFocusEnd(float _DeltaTime)
 		{
 			std::shared_ptr<AKnightEffect> FocusEffect = GetWorld()->SpawnActor<AKnightEffect>();
 			FocusEffect->ChangeEffect("FocusEffectEnd");
-			GlobalFunc::SetLocation(RootComponent, FocusEffect->GetKnightEffectRenderer());
+			GlobalFunc::SetLocation(RootComponent, FocusEffect->GetRenderer());
 			bIsEffectActive = false;
 		}
 		ChangeNextAnimation(EKnightState::IDLE);
@@ -846,7 +857,7 @@ void AKnight::CreateRenderer()
 
 	// 이동 애니메이션
 	std::string Idle = "Idle";
-	BodyRenderer->CreateAnimation(Idle, "Knight_Idle.png", 0, 8, IdleFrameTime);
+	BodyRenderer->CreateAnimation(Idle, Idle, 0, 8, IdleFrameTime);
 
 	std::string Run = "Run";
 	BodyRenderer->CreateAnimation(Run, Run, 0, 7, RunFrameTime);
@@ -939,7 +950,7 @@ void AKnight::CreateCollision()
 	BodyCollision->SetupAttachment(RootComponent);
 	BodyCollision->SetCollisionProfileName("Knight");
 	BodyCollision->SetScale3D({ 100.0f, 130.0f });
-	BodyCollision->GetTransformRef().Location.Y += 50.0f;
+	BodyCollision->GetTransformRef().Location.Y += 0.0f;
 
 	BodyCollision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 		{

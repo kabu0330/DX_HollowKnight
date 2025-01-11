@@ -76,6 +76,7 @@ void UContentsResource::LoadResourceDirectory()
 	LoadContentsResource("MapObjectResources");
 
 	// Knight
+	LoadContentsResource("Image/Knight/Idle");
 	LoadContentsResource("Image/Knight/Run");
 	LoadContentsResource("Image/Knight/Jump");
 	LoadContentsResource("Image/Knight/RunToIdle");

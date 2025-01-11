@@ -171,6 +171,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="ContentsEditorGUI.h">
       <SubType>
@@ -212,6 +216,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Monster.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Room.h">
       <SubType>
       </SubType>
@@ -221,6 +229,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="PreCompile.h" />
+    <ClInclude Include="RoomManager.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="StatusUnit.h">
       <SubType>
       </SubType>
@@ -236,6 +248,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Background.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -280,6 +296,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Room.cpp">
       <SubType>
       </SubType>
@@ -297,6 +317,10 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PreCompile.h</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PreCompile.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="RoomManager.cpp">
+      <SubType>
+      </SubType>
     </ClCompile>
     <ClCompile Include="StatusUnit.cpp">
       <SubType>

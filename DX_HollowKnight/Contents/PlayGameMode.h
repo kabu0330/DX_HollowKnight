@@ -21,20 +21,23 @@ public:
 	static std::shared_ptr<class ACameraActor> Camera;
 	static FVector MousePos;
 	static FVector KnightPos;
+	
+	bool& GetPauseRef()
+	{
+		return Pause;
+	}
+
 protected:
 
 private:
+	inline static bool Pause = false;
+
 	void SetCamera();
 
 	// CollisionGroup
 	void CreateAndLinkCollisionGroup();
-
-	// Room
-	std::shared_ptr<class ARoom> CreateRoom(std::string_view _RoomName, std::string_view _FileName, FVector _Size);
-	void SetInitCurRoom(std::shared_ptr<class ARoom> _InitRoom);
-	void LoadPixelCollisionTexture(class ARoom* _Room, UEngineWinImage* _BmpTexture, std::string_view _FileName, FVector _Size);
 	
-	class UEngineWinImage* PixelCollisionImage = nullptr;
+	void CheckInfo();
 
 };
 

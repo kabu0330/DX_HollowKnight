@@ -18,9 +18,6 @@ public:
 	AKnight& operator=(const AKnight& _Other) = delete;
 	AKnight& operator=(AKnight&& _Other) noexcept = delete;
 
-	void BeginPlay() override;
-	void Tick(float _DeltaTime) override;
-
 	void SetCameraPosition();
 
 	void TimeElapsed(float _DeltaTime);
@@ -36,7 +33,7 @@ public:
 		return RootComponent;
 	}
 
-	std::shared_ptr<class USpriteRenderer> GetKnightRenderer() const
+	std::shared_ptr<class USpriteRenderer> GetRenderer() const
 	{
 		return BodyRenderer;
 	}
@@ -57,6 +54,8 @@ public:
 
 
 protected:
+	void BeginPlay() override;
+	void Tick(float _DeltaTime) override;
 
 private:
 	static AKnight* MainPawn;

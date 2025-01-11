@@ -48,7 +48,7 @@ void UDebugWindowGUI::GetKnightInfo()
 	FVector KnightPos = APlayGameMode::KnightPos;
 	ImGui::Text("Knight Pos X : %.0f, Y : %.0f", KnightPos.X, KnightPos.Y);
 
-	float ZValue = AKnight::GetPawn()->GetKnightRenderer()->GetTransformRef().RelativeLocation.Z;
+	float ZValue = AKnight::GetPawn()->GetRenderer()->GetTransformRef().RelativeLocation.Z;
 	ImGui::Text("Knight Z Vaule : %.6f", ZValue);
 
 	GetGravityForce();

@@ -40,9 +40,6 @@
     <ClInclude Include="ContentsEditorGUI.h">
       <Filter>GUI</Filter>
     </ClInclude>
-    <ClInclude Include="ContentsResource.h">
-      <Filter>Global</Filter>
-    </ClInclude>
     <ClInclude Include="MapEditorGameMode.h">
       <Filter>Level</Filter>
     </ClInclude>
@@ -63,6 +60,18 @@
     </ClInclude>
     <ClInclude Include="MapEditorGUI.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Play</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsResource.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomManager.h">
+      <Filter>Setting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -105,9 +114,6 @@
     <ClCompile Include="ContentsEditorGUI.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="ContentsResource.cpp">
-      <Filter>Global</Filter>
-    </ClCompile>
     <ClCompile Include="MapEditorGameMode.cpp">
       <Filter>Level</Filter>
     </ClCompile>
@@ -128,6 +134,18 @@
     </ClCompile>
     <ClCompile Include="MapEditorGUI.cpp">
       <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Play</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsResource.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Setting</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomManager.cpp">
+      <Filter>Setting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +184,12 @@
     </Filter>
     <Filter Include="Test">
       <UniqueIdentifier>{06b144dd-98f6-449c-ada2-5305d26e33fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{318effba-c84a-4d4f-8a42-98637e2f0fa4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Setting">
+      <UniqueIdentifier>{cbf9cc41-8d7d-4084-959d-3decaa2e300c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

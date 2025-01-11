@@ -4,6 +4,7 @@
 #include <EnginePlatform/EngineInput.h>
 #include "PlayGameMode.h"
 
+
 std::shared_ptr<ARoom> ARoom::CurRoom = nullptr;
 
 ARoom::ARoom()
@@ -73,7 +74,8 @@ ARoom* ARoom::LinkRoom(ARoom* _Room)
 
 void ARoom::CheckGround(FVector _MovePos)
 {
-	FVector NextPos = APlayGameMode::KnightPos + _MovePos;
+	float YValue = AKnight::GetPawn()->GetRenderer()->GetRelativeScale3D().Y;
+	FVector NextPos = { APlayGameMode::KnightPos.X + _MovePos.X , APlayGameMode::KnightPos.Y + _MovePos.Y + (YValue * 0.5f)};
 	NextPos.X = floorf(NextPos.X);
 	NextPos.Y = floorf(NextPos.Y);
 
