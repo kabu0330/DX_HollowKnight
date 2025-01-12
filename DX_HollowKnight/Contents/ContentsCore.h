@@ -1,8 +1,7 @@
 #pragma once
 #include <EngineCore/IContentsCore.h>
 
-
-// 설명 :
+// 설명 : 윈도우 크기 설정, 리소스 로드, 레벨 생성
 class UContentsCore : public IContentsCore
 {
 public:
@@ -23,9 +22,6 @@ protected:
 
 private:
 	void SetWindowSize(UEngineInitData& _Data);
-	//void LoadResourceDirectory();
-	//void LoadFolder();
-	//void LoadSprite();
 
 
 	void CreateLevel();

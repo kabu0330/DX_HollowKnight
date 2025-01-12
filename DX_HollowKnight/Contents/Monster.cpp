@@ -33,6 +33,8 @@ void AMonster::CreateRenderer()
 	BodyRenderer->SetAutoScaleRatio(1.0f);
 	float ZSort = -100.0f;
 	BodyRenderer->SetWorldLocation({ 0.0f, 0.0f, ZSort });
+	
+	//BodyRenderer->CreateAnimation()
 }
 
 void AMonster::CreateCollision()

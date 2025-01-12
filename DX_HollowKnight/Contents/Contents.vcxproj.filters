@@ -25,7 +25,7 @@
     <ClInclude Include="Room.h">
       <Filter>Play</Filter>
     </ClInclude>
-    <ClInclude Include="KnightEffect.h">
+    <ClInclude Include="KnightSkill.h">
       <Filter>Global\Knight</Filter>
     </ClInclude>
     <ClInclude Include="Knight.h">
@@ -74,7 +74,13 @@
       <Filter>ContentsLevelSetting\Setting</Filter>
     </ClInclude>
     <ClInclude Include="ContentsRenderer.h">
-      <Filter>Render</Filter>
+      <Filter>ContentsLevelSetting\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Skill.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Global</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -105,7 +111,7 @@
     <ClCompile Include="Knight.cpp">
       <Filter>Global\Knight</Filter>
     </ClCompile>
-    <ClCompile Include="KnightEffect.cpp">
+    <ClCompile Include="KnightSkill.cpp">
       <Filter>Global\Knight</Filter>
     </ClCompile>
     <ClCompile Include="FightUnit.cpp">
@@ -157,7 +163,13 @@
       <Filter>Global\Knight</Filter>
     </ClCompile>
     <ClCompile Include="ContentsRenderer.cpp">
-      <Filter>Render</Filter>
+      <Filter>ContentsLevelSetting\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Skill.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Global</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,9 +194,6 @@
     <Filter Include="Play">
       <UniqueIdentifier>{90d40787-bd6c-4314-b86a-fd988ad3fbe1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Render">
-      <UniqueIdentifier>{487692e4-6b76-4236-8869-624e3b36942f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Test">
       <UniqueIdentifier>{06b144dd-98f6-449c-ada2-5305d26e33fd}</UniqueIdentifier>
     </Filter>
@@ -202,6 +211,9 @@
     </Filter>
     <Filter Include="ContentsLevelSetting\GUI">
       <UniqueIdentifier>{8d190253-6f67-4848-947a-2155a14ebc95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ContentsLevelSetting\Render">
+      <UniqueIdentifier>{487692e4-6b76-4236-8869-624e3b36942f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

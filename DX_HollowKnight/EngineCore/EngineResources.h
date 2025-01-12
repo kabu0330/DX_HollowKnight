@@ -3,6 +3,7 @@
 #include <EngineBase/EnginePath.h>
 #include <EngineBase/EngineString.h>
 
+// 설명 : 
 class UEngineResources : public UObject
 {
 public:
@@ -25,7 +26,8 @@ public:
 	ENGINEAPI static std::shared_ptr<ResType> Find(std::string_view _Name)
 	{
 		const type_info& Info = typeid(ResType);
-		return std::dynamic_pointer_cast<ResType>(Find(Info.name(), _Name.data()));
+		return std::dynamic_pointer_cast<ResType>(Find(Info.name(), _Name.data())); // 부모타입 포인터를 자식타입(ResType)으로 변환
+		// 실패시 std::shared_ptr을 nullptr로 반환
 	}
 
 	ENGINEAPI static std::shared_ptr<UEngineResources> Find(std::string_view _ResName, std::string_view _Name);

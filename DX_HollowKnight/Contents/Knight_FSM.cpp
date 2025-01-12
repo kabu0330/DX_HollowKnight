@@ -1,7 +1,7 @@
 #include "PreCompile.h"
 #include "Knight.h"
 #include <EnginePlatform/EngineInput.h>
-#include "KnightEffect.h"
+#include "KnightSkill.h"
 
 void AKnight::SetIdle(float _DeltaTime)
 {
@@ -157,7 +157,7 @@ void AKnight::SetDash(float _DeltaTime)
 	bCanRotation = false;
 	bIsDashing = true;
 
-	if (true == bLeftDir)
+	if (true == bIsLeft)
 	{
 		AddRelativeLocation(FVector{ -Velocity * _DeltaTime, 0.0f, 0.0f });
 	}
@@ -231,9 +231,9 @@ void AKnight::SetFocusGet(float _DeltaTime)
 {
 	if (false == bIsEffectActive)
 	{
-		std::shared_ptr<AKnightEffect> FocusEffect = GetWorld()->SpawnActor<AKnightEffect>();
-		FocusEffect->ChangeEffect("FocusEffect");
-		GlobalFunc::SetLocation(RootComponent, FocusEffect->GetRenderer());
+		std::shared_ptr<AKnightSkill> FocusEffect = GetWorld()->SpawnActor<AKnightSkill>();
+		FocusEffect->ChangeAnimation("FocusEffect");
+		//GlobalFunc::SetLocation(RootComponent, FocusEffect->GetRenderer());
 		bIsEffectActive = true;
 	}
 
@@ -257,9 +257,9 @@ void AKnight::SetFocusEnd(float _DeltaTime)
 	{
 		if (true == bIsEffectActive)
 		{
-			std::shared_ptr<AKnightEffect> FocusEffect = GetWorld()->SpawnActor<AKnightEffect>();
-			FocusEffect->ChangeEffect("FocusEffectEnd");
-			GlobalFunc::SetLocation(RootComponent, FocusEffect->GetRenderer());
+			std::shared_ptr<AKnightSkill> FocusEffect = GetWorld()->SpawnActor<AKnightSkill>();
+			FocusEffect->ChangeAnimation("FocusEffectEnd");
+			//GlobalFunc::SetLocation(RootComponent, FocusEffect->GetRenderer());
 			bIsEffectActive = false;
 		}
 		ChangeNextAnimation(EKnightState::IDLE);

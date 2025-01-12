@@ -113,6 +113,16 @@ public:
 	FUVValue UVValue;
 	FSpriteData SpriteData;
 
+	const FVector& GetScale()
+	{
+		return CurAnimation->Sprite->GetTexture()->GetTextureSize();
+	}
+
+	const FVector& GetActorLocation() 
+	{
+		return Transform.RelativeLocation;
+	}
+
 protected:
 	ENGINEAPI void Render(class UEngineCamera* _Camera, float _DeltaTime) override;
 	ENGINEAPI void BeginPlay() override;

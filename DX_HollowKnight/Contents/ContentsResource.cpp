@@ -73,6 +73,15 @@ void UContentsResource::LoadResourceDirectory()
 		Mat->SetPixelShader("ContentsShader.fx");
 	}
 
+	{
+		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("MyCollisionDebugMaterial");
+		Mat->SetVertexShader("EngineDebugCollisionShader.fx");
+		Mat->SetPixelShader("EngineDebugCollisionShader.fx");
+		// 언제나 화면에 나오는 누구도 이녀석의 앞을 가릴수 없어.
+		Mat->SetDepthStencilState("CollisionDebugDepth");
+		Mat->SetRasterizerState("CollisionDebugRas");
+	}
+
 	LoadContentsResource("MapObjectResources");
 
 	// Knight
@@ -112,9 +121,9 @@ void UContentsResource::LoadResourceDirectory()
 
 void UContentsResource::LoadFolder()
 {
-	UEngineDirectory TitleMain;
-	TitleMain.MoveParentToDirectory("ContentsResources//Image//Title");
-	TitleMain.Append("TitleBackGround");
+	//UEngineDirectory TitleMain;
+	//TitleMain.MoveParentToDirectory("ContentsResources//Image//Title");
+	//TitleMain.Append("TitleBackGround");
 }
 
 void UContentsResource::LoadSprite()

@@ -22,6 +22,7 @@ protected:
 
 private:
 	std::shared_ptr<class UContentsRenderer> BackgroundRenderer;
-	std::shared_ptr<class ATitleLogo> Logo;
+	std::shared_ptr<class UContentsRenderer> TitleLogo;
+	std::shared_ptr<class UContentsRenderer> CreditsLogo;
 };
 

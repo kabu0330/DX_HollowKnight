@@ -22,14 +22,14 @@ public:
 
 ATitleGameMode::ATitleGameMode()
 {
-	UEngineDirectory Dir;
-	if (false == Dir.MoveParentToDirectory("ContentsResources"))
-	{
-		MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-		return;
-	}
-	Dir.Append("Image/Title/TitleBackGround");
-	UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
+	//UEngineDirectory Dir;
+	//if (false == Dir.MoveParentToDirectory("ContentsResources"))
+	//{
+	//	MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+	//	return;
+	//}
+	//Dir.Append("Image/Title/TitleBackGround");
+	//UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
 
 	TitleScene = GetWorld()->SpawnActor<ATitleScene>();
 	TitleScene->SetActorLocation({ 0.0f, 0.0f, 0.0f });

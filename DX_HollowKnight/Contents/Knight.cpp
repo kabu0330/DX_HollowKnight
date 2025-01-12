@@ -10,7 +10,7 @@
 #include <EngineCore/EngineCamera.h>
 #include <EngineCore/Collision.h>
 
-#include "KnightEffect.h"
+#include "KnightSkill.h"
 #include "Room.h"
 
 AKnight* AKnight::MainPawn = nullptr;
@@ -28,11 +28,11 @@ AKnight::AKnight()
 	JumpForce = InitJumpForce;
 	bCanRotation = true;
 
-	SetActorLocation({ 1000.0f, -2105.0f });
+	//SetActorLocation({ 1000.0f, -2105.0f });
 
 	// Debug
 	BodyRenderer->BillboardOn();
-	//DebugNonGravity = true;
+	DebugNonGravity = true;
 	if (true == DebugNonGravity)
 	{
 		Velocity = 800.0f;	
@@ -60,7 +60,7 @@ void AKnight::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-	bool Result = bLeftDir;
+	bool Result = bIsLeft;
 	std::string Debug = std::to_string(Result);
 	UEngineDebug::OutPutString(Debug);
 
@@ -99,8 +99,8 @@ void AKnight::Gravity(float _DeltaTime)
 
 	if (false == bIsOnGround)
 	{
-		AddRelativeLocation(GravityForce * _DeltaTime);
 		GravityForce += FVector::DOWN * GravityValue * _DeltaTime;
+		AddRelativeLocation(GravityForce * _DeltaTime);
 	}
 	else
 	{
@@ -160,8 +160,9 @@ void AKnight::Move(float _DeltaTime)
 			break;
 		}
 
-		UColor GroundColor = ARoom::GetCurRoom()->GetPixelCollisionImage().GetColor({ GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y + (BodyRenderer->GetRelativeScale3D().Y * 0.5f)});
 		FVector Pos = { GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y };
+		FVector Result = { GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y + (BodyRenderer->GetRelativeScale3D().Y * 0.5f) };
+		UColor GroundColor = ARoom::GetCurRoom()->GetPixelCollisionImage().GetColor(Result);
 		UColor White = UColor{ 255, 255, 255, 255 };
 		UColor Black = UColor{ 0, 0, 0, 0 };
 
@@ -189,8 +190,11 @@ void AKnight::SetCameraPosition()
 	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetCamera(0);
 	FVector Pos = RootComponent->GetTransformRef().RelativeLocation;
 	FVector ScreenSize = UEngineCore::GetScreenScale();
-	CameraPos = { Pos.X, Pos.Y + ScreenSize.Y * 0.35f };
+	//CameraPos = { Pos.X, Pos.Y + ScreenSize.Y * 0.35f };
+	CameraPos = { Pos.X, Pos.Y };
 	Camera->SetActorLocation(CameraPos);
+	FVector CameraResult = GetActorLocation();
+	int a = 0;
 }
 
 void AKnight::TimeElapsed(float _DeltaTime)
@@ -409,15 +413,15 @@ void AKnight::DebugInput(float _DeltaTime)
 	float ZValue = BodyRenderer->GetTransformRef().RelativeLocation.Z;
 	int a = 0;
 
-	if (UEngineInput::IsPress('W'))
-	{
-		BodyRenderer->AddRelativeLocation({ 0.0f, 0.0f, 1.0f * _DeltaTime });
-	}
+	//if (UEngineInput::IsPress('W'))
+	//{
+	//	BodyRenderer->AddRelativeLocation({ 0.0f, 0.0f, 1.0f * _DeltaTime });
+	//}
 
-	if (UEngineInput::IsPress('S'))
-	{
-		BodyRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f * _DeltaTime });
-	}
+	//if (UEngineInput::IsPress('S'))
+	//{
+	//	BodyRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f * _DeltaTime });
+	//}
 }
 
 void AKnight::CreateSlashEffect()
@@ -427,14 +431,11 @@ void AKnight::CreateSlashEffect()
 		return;
 	}
 
-	std::shared_ptr<AKnightEffect> SlashEffect = GetWorld()->SpawnActor<AKnightEffect>();
-	SlashEffect->ChangeEffect("SlashEffect");
-	//SlashEffect->GetRenderer()->SetupAttachment(RootComponent);
-	FVector LRPos = FVector{ -100.0f, 0.0f};
+	std::shared_ptr<AKnightSkill> SlashEffect = GetWorld()->SpawnActor<AKnightSkill>();
+	SlashEffect->ChangeAnimation("SlashEffect");
+	FVector Offset = FVector{ -100.0f, 0.0f};
+	SlashEffect->SetLocation(this, Offset);
 	bIsShowEffect = true;
-	
-	FVector Pos = RootComponent->GetTransformRef().RelativeLocation;
-	GlobalFunc::SetLocation(RootComponent, SlashEffect->GetRenderer(), bLeftDir, LRPos);
 
 	return;
 }
@@ -446,10 +447,11 @@ void AKnight::CreateUpSlashEffect()
 		return;
 	}
 
-	std::shared_ptr<AKnightEffect> SlashEffect = GetWorld()->SpawnActor<AKnightEffect>();
-	SlashEffect->ChangeEffect("UpSlashEffect");
-	FVector LRPos = FVector{ 0.0f, 50.0f };
-	GlobalFunc::SetLocationTB(RootComponent, SlashEffect->GetRenderer(), bLeftDir, LRPos);
+	std::shared_ptr<AKnightSkill> SlashEffect = GetWorld()->SpawnActor<AKnightSkill>();
+	SlashEffect->ChangeAnimation("UpSlashEffect");
+	FVector Offset = FVector{ 0.0f, 100.0f };
+	SlashEffect->SetLocation(this, Offset);
+	SlashEffect->EnableRotation(false); // 좌우반전에 따라 
 	bIsShowEffect = true;
 }
 
@@ -460,10 +462,11 @@ void AKnight::CreateDownSlashEffect()
 		return;
 	}
 
-	std::shared_ptr<AKnightEffect> SlashEffect = GetWorld()->SpawnActor<AKnightEffect>();
-	SlashEffect->ChangeEffect("DownSlashEffect");
-	FVector LRPos = FVector{ 0.0f, -100.0f };
-	GlobalFunc::SetLocationTB(RootComponent, SlashEffect->GetRenderer(), bLeftDir, LRPos);
+	std::shared_ptr<AKnightSkill> SlashEffect = GetWorld()->SpawnActor<AKnightSkill>();
+	SlashEffect->ChangeAnimation("DownSlashEffect");
+	FVector Offset = FVector{ 0.0f, -100.0f };
+	SlashEffect->SetLocation(this, Offset);
+	SlashEffect->EnableRotation(false);
 	bIsShowEffect = true;
 }
 
@@ -502,6 +505,7 @@ void AKnight::CreateCollision()
 	BodyCollision->SetCollisionProfileName("Knight");
 	BodyCollision->SetScale3D({ 100.0f, 130.0f });
 	BodyCollision->GetTransformRef().Location.Y += 0.0f;
+	BodyCollision->SetRelativeLocation(BodyRenderer->GetActorLocation());
 
 	BodyCollision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 		{
@@ -523,13 +527,13 @@ void AKnight::CheckDirection()
 	}
 	if (UEngineInput::IsPress(VK_LEFT))
 	{
-		bLeftDir = true;
-		RootComponent->SetRotation({ 0.0f, 0.0f, 0.0f });
+		bIsLeft = true;
+		SetActorRelativeScale3D({ 1.0f, 1.0f, 1.0f });
 	}
 	if (UEngineInput::IsPress(VK_RIGHT))
 	{
-		bLeftDir = false;
-		RootComponent->SetRotation({ 0.0f, 180.0f, 0.0f });
+		bIsLeft = false;
+		SetActorRelativeScale3D({ -1.0f, 1.0f, 1.0f });
 	}
 }
 

@@ -15,6 +15,7 @@
 #include "Background.h"
 #include "DebugWindowGUI.h"
 #include "MapEditorGUI.h"
+#include "CollisionManager.h"
 
 std::shared_ptr<AMapObject> AMapEditorGameMode::MapObject = nullptr;
 
@@ -22,12 +23,13 @@ std::shared_ptr<AMapObject> AMapEditorGameMode::MapObject = nullptr;
 AMapEditorGameMode::AMapEditorGameMode()
 {
 	// 충돌은 레벨마다 공유
-	//GetWorld()->CreateCollisionProfile("Monster");	
-	GetWorld()->CreateCollisionProfile("Object");
+	UCollisionManager::CreateCollisionProfile(this);
+	UCollisionManager::LinkCollision(this);
 
 	Camera = GetWorld()->GetMainCamera();
 	Camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
 	Camera->GetCameraComponent()->SetZSort(0, true);
+	Camera->GetCameraComponent()->SetProjectionType(EProjectionType::Perspective);
 
 	UEngineGUI::CreateGUIWindow<MapEditorGUI>("MapEditorWindow");
 

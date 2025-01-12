@@ -9,6 +9,7 @@
 #include "Room.h"
 #include "CollisionManager.h"
 #include "RoomManager.h"
+#include "DebugWindowGUI.h"
 
 std::shared_ptr<ACameraActor> APlayGameMode::Camera = nullptr;
 FVector APlayGameMode::MousePos = { 0.0f, 0.0f, 0.0f };
@@ -30,8 +31,9 @@ APlayGameMode::APlayGameMode()
 void APlayGameMode::SetCamera()
 {
 	Camera = GetWorld()->GetMainCamera();
-	Camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
+	Camera->SetActorLocation({ 0.0f, 0.0f, 1.0f, 1.0f });
 	Camera->GetCameraComponent()->SetZSort(0, true);
+	//Camera->GetCameraComponent()->SetProjectionType(EProjectionType::Perspective);
 }
 
 void APlayGameMode::CreateAndLinkCollisionGroup()
@@ -44,6 +46,20 @@ void APlayGameMode::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 	CheckInfo();
+}
+
+void APlayGameMode::LevelChangeStart()
+{
+	{
+		std::shared_ptr<UDebugWindowGUI> Window = UEngineGUI::FindGUIWindow<UDebugWindowGUI>("DebugWindow");
+
+		if (nullptr == Window)
+		{
+			Window = UEngineGUI::CreateGUIWindow<UDebugWindowGUI>("DebugWindow");
+		}
+
+		Window->SetActive(true);
+	}
 }
 
 void APlayGameMode::CheckInfo()

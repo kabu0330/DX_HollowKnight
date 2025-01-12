@@ -99,7 +99,7 @@ void ARoom::CheckGround(FVector _MovePos)
 
 void ARoom::CreatePixelCollisionTexture(std::string_view _FileName)
 {
-	float ZSort = 100.0f;
+	float ZSort = static_cast<float>(EZOrder::PIXELCOLLISION);
 
 	BackgroundRenderer->SetTexture(_FileName, true, 1.0f);
 	BackgroundRenderer->SetWorldLocation({ 0.0f, 0.0f, ZSort });

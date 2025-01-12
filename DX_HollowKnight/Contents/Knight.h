@@ -52,6 +52,10 @@ public:
 
 	float JumpForce = 0.0f;
 
+	bool IsLeft()
+	{
+		return bIsLeft;
+	}
 
 protected:
 	void BeginPlay() override;
@@ -177,6 +181,6 @@ private:
 	void SetDeathHead(float _DeltaTime);
 
 	void CheckDirection();
-	bool bLeftDir = true;
+	bool bIsLeft = true;
 };
 

@@ -15,23 +15,23 @@ public:
 	}
 
 	// 좌우반전 적용
-	static void SetLocation(std::shared_ptr<class USceneComponent> _RootComponent, std::shared_ptr<UContentsRenderer> _Renderer, bool _Left = true, const FVector& _OffsetPos = { 0.0f, 0.0f, 0.0f }, const FVector& _Rotation = { 0.0f, 0.0f, 0.0f })
+	static void SetLocation(std::shared_ptr<class USceneComponent> _RootComponent, std::shared_ptr<AActor> _Actor, bool _Left = true, const FVector& _OffsetPos = { 0.0f, 0.0f, 0.0f }, const FVector& _Rotation = { 0.0f, 0.0f, 0.0f })
 	{
 		FVector Pos = _RootComponent->GetTransformRef().RelativeLocation;
 		FVector LRPos = _OffsetPos;
 		if (true == _Left)
 		{
 			LRPos += Pos;
-			_Renderer->SetRelativeLocation(LRPos);
-			_Renderer->SetRotation(_Rotation);
+			_Actor->SetActorLocation(LRPos);
+			_Actor->SetActorRotation(_Rotation);
 			return;
 		}
 		else
 		{
 			float Inverse = 180.0f;
 			LRPos -= Pos;
-			_Renderer->SetRelativeLocation(-LRPos);
-			_Renderer->SetRotation({ _Rotation.X, _Rotation.Y + Inverse, _Rotation.Z });
+			_Actor->SetActorLocation(-LRPos);
+			_Actor->SetActorRotation({ _Rotation.X, _Rotation.Y + Inverse, _Rotation.Z });
 			return;
 		}
 	}
@@ -63,12 +63,13 @@ public:
 
 enum class EZOrder
 {
-	NONE = -900,
-	SKILL_FRONT = -100,
-	PLAYER = 0,
-	MONSTER = 100,
-	SKILL_BACK = 200,
-	BACKGROUND = 3999,
+	NONE = 100,
+	SKILL_FRONT = 890,
+	PLAYER = 900,
+	MONSTER = 910,
+	SKILL_BACK = 920,
+	BACKGROUND = 3950,
+	PIXELCOLLISION = 3999,
 	MAX
 };
 
