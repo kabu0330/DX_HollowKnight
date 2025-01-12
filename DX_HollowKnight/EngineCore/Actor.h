@@ -122,6 +122,11 @@ public:
 		RootComponent->SetRotation(_Value);
 	}
 
+	FVector GetActorRotation()
+	{
+		return RootComponent->Transform.Rotation;
+	}
+
 	void AddActorRotation(const FVector& _Value)
 	{
 		if (nullptr == RootComponent)

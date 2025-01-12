@@ -27,21 +27,23 @@ AMapEditorGameMode::AMapEditorGameMode()
 	UCollisionManager::LinkCollision(this);
 
 	Camera = GetWorld()->GetMainCamera();
-	Camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
+	Camera->SetActorLocation({ 0.0f, 0.0f, 1.0f, 1.0f });
 	Camera->GetCameraComponent()->SetZSort(0, true);
-	Camera->GetCameraComponent()->SetProjectionType(EProjectionType::Perspective);
+	FVector ScreenSize = UEngineCore::GetScreenScale();
+	Camera->SetActorLocation({ScreenSize.X * 0.5f, -ScreenSize.Y * 0.5f });
+	//Camera->GetCameraComponent()->SetProjectionType(EProjectionType::Perspective);
 
 	UEngineGUI::CreateGUIWindow<MapEditorGUI>("MapEditorWindow");
 
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
-	//BackTexture = CreateDefaultSubObject<USpriteRenderer>();
-	//BackTexture->SetupAttachment(RootComponent);
-	//float ZSort = 3999.0f;
-	//BackTexture->SetWorldLocation({ 0.0f, 0.0f, ZSort });
-	//BackTexture->SetTexture("dartmount_sample.bmp", true);
-	//BackTexture->ColorData.MulColor *= {1.0f, 1.0f, 1.0f, 0.0f};
+	BackTexture = CreateDefaultSubObject<USpriteRenderer>();
+	BackTexture->SetupAttachment(RootComponent);
+	float ZSort = 3999.0f;
+	BackTexture->SetWorldLocation({ 0.0f, 0.0f, ZSort });
+	BackTexture->SetTexture("dartmount_sample.bmp", true);
+	BackTexture->ColorData.MulColor *= {1.0f, 1.0f, 1.0f, 0.0f};
 }
 
 AMapEditorGameMode::~AMapEditorGameMode()
@@ -75,7 +77,7 @@ void AMapEditorGameMode::CheckInput(float _DeltaTime)
 	}
 
 	// 미리보기 취소
-	if (true == UEngineInput::IsDown('Z'))
+	if (true == UEngineInput::IsDown('~'))
 	{
 		MapEditorWindow->IsPreviewRef() = false;
 

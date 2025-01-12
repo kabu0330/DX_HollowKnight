@@ -29,6 +29,8 @@ protected:
 	void DeleteAllActors();
 	void SpawnActor();
 
+	void SetScaleButton();
+	void SetRotationButton();
 	void SetActorLocationButton();
 
 	void SaveFile();
@@ -47,10 +49,12 @@ private:
 	int XValue = 0;
 	int YValue = 0;
 
+	FVector Pos = FVector::ZERO;
 	ImTextureID SelectedTexture = 0;
 	bool bIsPreview = false;
 	FVector TextureScale = FVector::ZERO;
 	float ScaleRatio = 1.0f;
+	FVector RotationValue = FVector::ZERO;
 
 };
 

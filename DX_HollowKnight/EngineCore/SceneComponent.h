@@ -62,7 +62,6 @@ public:
 		TransformUpdate();
 	}
 
-
 	void SetRotation(const FVector& _Value)
 	{
 		Transform.Rotation = _Value;
@@ -98,7 +97,10 @@ public:
 	{
 		return Transform.Scale;
 	}
-
+	FVector GetRelativeRotation()
+	{
+		return Transform.Rotation;
+	}
 
 	FTransform& GetTransformRef()
 	{

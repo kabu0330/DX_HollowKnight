@@ -32,6 +32,8 @@ void MapEditorGUI::OnGUI()
 	Sprite = UEngineSprite::Find<UEngineSprite>("MapObjectResources");
 	Texture = nullptr;
 	TextureSRV = 0;
+	std::shared_ptr<class ACameraActor> Camera = GetWorld()->GetMainCamera();
+	Pos = Camera->ScreenMousePosToWorldPos();
 
 	SaveFile(); // 세이브
 	ImGui::SameLine();
@@ -41,11 +43,12 @@ void MapEditorGUI::OnGUI()
 	ImGui::SameLine();
 	DeleteAllActors(); // 전체 삭제
 
+	SetScaleButton();
+	SetRotationButton();
 	SetActorLocationButton();
 
 	// 스폰 리스트
 	ShowActorListBox(); 
-
 
 
 	ShowSpriteImageButton();
@@ -56,6 +59,66 @@ void MapEditorGUI::OnGUI()
 	RenderPreview();
 
 
+}
+
+void MapEditorGUI::SetScaleButton()
+{
+	ImGui::PushItemWidth(50.0f);
+	ImGui::InputFloat("Scale", &ScaleRatio);
+
+	if (UEngineInput::IsDown('Q'))
+	{
+		ScaleRatio += 0.1f;
+	}
+	if (UEngineInput::IsDown('E'))
+	{
+		ScaleRatio -= 0.1f;
+	}
+	if (UEngineInput::IsDown('R'))
+	{
+		ScaleRatio = 1.0f;
+	}
+}
+
+void MapEditorGUI::SetRotationButton()
+{
+	float RotationZ = RotationValue.Z;
+	ImGui::SliderFloat("Z Angle ", &RotationZ, 0.0f, 360.0f);
+	ImGui::SameLine();
+	float RotationY = RotationValue.Y;
+	ImGui::SliderFloat("Y Angle ", &RotationY, 0.0f, 360.0f);
+
+	if (UEngineInput::IsDown('1'))
+	{
+		RotationValue.Z += 90.0f;
+	}
+	if (UEngineInput::IsDown('2'))
+	{
+		RotationValue.Z -= 90.0f;
+	}
+
+	if (UEngineInput::IsDown('Z'))
+	{
+		RotationValue.Z += 15.0f;
+	}
+	if (UEngineInput::IsDown('X'))
+	{
+		RotationValue.Z -= 15.0f;
+	}
+	if (UEngineInput::IsDown('C'))
+	{
+		if (180.0f <= RotationValue.Y)
+		{
+			RotationValue.Y = 0.0f;
+			return;
+		}
+
+		RotationValue.Y += 180.0f;
+	}
+	if (UEngineInput::IsDown('V'))
+	{
+		RotationValue = FVector::ZERO;
+	}
 }
 
 void MapEditorGUI::SetActorLocationButton()
@@ -108,7 +171,7 @@ void MapEditorGUI::ShowSpriteImageButton()
 		std::string Name = std::to_string(i);
 		
 		Texture = Sprite->GetTexture(i);
-		
+
 		// 이미지를 가져오기 위해 SRV를 넘겨준다.
 		TextureSRV = reinterpret_cast<unsigned __int64>(Texture->GetSRV());
 
@@ -120,7 +183,11 @@ void MapEditorGUI::ShowSpriteImageButton()
 			// 미리보기할 텍스처 이미지 
 			SelectedTexture = TextureSRV;
 			TextureScale = Texture->GetTextureSize();
+
+			// 클릭시 초기화
 			bIsPreview = true;
+			ScaleRatio = 1.0f;
+			RotationValue = FVector::ZERO;
 			int a = 0;
 		}
 
@@ -139,22 +206,74 @@ void MapEditorGUI::ShowSpriteImageButton()
 
 void MapEditorGUI::RenderPreview()
 {
-	// IMGUI 창에서는 미리보기 안한다.
-	if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
+	// IMGUI 창 내에도 미리보기 창이 따라 들어오지 않도록 예외처리
+	bool bIsHovered = ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
+	bool bIsClicked = ImGui::IsMouseClicked(ImGuiMouseButton_Left);
+
+	if (bIsHovered && !bIsClicked)
 	{
-		bIsPreview = false; // ImGui 창 안에 있음
+		bIsPreview = false; // 창 안에 있음 (호버만)
 	}
 	else
 	{
-		bIsPreview = true;  // ImGui 창 밖에 있음
+		bIsPreview = true; // 창 밖에 있음
 	}
 
+	// 마우스에서 미리보기
 	if (true == bIsPreview && 0 != SelectedTexture)
 	{
 		ImVec2 MousePos = ImGui::GetMousePos();
 		ImVec2 Scale = { TextureScale.X * ScaleRatio, TextureScale.Y * ScaleRatio };
+		ImVec2 HalfScale = { Scale.x / 2, Scale.y / 2 };
+
+		// 마우스 위치에서 미리보기 이미지가 마우스 정중앙에 오도록
 		ImGui::SetNextWindowPos(ImVec2(MousePos.x - (Scale.x / 2), MousePos.y - (Scale.y / 2)));
-		ImGui::Begin("Preview", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_AlwaysAutoResize);
+		//ImGui::SetNextWindowPos(ImVec2(MousePos.x , MousePos.y ));
+
+		// 미리보기 창 생성
+		ImGui::Begin("Preview",
+			nullptr,
+			ImGuiWindowFlags_NoDecoration |
+			ImGuiWindowFlags_NoInputs |
+			ImGuiWindowFlags_AlwaysAutoResize |
+			ImGuiWindowFlags_NoFocusOnAppearing);
+
+		// 회전
+		//FVector Radians = FVector::ZERO;
+		//Radians.Y = RotationValue.Y * UEngineMath::D2R;
+		//Radians.Z = RotationValue.Z * UEngineMath::D2R;
+
+		//float CosZ = cos(Radians.Z);
+		//float SinZ = sin(Radians.Z);
+
+		//auto RotatePointZ = [&](const ImVec2& point) -> ImVec2 {
+		//	return ImVec2(
+		//		CosZ * point.x - CosZ * point.y,
+		//		SinZ * point.x + SinZ * point.y
+		//	);
+		//	};
+
+		//// 사각형의 네 꼭짓점 계산 (Z축 회전)
+		//ImVec2 P1 = RotatePointZ({ -HalfScale.x, -HalfScale.y }); // 좌상단
+		//ImVec2 P2 = RotatePointZ({ HalfScale.x, -HalfScale.y });  // 우상단
+		//ImVec2 P3 = RotatePointZ({ HalfScale.x, HalfScale.y });   // 우하단
+		//ImVec2 P4 = RotatePointZ({ -HalfScale.x, HalfScale.y });  // 좌하단
+
+		//// 마우스 위치로 이동
+		//P1 = ImVec2(MousePos.x + P1.x, MousePos.y + P1.y);
+		//P2 = ImVec2(MousePos.x + P2.x, MousePos.y + P2.y);
+		//P3 = ImVec2(MousePos.x + P3.x, MousePos.y + P3.y);
+		//P4 = ImVec2(MousePos.x + P4.x, MousePos.y + P4.y);
+
+		//// ImDrawList를 사용해 회전된 텍스처 그리기
+		//ImDrawList* DrawList = ImGui::GetBackgroundDrawList();
+		//DrawList->AddImageQuad(
+		//	SelectedTexture, // 텍스처 ID
+		//	P1, P2, P3, P4,  // 회전된 네 점
+		//	ImVec2(0.0f, 0.0f), ImVec2(1.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec2(0.0f, 1.0f) // UV 좌표
+		//);
+
+
 		ImGui::Image(SelectedTexture, Scale);
 		ImGui::End();
 	}
@@ -236,6 +355,9 @@ void MapEditorGUI::ShowActorListBox()
 
 			if (true == ImGui::Button("Select Delete"))
 			{
+				AllMonsterList[LastSelectedItem]->GetRenderer()->ColorData.MulColor = { 1.0f, 1.0f, 1.0f, 1.0f }; // 기본 색상
+				XValue = 0;
+				YValue = 0;
 				ObjectItem = -1;
 				LastSelectedItem = -1;
 		
@@ -258,12 +380,11 @@ void MapEditorGUI::DeleteAllActors()
 {
 	if (ImGui::Button("All Delete"))
 	{
-		std::list<std::shared_ptr<AMapObject>> AllMonsterList = GetWorld()->GetAllActorListByClass<AMapObject>();
-		for (std::shared_ptr<AMapObject> Mon : AllMonsterList)
+		std::list<std::shared_ptr<AMapObject>> AllList = GetWorld()->GetAllActorListByClass<AMapObject>();
+		for (std::shared_ptr<AMapObject> Actor : AllList)
 		{
-			Mon->Destroy();
+			Actor->Destroy();
 		}
-
 	}
 }
 
@@ -272,9 +393,8 @@ void MapEditorGUI::SpawnActor()
 	if (true == UEngineInput::IsDown(VK_RBUTTON))
 	{
 		ESpawnList Select = static_cast<ESpawnList>(SelectItem);
-		std::shared_ptr<class ACameraActor> Camera = GetWorld()->GetMainCamera();
 
-		FVector Pos = Camera->ScreenMousePosToWorldPos();
+		//FVector Pos = Camera->ScreenMousePosToWorldPos();
 		if (0 != XValue)
 		{
 			Pos.X = static_cast<float>(XValue);
@@ -306,6 +426,7 @@ void MapEditorGUI::SpawnActor()
 
 
 		AMapEditorGameMode::GetMapObject()->GetRenderer()->SetAutoScaleRatio(ScaleRatio);
+		AMapEditorGameMode::GetMapObject()->GetRenderer()->SetRotation(RotationValue);
 		AMapEditorGameMode::GetMapObject()->SetActorLocation(Pos);
 
 		// 미리보기 유지

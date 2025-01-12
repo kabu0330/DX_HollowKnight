@@ -6,7 +6,7 @@ UContentsRenderer::UContentsRenderer()
 {
 	CreateRenderUnit();
 	SetMesh("Rect");
-	SetMaterial("SpriteMaterial");
+	SetMaterial("MyMaterial");
 
 	GetRenderUnit().ConstantBufferLinkData("ResultColor", ColorData);
 	GetRenderUnit().ConstantBufferLinkData("FSpriteData", SpriteData);

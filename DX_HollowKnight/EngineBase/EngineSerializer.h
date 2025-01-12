@@ -40,6 +40,11 @@ public:
 		Write(&_Data, sizeof(FIntPoint));
 	}
 
+	ENGINEAPI void operator<<(const FTransform& _Data)
+	{
+		Write(&_Data, sizeof(FTransform));
+	}
+
 	ENGINEAPI void operator<<(const std::string& _Data)
 	{
 		int Size = static_cast<int>(_Data.size());
@@ -84,6 +89,11 @@ public:
 	ENGINEAPI void operator>>(FIntPoint& _Data)
 	{
 		Read(&_Data, sizeof(FIntPoint));
+	}
+
+	ENGINEAPI void operator>>(FTransform& _Data)
+	{
+		Read(&_Data, sizeof(FTransform));
 	}
 
 	ENGINEAPI void operator>>(std::string& _Data)

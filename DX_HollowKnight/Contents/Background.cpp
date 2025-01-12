@@ -43,15 +43,21 @@ void ABackground::Tick(float _DeltaTime)
 void ABackground::Serialize(UEngineSerializer& _Ser)
 {
 	_Ser << GetActorLocation();
+	_Ser << Renderer->GetTransformRef().Rotation;
+	//FVector Rotation = Renderer->GetTransformRef().Rotation;
 	_Ser << Index;
 }
 
 void ABackground::DeSerialize(UEngineSerializer& _Ser)
 {
-	FVector SavePos = FVector::ZERO;
-	_Ser >> SavePos;
+	FVector SaveLocation = FVector::ZERO;
+	FVector SaveRotation = FVector::ZERO;
+
+	_Ser >> SaveLocation;
+	_Ser >> SaveRotation;
 	_Ser >> Index;
 
-	SetActorLocation(SavePos);
+	SetActorLocation(SaveLocation);
+	SetActorRotation(SaveRotation);
 	SetSpriteIndex(Index);
 }

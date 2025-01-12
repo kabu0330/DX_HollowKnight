@@ -62,13 +62,25 @@ VertexShaderOutPut MY_VS(EngineVertex _Vertex)
     return OutPut;
 }
 
-cbuffer FMyColor : register(b0)
+struct OutTargetColor
 {
-    float4 Albedo;
+	float4 Target0 : SV_Target0;
+};
+
+Texture2D ImageTexture : register(t0);
+SamplerState ImageSampler : register(s0);
+
+cbuffer ResultColor : register(b0)
+{
+	float4 PlusColor;
+	float4 MulColor;
 };
 
 // 이미지를 샘플링해서 이미지를 보이게 만들고
 float4 MY_PS(VertexShaderOutPut _Vertex) : SV_Target0
-{
-    return float4(1.0f, 0.0f, 0.0f, 1.0f);
+{  
+	float4 Color = ImageTexture.Sample(ImageSampler, _Vertex.UV.xy);
+	Color += PlusColor;
+	Color *= MulColor;
+	return Color;
 };
