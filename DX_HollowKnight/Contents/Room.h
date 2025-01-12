@@ -51,7 +51,8 @@ private:
 	UEngineWinImage PixelCollisionImage;
 	FVector Size = FVector::ZERO;
 
-	std::shared_ptr<class USpriteRenderer> BackgroundRenderer;
+	std::shared_ptr<class UContentsRenderer> PixelCollisionTexture;
+	std::shared_ptr<class UContentsRenderer> BackgroundRenderer;
 
 	std::vector<ARoom*> Rooms;
 };

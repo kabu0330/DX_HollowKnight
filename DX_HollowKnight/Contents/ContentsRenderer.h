@@ -123,6 +123,11 @@ public:
 		return Transform.RelativeLocation;
 	}
 
+	void SetZSort(float _ZValue)
+	{
+		SetWorldLocation({ Transform.Location.X, Transform.Location.Y ,_ZValue });
+	}
+
 protected:
 	ENGINEAPI void Render(class UEngineCamera* _Camera, float _DeltaTime) override;
 	ENGINEAPI void BeginPlay() override;

@@ -49,8 +49,8 @@ void UContentsCore::CreateLevel()
 
 	//UEngineCore::OpenLevel("Title");
 	//UEngineCore::OpenLevel("MapEditor");
-	//UEngineCore::OpenLevel("Play");
-	UEngineCore::OpenLevel("MapEditorMode");
+	UEngineCore::OpenLevel("Play");
+	//UEngineCore::OpenLevel("MapEditorMode");
 }
 
 void UContentsCore::EngineTick(float _DeltaTime)

@@ -14,9 +14,15 @@ ARoom::ARoom()
 	RootComponent = Default;
 
 	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetCamera(0);
-	BackgroundRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	PixelCollisionTexture = CreateDefaultSubObject<UContentsRenderer>();
+	PixelCollisionTexture->SetupAttachment(RootComponent);
+	PixelCollisionTexture->SetAutoScaleRatio(1.0f);
+
+	BackgroundRenderer = CreateDefaultSubObject<UContentsRenderer>();
 	BackgroundRenderer->SetupAttachment(RootComponent);
 	BackgroundRenderer->SetAutoScaleRatio(1.0f);
+	BackgroundRenderer->SetTexture("Dirtmouth_100%.png", true, 2.0f);
+
 }
 
 ARoom::~ARoom()
@@ -26,12 +32,15 @@ ARoom::~ARoom()
 void ARoom::BeginPlay()
 {
 	AActor::BeginPlay();
+
+
 }
 
 void ARoom::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
-	
+	float ZSort = static_cast<float>(EZOrder::BACKGROUND);
+	BackgroundRenderer->SetZSort(ZSort);
 }
 
 bool ARoom::IsLinking(ARoom* _Room)
@@ -101,7 +110,7 @@ void ARoom::CreatePixelCollisionTexture(std::string_view _FileName)
 {
 	float ZSort = static_cast<float>(EZOrder::PIXELCOLLISION);
 
-	BackgroundRenderer->SetTexture(_FileName, true, 1.0f);
-	BackgroundRenderer->SetWorldLocation({ 0.0f, 0.0f, ZSort });
+	PixelCollisionTexture->SetTexture(_FileName, true, 1.0f);
+	PixelCollisionTexture->SetWorldLocation({ 0.0f, 0.0f, ZSort });
 }
 
