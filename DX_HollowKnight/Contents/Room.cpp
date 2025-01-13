@@ -20,8 +20,7 @@ ARoom::ARoom()
 
 	BackgroundRenderer = CreateDefaultSubObject<UContentsRenderer>();
 	BackgroundRenderer->SetupAttachment(RootComponent);
-	BackgroundRenderer->SetAutoScaleRatio(1.0f);
-	BackgroundRenderer->SetTexture("Dirtmouth_100%.png", true, 2.0f);
+	BackgroundRenderer->SetTexture("Dirtmouth_Back.png", true, 2.0f);
 
 }
 
@@ -104,6 +103,14 @@ void ARoom::CheckGround(FVector _MovePos)
 	}
 
 	int a = 0;
+}
+
+void ARoom::CreateTexture(std::string_view _FileName)
+{
+	float ZSort = static_cast<float>(EZOrder::BACKGROUND);
+
+	PixelCollisionTexture->SetTexture(_FileName, true, 1.0f);
+	PixelCollisionTexture->SetWorldLocation({ 0.0f, 0.0f, ZSort });
 }
 
 void ARoom::CreatePixelCollisionTexture(std::string_view _FileName)

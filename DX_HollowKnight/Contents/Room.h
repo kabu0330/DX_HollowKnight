@@ -33,6 +33,7 @@ public:
 	//std::shared_ptr<ARoom> LinkRoom(ARoom* _Room);
 
 	void CheckGround(FVector _MovePos);
+	void CreateTexture(std::string_view _FileName);
 	void CreatePixelCollisionTexture(std::string_view _FileName);
 
 	FVector GetSize() const
@@ -50,6 +51,7 @@ private:
 	static std::shared_ptr<ARoom> CurRoom;
 	UEngineWinImage PixelCollisionImage;
 	FVector Size = FVector::ZERO;
+	FVector Pos = FVector::ZERO;
 
 	std::shared_ptr<class UContentsRenderer> PixelCollisionTexture;
 	std::shared_ptr<class UContentsRenderer> BackgroundRenderer;
