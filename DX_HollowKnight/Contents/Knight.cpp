@@ -17,8 +17,10 @@ AKnight* AKnight::MainPawn = nullptr;
 
 AKnight::AKnight()
 {
-	CreateRenderer();
-	CreateCollision();
+	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
+	RootComponent = Default;
+	//CreateRenderer();
+	//CreateCollision();
 
 	MainPawn = this;
 
@@ -31,7 +33,7 @@ AKnight::AKnight()
 	//SetActorLocation({ 1100.0f, -3183.0f });
 
 	// Debug
-	BodyRenderer->BillboardOn();
+	//BodyRenderer->BillboardOn();
 	//DebugNonGravity = true;
 	//if (true == DebugNonGravity)
 	//{
@@ -45,7 +47,7 @@ AKnight::AKnight()
 void AKnight::BeginPlay()
 {
 	AActor::BeginPlay();
-	SetFSM();
+	//SetFSM();
 	//BodyRenderer->ColorData.MulColor += {0.0f, 1.0f, 0.0f, 1.0f};
 
 
@@ -56,32 +58,57 @@ void AKnight::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-	bool Result = bIsLeft;
-	std::string Debug = std::to_string(Result);
-	UEngineDebug::OutPutString(Debug);
-
 
 	SetCameraPosition();
-	FSM.Update(_DeltaTime);
+	//FSM.Update(_DeltaTime);
 
 	TimeElapsed(_DeltaTime);
-	EndAnimationEffect();
 
-	DebugInput(_DeltaTime);
+	//DebugInput(_DeltaTime);
 
 }
 
-//void AKnight::CheckGround(FVector _Gravity)
-//{
-//
-//	std::shared_ptr<ARoom> CurRoom = ARoom::GetCurRoom();
-//	if (nullptr == CurRoom)
-//	{
-//		return;
-//	}
-//
-//	CurRoom->CheckGround(_Gravity);
-//}
+void AKnight::CheckGround(FVector _Gravity)
+{
+	//std::shared_ptr<ARoom> CurRoom = ARoom::GetCurRoom();
+	//if (nullptr == CurRoom)
+	//{
+	//	return;
+	//}
+
+	//// 렌더러 크기 기반으로 발 위치 계산
+	//FVector ActorPos = GetActorLocation();
+	//float HalfRendererHeight = BodyRenderer->GetScale().Y * 0.5f;
+
+	//// 발 위치를 정확히 계산
+	//FVector CollisionPoint = { ActorPos.X, ActorPos.Y + HalfRendererHeight + _Gravity.Y };
+	//CollisionPoint.X = floorf(CollisionPoint.X);
+	//CollisionPoint.Y = floorf(CollisionPoint.Y);
+
+	//UColor GroundColor = CurRoom->GetPixelCollisionImage().GetColor({ CollisionPoint.X, -CollisionPoint.Y });
+
+	//if (GroundColor == UColor::BLACK) {
+	//	// 위치를 지면에 맞춤
+	//	SetActorLocation(FVector(ActorPos.X, ActorPos.Y - HalfRendererHeight, ActorPos.Z));
+	//	GravityForce = FVector::ZERO;
+	//}
+	//CurRoom->CheckPixelCollision(this, BodyRenderer.get(), _Gravity);
+	//CurRoom->CheckGround(this, _Gravity);
+}
+
+void AKnight::Gravity(float _DeltaTime)
+{
+	//if (false == bIsOnGround)
+	//{
+	//	float GravityValue = 1000.0f;
+	//	GravityForce += FVector::DOWN * GravityValue * _DeltaTime;
+	//	AddRelativeLocation(GravityForce * _DeltaTime);
+	//}
+	//else
+	//{
+	//	GravityForce = FVector::ZERO;
+	//}
+}
 
 void AKnight::Move(float _DeltaTime)
 {
@@ -123,36 +150,29 @@ void AKnight::Move(float _DeltaTime)
 	}
 
 
-	while (true)
-	{
-		if (nullptr == ARoom::GetCurRoom())
-		{
-			break;
-		}
+	//while (true)
+	//{
+	//	if (nullptr == ARoom::GetCurRoom())
+	//	{
+	//		return;
+	//	}
 
-		FVector Pos = { GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y };
-		FVector Result = { GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y + (BodyRenderer->GetScale().Y * 0.5f)};
-		UColor GroundColor = ARoom::GetCurRoom()->GetPixelCollisionImage().GetColor(Result);
-		UColor White = UColor{ 255, 255, 255, 255 };
-		UColor Black = UColor{ 0, 0, 0, 0 };
+	//	FVector Pos = { GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y };
+	//	FVector CollisionPos = { GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y + (BodyRenderer->GetScale().Y * 0.5f)};
+	//	CollisionPos.X = floorf(CollisionPos.X);
+	//	CollisionPos.Y = floorf(CollisionPos.Y);
 
-		
-		if (GroundColor == Black)
-		{
-			//UEngineDebug::OutPutString("On Ground");
-			//GravityForce = FVector::ZERO;
-			AddRelativeLocation(FVector::UP);			
-		}
-		else if (GroundColor == White || GroundColor == UColor(255, 255, 255, 0))
-		{
-			//UEngineDebug::OutPutString("Airborn");
-			break;
-		}
-		else
-		{
-			break;
-		}
-	}
+	//	UColor GroundColor = ARoom::GetCurRoom()->GetPixelCollisionImage().GetColor(CollisionPos);
+	//	
+	//	if (GroundColor == UColor::BLACK)
+	//	{
+	//		AddRelativeLocation(FVector::UP);			
+	//	}
+	//	else 
+	//	{
+	//		return;
+	//	}
+	//}
 }
 
 void AKnight::SetCameraPosition()
@@ -179,22 +199,6 @@ void AKnight::TimeElapsed(float _DeltaTime)
 			bIsAttacking = false;
 			bIsShowEffect = false;
 			AttackCooldownElapsed = 0.0f;
-		}
-	}
-}
-
-void AKnight::EndAnimationEffect()
-{
-	if (nullptr == EffectRenderer)
-	{
-		return; 
-	}
-
-	if (true == EffectRenderer->IsActive())
-	{
-		if (true == EffectRenderer->IsCurAnimationEnd())
-		{
-			EffectRenderer->SetActive(false);
 		}
 	}
 }

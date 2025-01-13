@@ -21,29 +21,29 @@ public:
 	void SetCameraPosition();
 
 	void TimeElapsed(float _DeltaTime);
-	void EndAnimationEffect();
 
 	static AKnight* GetPawn()
 	{
 		return MainPawn;
 	}
 
-	std::shared_ptr<USceneComponent> GetRootComponent() const
+	USceneComponent* GetRootComponent() const
 	{
-		return RootComponent;
+		return RootComponent.get();
 	}
 
-	std::shared_ptr<class UContentsRenderer> GetRenderer() const
+	UContentsRenderer* GetRenderer() const
 	{
-		return BodyRenderer;
+		return BodyRenderer.get();
+	}
+
+	void SetOnGround(bool _Value)
+	{
+		bIsOnGround = _Value;
 	}
 	bool IsOnGround()
 	{
 		return bIsOnGround;
-	}
-	void IsOnGroundRef(bool _Value)
-	{
-		bIsOnGround = _Value;
 	}
 
 	float JumpForce = 0.0f;
@@ -53,6 +53,8 @@ public:
 		return bIsLeft;
 	}
 
+	FVector GravityForce = FVector::ZERO;
+
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
@@ -61,9 +63,17 @@ private:
 	static AKnight* MainPawn;
 	FVector CameraPos = { 0.0f, 0.0f, 0.0f };
 
+	// 중력적용
+	void ActiveGravity(float _DeltaTime)
+	{
+		CheckGround(GravityForce * _DeltaTime);
+		Gravity(_DeltaTime);
+	}
+	void CheckGround(FVector _Gravity);
+	void Gravity(float _DeltaTime);
+
 	// Renderer
 	std::shared_ptr<class UContentsRenderer> BodyRenderer;
-	std::shared_ptr<class USpriteRenderer> EffectRenderer;
 	void CreateRenderer();
 
 	// Collision

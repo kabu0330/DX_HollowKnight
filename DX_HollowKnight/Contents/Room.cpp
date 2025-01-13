@@ -3,7 +3,7 @@
 #include <EngineCore/SpriteRenderer.h>
 #include <EnginePlatform/EngineInput.h>
 #include "PlayGameMode.h"
-
+#include "Monster.h"
 
 std::shared_ptr<ARoom> ARoom::CurRoom = nullptr;
 
@@ -22,7 +22,8 @@ ARoom::ARoom()
 	BackgroundRenderer->SetupAttachment(RootComponent);
 	//BackgroundRenderer->SetTexture("Dirtmouth_Back.png", true, 2.0f);
 
-	DebugNonGravity = true;
+	//DebugNonGravity = true;
+	bActiveGravity = true;
 }
 
 ARoom::~ARoom()
@@ -81,65 +82,13 @@ ARoom* ARoom::LinkRoom(ARoom* _Room)
 	return Rooms[Rooms.size() - 1];
 }
 
-void ARoom::CheckGround(FVector _MovePos)
-{
-	float YValue = AKnight::GetPawn()->GetRenderer()->GetScale().Y;
-	FVector NextPos = { APlayGameMode::KnightPos.X + _MovePos.X , APlayGameMode::KnightPos.Y + _MovePos.Y + (YValue * 0.5f)};
-	NextPos.X = floorf(NextPos.X);
-	NextPos.Y = floorf(NextPos.Y);
-
-	UColor Color = PixelCollisionImage.GetColor({ NextPos.X, -NextPos.Y });
-	UColor White = { 255, 255, 255, 255 };
-	UColor Black = { 0, 0, 0, 0 };
-
-	if (Color == White || Color == UColor(255, 255, 255, 0))
-	{
-		//UEngineDebug::OutPutString("White");
-		AKnight::GetPawn()->IsOnGroundRef(false);
-	}
-	else if (Color == Black)
-	{
-		//UEngineDebug::OutPutString("Black");
-		// 흰색 아니면 다 벽과 바닥으로 보겠다.
-		AKnight::GetPawn()->IsOnGroundRef(true);
-	}
-
-	int a = 0;
-}
-
-void ARoom::Gravity(AActor* _Target)
-{
-	if (true == DebugNonGravity)
-	{
-		return;
-	}
-
-	AKnight* Target = dynamic_cast<AKnight*>(_Target);
-	if (nullptr == Target)
-	{
-		return;
-	}
-
-	if (false == Target->IsOnGround())
-	{
-		float DeltaTime = UEngineCore::GetDeltaTime();
-		GravityForce += FVector::DOWN * GravityValue * DeltaTime;
-		AddRelativeLocation(GravityForce * DeltaTime);
-	}
-	else
-	{
-		GravityForce = FVector::ZERO;
-	}
-}
-
 void ARoom::CreateTexture(std::string_view _FileName, float _ScaleRatio)
 {
 	float ZSort = static_cast<float>(EZOrder::BACKGROUND);
 
 	BackgroundRenderer->SetTexture(_FileName, true, _ScaleRatio);
 	BackgroundRenderer->SetRelativeLocation({ Size.X / 2.0f * _ScaleRatio, -Size.Y / 2.0f * _ScaleRatio, ZSort });
-	//BackgroundRenderer->SetWorldLocation({ 0.0f, 0.0f, ZSort });
-	//BackgroundRenderer->SetActive(false);
+	BackgroundRenderer->SetActive(false);
 }
 
 void ARoom::CreatePixelCollisionTexture(std::string_view _FileName, float _ScaleRatio)
@@ -148,6 +97,78 @@ void ARoom::CreatePixelCollisionTexture(std::string_view _FileName, float _Scale
 
 	PixelCollisionTexture->SetTexture(_FileName, true, _ScaleRatio);
 	PixelCollisionTexture->SetRelativeLocation({ Size.X / 2.0f * _ScaleRatio, -Size.Y / 2.0f * _ScaleRatio, ZSort });
-	//PixelCollisionTexture->SetWorldLocation({ 0.0f, 0.0f, ZSort });
+}
+
+void ARoom::CheckPixelCollision(AActor* _Actor, class UContentsRenderer* _Renderer, FVector _Gravity)
+{
+	float DeltaTime = UEngineCore::GetDeltaTime();
+	FVector NextPos = GravityForce * DeltaTime;
+
+	FVector ActorPos = _Actor->GetActorLocation();
+	float HalfRendererHeight = _Renderer->GetScale().Y * 0.5f;
+
+	FVector CollisionPoint = { ActorPos.X + NextPos.X, ActorPos.Y +  NextPos.Y + HalfRendererHeight };
+
+	// 실수오차 문제 때문에
+	CollisionPoint.X = floorf(CollisionPoint.X);
+	CollisionPoint.Y = floorf(CollisionPoint.Y);
+
+	UColor CollisionColor = PixelCollisionImage.GetColor({ CollisionPoint.X, -CollisionPoint.Y }); // y축 반전
+
+	AKnight* Knight = dynamic_cast<AKnight*>(_Actor);
+
+	if (nullptr != Knight)
+	{
+		if (CollisionColor == UColor::BLACK || CollisionColor == UColor(0, 0, 0, 255))
+		{
+			//UEngineDebug::OutPutString("White");
+			Knight->SetOnGround(true);
+			return;
+		}
+		else if (CollisionColor == UColor::WHITE || CollisionColor == UColor(255, 255, 255, 255))
+		{
+			//UEngineDebug::OutPutString("Black");
+			// 흰색 아니면 다 벽과 바닥으로 보겠다.
+			Knight->SetOnGround(false);
+			return;
+		}
+	}
+
+	AMonster* Monster = dynamic_cast<AMonster*>(_Actor);
+	if (nullptr != Monster)
+	{
+		if (CollisionColor == UColor::WHITE || CollisionColor == UColor(255, 255, 255, 255))
+		{
+			Monster->SetOnGround(true);
+			return;
+		}
+		else if (CollisionColor == UColor::BLACK || CollisionColor == UColor(0, 0, 0, 255))
+		{
+			Monster->SetOnGround(false);
+			return;
+		}
+	}
+}
+
+void ARoom::CheckGround(AActor* _Actor, FVector _Gravity)
+{
+	float DeltaTime = UEngineCore::GetDeltaTime();
+	FVector CollisionPixel = _Actor->GetActorLocation() + (_Gravity * DeltaTime);
+
+	CollisionPixel.X = floorf(CollisionPixel.X);
+	CollisionPixel.Y = floorf(CollisionPixel.Y);
+
+	UColor Color = PixelCollisionImage.GetColor({ CollisionPixel.X, -CollisionPixel.Y });
+
+	if (Color == UColor::BLACK)
+	{
+		AKnight::GetPawn()->SetOnGround(true);
+	}
+	else if (Color == UColor::WHITE || Color == UColor(255, 255, 255, 0))
+	{
+		//UEngineDebug::OutPutString("White");
+		AKnight::GetPawn()->SetOnGround(false);
+	}
+
 }
 

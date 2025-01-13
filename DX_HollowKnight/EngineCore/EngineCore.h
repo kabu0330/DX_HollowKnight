@@ -53,7 +53,6 @@ private:
 
 	UEngineGraphicDevice Device;
 
-
 	HMODULE ContentsDLL;
 	std::shared_ptr<IContentsCore> Core;
 	UEngineInitData Data;

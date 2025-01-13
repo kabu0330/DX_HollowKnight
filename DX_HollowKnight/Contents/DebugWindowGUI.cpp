@@ -24,6 +24,7 @@ void UDebugWindowGUI::OnGUI()
 	GetCurRoom();
 	GetMousePos();
 	GetKnightInfo();
+	GetGravityForce();
 }
 
 void UDebugWindowGUI::GetMousePos()
@@ -51,23 +52,21 @@ void UDebugWindowGUI::GetKnightInfo()
 	float ZValue = AKnight::GetPawn()->GetRenderer()->GetTransformRef().RelativeLocation.Z;
 	ImGui::Text("Knight Z Vaule : %.6f", ZValue);
 
-	GetGravityForce();
-
 	ImGui::Text("Knight JumpPower : %.2f", Knight->JumpForce);
 }
 
 void UDebugWindowGUI::GetGravityForce()
 {
-	//ImGui::Text("Knight GravityForce : %.2f", AKnight::GetPawn()->GetGravityForce());
-	//int Result = static_cast<int>(AKnight::GetPawn()->GetIsOnGround());
-	//std::string ResultString = "";
-	//if (0 == Result)
-	//{
-	//	ResultString = "false";
-	//}
-	//else
-	//{
-	//	ResultString = "true";
-	//}
-	//ImGui::Text("Knight IsOnGround : %s", ResultString.data());
+	ImGui::Text("Knight GravityForce : %.2f", AKnight::GetPawn()->GravityForce);
+	int Result = static_cast<int>(AKnight::GetPawn()->IsOnGround());
+	std::string ResultString = "";
+	if (0 == Result)
+	{
+		ResultString = "false";
+	}
+	else
+	{
+		ResultString = "true";
+	}
+	ImGui::Text("Knight IsOnGround : %s", ResultString.data());
 }

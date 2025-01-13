@@ -19,13 +19,7 @@ APlayGameMode::APlayGameMode()
 {
 	SetCamera();
 	CreateAndLinkCollisionGroup();
-	RoomManager::CreateAndLinkRoom(this);
-
-	//std::shared_ptr<ARoom> Dirtmouth = GetWorld()->SpawnActor<ARoom>();
-	//Dirtmouth->SetName("Dirtmouth");
-	//Rooms.push_back(Dirtmouth);
-	//LoadPixelCollisionTexture(Dirtmouth.get(), &Dirtmouth->GetPixelCollisionImage(), "dartmount_back.bmp", { 4148.0f / 2.0f, -2500.0f / 2.0f });
-
+	URoomManager::CreateAndLinkRoom(this);
 }
 
 void APlayGameMode::SetCamera()
@@ -50,16 +44,16 @@ void APlayGameMode::Tick(float _DeltaTime)
 
 void APlayGameMode::LevelChangeStart()
 {
-	{
-		std::shared_ptr<UDebugWindowGUI> Window = UEngineGUI::FindGUIWindow<UDebugWindowGUI>("DebugWindow");
+	//{
+	//	std::shared_ptr<UDebugWindowGUI> Window = UEngineGUI::FindGUIWindow<UDebugWindowGUI>("DebugWindow");
 
-		if (nullptr == Window)
-		{
-			Window = UEngineGUI::CreateGUIWindow<UDebugWindowGUI>("DebugWindow");
-		}
+	//	if (nullptr == Window)
+	//	{
+	//		Window = UEngineGUI::CreateGUIWindow<UDebugWindowGUI>("DebugWindow");
+	//	}
 
-		Window->SetActive(true);
-	}
+	//	Window->SetActive(true);
+	//}
 }
 
 void APlayGameMode::CheckInfo()

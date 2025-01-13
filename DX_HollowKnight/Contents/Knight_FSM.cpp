@@ -3,10 +3,11 @@
 #include <EnginePlatform/EngineInput.h>
 #include "KnightSkill.h"
 
+
 void AKnight::SetIdle(float _DeltaTime)
 {
 	Move(_DeltaTime);
-
+	ActiveGravity(_DeltaTime);
 	bCanRotation = true;
 
 	if (UEngineInput::IsPress(VK_LEFT) || UEngineInput::IsPress(VK_RIGHT))
@@ -30,6 +31,7 @@ void AKnight::SetIdle(float _DeltaTime)
 void AKnight::SetRun(float _DeltaTime)
 {
 	Move(_DeltaTime);
+	ActiveGravity(_DeltaTime);
 
 	bCanRotation = true;
 
@@ -48,6 +50,7 @@ void AKnight::SetRun(float _DeltaTime)
 void AKnight::SetIdleToRun(float _DeltaTime)
 {
 	Move(_DeltaTime);
+	ActiveGravity(_DeltaTime);
 
 	bCanRotation = true;
 
@@ -62,6 +65,7 @@ void AKnight::SetIdleToRun(float _DeltaTime)
 void AKnight::SetRunToIdle(float _DeltaTime)
 {
 	Move(_DeltaTime);
+	ActiveGravity(_DeltaTime);
 
 	bCanRotation = true;
 	bIsDashing = false;

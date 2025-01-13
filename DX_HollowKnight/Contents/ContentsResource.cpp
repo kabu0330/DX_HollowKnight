@@ -31,15 +31,39 @@ void UContentsResource::LoadResource()
 			std::string FilePath = ImageFiles[i].GetPathToString();
 			UEngineTexture::Load(FilePath);
 		}
-
 	}
+
+	{
+		// 맵 리소스
+		UEngineDirectory Dir;
+		Dir.MoveParentToDirectory("ContentsResources");
+		Dir.Append("MapData");
+
+		std::vector<UEngineFile> ImageFiles = Dir.GetAllFile(true, { ".PNG", ".BMP", ".JPG" });
+		for (size_t i = 0; i < ImageFiles.size(); i++)
+		{
+			std::string FilePath = ImageFiles[i].GetPathToString();
+			UEngineTexture::Load(FilePath);
+		}
+	}
+}
+
+void UContentsResource::LoadContentsResource(std::string_view _Path)
+{
+	std::string Path = _Path.data();
+	UEngineDirectory Dir;
+	if (false == Dir.MoveParentToDirectory("ContentsResources"))
+	{
+		MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+		return;
+	}
+	Dir.Append(Path);
+	UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
 }
 
 void UContentsResource::LoadResourceDirectory()
 {
 	LoadResource(); // 최초 1회 리소스 폴더를 로드해야 한다.
-
-	LoadContentsResource("MapObjectResources");
 
 	// Knight
 	LoadContentsResource("Image/Knight/Idle");
@@ -74,19 +98,6 @@ void UContentsResource::LoadResourceDirectory()
 	LoadContentsResource("Image/Effect/Knight/DownSlashEffect");
 	LoadContentsResource("Image/Effect/Knight/FocusEffect");
 	LoadContentsResource("Image/Effect/Knight/FocusEffectEnd");
-}
-
-void UContentsResource::LoadContentsResource(std::string_view _Path)
-{
-	std::string Path = _Path.data();
-	UEngineDirectory Dir;
-	if (false == Dir.MoveParentToDirectory("ContentsResources"))
-	{
-		MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-		return;
-	}
-	Dir.Append(Path);
-	UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
 }
 
 void UContentsResource::LoadFolder()

@@ -32,8 +32,7 @@ public:
 	ARoom* LinkRoom(ARoom* _Room);
 	//std::shared_ptr<ARoom> LinkRoom(ARoom* _Room);
 
-	void CheckGround(FVector _MovePos);
-	void Gravity(AActor* _Target);
+
 	void CreateTexture(std::string_view _FileName, float _ScaleRatio);
 	void CreatePixelCollisionTexture(std::string_view _FileName, float _ScaleRatio);
 
@@ -46,12 +45,14 @@ public:
 		Size = _Size;
 	}
 
+	void CheckPixelCollision(AActor* _Actor, class UContentsRenderer* _Renderer, FVector _Gravity);
+	void CheckGround(AActor* _Actor, FVector _Gravity);
 protected:
 
 private:
-	inline static bool DebugNonGravity = false;
+	inline static bool bActiveGravity = false;
+	float GravityValue = 0.0f;
 	FVector GravityForce = FVector::ZERO;
-	float GravityValue = 1400.0f;
 
 	static std::shared_ptr<ARoom> CurRoom;
 	UEngineWinImage PixelCollisionImage;

@@ -15,13 +15,13 @@ public:
 	ASkill& operator=(const ASkill& _Other) = delete;
 	ASkill& operator=(ASkill&& _Other) noexcept = delete;
 
-	std::shared_ptr<class UContentsRenderer> GetRenderer()
+	class UContentsRenderer* GetRenderer()
 	{
-		return BodyRenderer;
+		return BodyRenderer.get();
 	}
-	std::shared_ptr<class UCollision> GetCollision()
+	class UCollision* GetCollision()
 	{
-		return Collision;
+		return Collision.get();
 	}
 
 	void ChangeAnimation(std::string_view _AnimationName);

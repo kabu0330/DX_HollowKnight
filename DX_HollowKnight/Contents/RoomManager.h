@@ -1,18 +1,18 @@
 #pragma once
 
 // Ό³Έν :
-class RoomManager
+class URoomManager
 {
 public:
 	// constrcuter destructer
-	RoomManager();
-	virtual	~RoomManager() = 0;
+	URoomManager();
+	virtual	~URoomManager() = 0;
 
 	// delete Function
-	RoomManager(const RoomManager& _Other) = delete;
-	RoomManager(RoomManager&& _Other) noexcept = delete;
-	RoomManager& operator=(const RoomManager& _Other) = delete;
-	RoomManager& operator=(RoomManager&& _Other) noexcept = delete;
+	URoomManager(const URoomManager& _Other) = delete;
+	URoomManager(URoomManager&& _Other) noexcept = delete;
+	URoomManager& operator=(const URoomManager& _Other) = delete;
+	URoomManager& operator=(URoomManager&& _Other) noexcept = delete;
 
 	static void CreateAndLinkRoom(class AGameMode* _GameMode);
 protected:
