@@ -218,7 +218,7 @@ void UEngineWinImage::Load(UEngineWinImage* _TargetImage, std::string_view _Path
 
 	if (nullptr == NewBitmap)
 	{
-		MSGASSERT("이미지 로딩에 실패했습니다");
+		MSGASSERT("이미지 로딩에 실패했습니다.");
 		return;
 	}
 

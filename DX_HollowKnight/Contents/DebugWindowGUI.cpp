@@ -58,16 +58,16 @@ void UDebugWindowGUI::GetKnightInfo()
 
 void UDebugWindowGUI::GetGravityForce()
 {
-	ImGui::Text("Knight GravityForce : %.2f", AKnight::GetPawn()->GetGravityForce());
-	int Result = static_cast<int>(AKnight::GetPawn()->GetIsOnGround());
-	std::string ResultString = "";
-	if (0 == Result)
-	{
-		ResultString = "false";
-	}
-	else
-	{
-		ResultString = "true";
-	}
-	ImGui::Text("Knight IsOnGround : %s", ResultString.data());
+	//ImGui::Text("Knight GravityForce : %.2f", AKnight::GetPawn()->GetGravityForce());
+	//int Result = static_cast<int>(AKnight::GetPawn()->GetIsOnGround());
+	//std::string ResultString = "";
+	//if (0 == Result)
+	//{
+	//	ResultString = "false";
+	//}
+	//else
+	//{
+	//	ResultString = "true";
+	//}
+	//ImGui::Text("Knight IsOnGround : %s", ResultString.data());
 }

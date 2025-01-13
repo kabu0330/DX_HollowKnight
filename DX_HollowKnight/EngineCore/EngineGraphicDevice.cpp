@@ -2,6 +2,7 @@
 #include "EngineGraphicDevice.h"
 #include "EngineTexture.h"
 #include "EngineDepthStencilState.h"
+#include "EngineRenderTarget.h"
 
 UEngineGraphicDevice::UEngineGraphicDevice()
 {
@@ -15,8 +16,8 @@ UEngineGraphicDevice::~UEngineGraphicDevice()
 void UEngineGraphicDevice::Release()
 {
     MainAdapter = nullptr;
-    DXBackBufferTexture = nullptr;
-    RTV = nullptr;
+    //DXBackBufferTexture = nullptr;
+    //RTV = nullptr;
     SwapChain = nullptr;
     Context = nullptr;
     Device = nullptr;
@@ -150,25 +151,25 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
 
     // 렌더 타겟 구조
     // 2-1. 뎁스-스텐실 뷰(DSV) 객체 생성
-    D3D11_TEXTURE2D_DESC Desc = {0}; // 텍스처의 속성을 설정하는 구조체
+    //D3D11_TEXTURE2D_DESC Desc = {0}; // 텍스처의 속성을 설정하는 구조체
 
-    Desc.ArraySize = 1;         // 텍스처의 배열 크기 : 일반적으로 1로 설정
-    Desc.Width = Size.iX();     // 텍스처의 가로 크기 : 윈도우 사이즈
-    Desc.Height = Size.iY();    // 텍스처의 세로 크기 : 윈도우 사이즈
+    //Desc.ArraySize = 1;         // 텍스처의 배열 크기 : 일반적으로 1로 설정
+    //Desc.Width = Size.iX();     // 텍스처의 가로 크기 : 윈도우 사이즈
+    //Desc.Height = Size.iY();    // 텍스처의 세로 크기 : 윈도우 사이즈
 
-    Desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // Format : 픽셀 형식
-    // unsigned 24바이트 : 깊이 값 // unsigned 8바이트 : 스텐실 값
+    //Desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // Format : 픽셀 형식
+    //// unsigned 24바이트 : 깊이 값 // unsigned 8바이트 : 스텐실 값
 
-    Desc.SampleDesc.Count = 1;      // 멀티샘플링(안티 앨리어싱) : 사용 안함
-    Desc.SampleDesc.Quality = 0;    // 품질 : 기본값
+    //Desc.SampleDesc.Count = 1;      // 멀티샘플링(안티 앨리어싱) : 사용 안함
+    //Desc.SampleDesc.Quality = 0;    // 품질 : 기본값
 
-    Desc.MipLevels = 1;                                         // Mipmap(다중 해상도 텍스처) 레벨 설정 : 1(원본 텍스처만 사용) 
-    Desc.Usage = D3D11_USAGE_DEFAULT;                           // 리소스 사용 방식 : GPU
-    Desc.CPUAccessFlags = 0;                                    // CPU 접근 플래그 : CPU 접근 불허
-    Desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL; // 바인딩 플래그 : 뎁스-스텐실 텍스처로 바인딩
+    //Desc.MipLevels = 1;                                         // Mipmap(다중 해상도 텍스처) 레벨 설정 : 1(원본 텍스처만 사용) 
+    //Desc.Usage = D3D11_USAGE_DEFAULT;                           // 리소스 사용 방식 : GPU
+    //Desc.CPUAccessFlags = 0;                                    // CPU 접근 플래그 : CPU 접근 불허
+    //Desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL; // 바인딩 플래그 : 뎁스-스텐실 텍스처로 바인딩
 
-    DepthTex = std::make_shared<UEngineTexture>();
-    DepthTex->ResCreate(Desc); 
+    //DepthTex = std::make_shared<UEngineTexture>();
+    //DepthTex->ResCreate(Desc); 
     // 뎁스 스텐실 뷰(DSV) 객체 생성 성공
 
 
@@ -221,6 +222,7 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
     }
 
     // DXBackBufferTexture는 BITMAP이다. 2차원 배열에 색상 정보가 들어있는 핸들
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> DXBackBufferTexture = nullptr;
     if (S_OK != SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), &DXBackBufferTexture))
     {
         MSGASSERT("백버퍼 텍스처를 가져오는 데 실패했습니다.");
@@ -228,29 +230,29 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
     };
 
     // 백버퍼의 수정 권한을 가진 렌더 타겟 뷰(RTV) 생성
-    //                             HBITMAP                       HDC
-    if (S_OK != Device->CreateRenderTargetView(DXBackBufferTexture.Get(), nullptr, &RTV))
-    {
-        MSGASSERT("백버퍼 텍스처의 수정권한을 가진 렌더 타겟 뷰 생성에 실패했습니다.");
-        return;
-    }
+    BackBufferTarget = std::make_shared<UEngineRenderTarget>();
+    BackBufferTarget->CreateTarget(DXBackBufferTexture);
+    BackBufferTarget->CreateDepth(); // DSV 생성 
 }
 
 void UEngineGraphicDevice::RenderStart()
 {
-    FVector ClearColor;
-    ClearColor = FVector(0.0f, 0.0f, 1.0f, 1.0f); // Blue
+    BackBufferTarget->Clear();
+    BackBufferTarget->Setting();
 
-    Context->ClearRenderTargetView(RTV.Get(), ClearColor.Arr1D); // 백버퍼 초기화, 특정 색상으로 지운다.
-    Context->ClearDepthStencilView(DepthTex->GetDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0); // 깊이값, 스텐실 값 초기화
-    //                                                                            깊이 초기화값 1.0f / 스텐실 초기화값 0
+    //FVector ClearColor;
+    //ClearColor = FVector(0.0f, 0.0f, 1.0f, 1.0f); // Blue
 
-    ID3D11RenderTargetView* RTV = UEngineCore::GetDevice().GetRTV();
-    ID3D11RenderTargetView* ArrRtv[16] = { 0 }; // 렌더 타겟은 최대 16개까지 가능
-    ArrRtv[0] = RTV; // SV_Target0
+    //Context->ClearRenderTargetView(RTV.Get(), ClearColor.Arr1D); // 백버퍼 초기화, 특정 색상으로 지운다.
+    //Context->ClearDepthStencilView(DepthTex->GetDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0); // 깊이값, 스텐실 값 초기화
+    ////                                                                            깊이 초기화값 1.0f / 스텐실 초기화값 0
 
-    //                       RTV 수, RTV 배열, DSV
-    Context->OMSetRenderTargets(1, &ArrRtv[0], DepthTex->GetDSV());     // 출력 병합 단계에서 사용할 렌더타겟과 뎁스-스텐실 뷰 설정
+    //ID3D11RenderTargetView* RTV = UEngineCore::GetDevice().GetRTV();
+    //ID3D11RenderTargetView* ArrRtv[16] = { 0 }; // 렌더 타겟은 최대 16개까지 가능
+    //ArrRtv[0] = RTV; // SV_Target0
+
+    ////                       RTV 수, RTV 배열, DSV
+    //Context->OMSetRenderTargets(1, &ArrRtv[0], DepthTex->GetDSV());     // 출력 병합 단계에서 사용할 렌더타겟과 뎁스-스텐실 뷰 설정
 
     // Context->OMSetDepthStencilState();
 }

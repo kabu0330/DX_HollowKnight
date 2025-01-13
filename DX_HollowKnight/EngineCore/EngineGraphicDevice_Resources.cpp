@@ -45,6 +45,17 @@ void UEngineGraphicDevice::DepthStencilInit()
 
 		UEngineDepthStencilState::Create("CollisionDebugDepth", Desc);
 	}
+
+	{
+		D3D11_DEPTH_STENCIL_DESC Desc = { 0 };
+		Desc.DepthEnable = true;
+		Desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		Desc.DepthFunc = D3D11_COMPARISON_ALWAYS;
+		Desc.StencilEnable = false;
+		// Desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+
+		UEngineDepthStencilState::Create("TargetMerge", Desc);
+	}
 }
 
 void UEngineGraphicDevice::TextureInit()
@@ -125,8 +136,23 @@ void UEngineGraphicDevice::MeshInit()
 		UEngineIndexBuffer::Create("Rect", Indexs);
 	}
 
+	// 포지션을 1로 하면 화면 전체를 가리는 메시를 만들 수 있다.
+	{
+		std::vector<FEngineVertex> Vertexs;
+		Vertexs.resize(4);
+		Vertexs[0] = FEngineVertex{ FVector(-1.0f, 1.0f, 0.0f), {0.0f , 0.0f }, {1.0f, 0.0f, 0.0f, 1.0f} };
+		Vertexs[1] = FEngineVertex{ FVector(1.0f, 1.0f, 0.0f), {1.0f , 0.0f } , {0.0f, 1.0f, 0.0f, 1.0f} };
+		Vertexs[2] = FEngineVertex{ FVector(-1.0f, -1.0f, 0.0f), {0.0f , 1.0f } , {0.0f, 0.0f, 1.0f, 1.0f} };
+		Vertexs[3] = FEngineVertex{ FVector(1.0f, -1.0f, 0.0f), {1.0f , 1.0f } , {1.0f, 1.0f, 1.0f, 1.0f} };
+
+		UEngineVertexBuffer::Create("FullRect", Vertexs);
+	}
+
 	{
 		UMesh::Create("Rect");
+
+		// FullRect 포스트 프로세싱용 화면 전체크기 만한 메시를 제작.
+		UMesh::Create("FullRect", "FullRect", "Rect");
 	}
 
 }
@@ -155,7 +181,7 @@ void UEngineGraphicDevice::BlendInit()
 	Desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;			// 소스 알파값 사용
 	Desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;		// 대상 알파값 반전 사용 (1 - 소스 알파값) = 대상 알파값
 
-	Desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;			// 알파 연산
+	Desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_MAX;			// 알파 연산
 	Desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;			// 알파 소스 값
 	Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;			// 알파 대상 값
 
@@ -194,8 +220,14 @@ void UEngineGraphicDevice::MaterialInit()
 		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("CollisionDebugMaterial");
 		Mat->SetVertexShader("EngineDebugCollisionShader.fx");
 		Mat->SetPixelShader("EngineDebugCollisionShader.fx");
-		// 언제나 화면에 나오는 누구도 이녀석의 앞을 가릴수 없어.
-		Mat->SetDepthStencilState("CollisionDebugDepth");
+		Mat->SetDepthStencilState("CollisionDebugDepth"); // 언제나 화면에 나오는 누구도 이녀석의 앞을 가릴수 없어.
 		Mat->SetRasterizerState("CollisionDebugRas");
+	}
+
+	{
+		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("TargetMerge");
+		Mat->SetVertexShader("EngineTargetMergeShader.fx");
+		Mat->SetPixelShader("EngineTargetMergeShader.fx");
+		Mat->SetDepthStencilState("TargetMerge"); // 언제나 화면에 나오는 누구도 이녀석의 앞을 가릴수 없어.
 	}
 }

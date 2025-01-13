@@ -21,12 +21,12 @@ std::shared_ptr<UEngineTexture> UEngineTexture::Load(std::string_view _Name, std
 
 	if (true == Contains(UpperName))
 	{
-		MSGASSERT("이미 로드한 텍스처를 도 로드하려고 했습니다." + UpperName);
+		MSGASSERT("이미 로드한 텍스처입니다." + UpperName);
 		return nullptr;
 	}
 
 	std::shared_ptr<UEngineTexture> NewRes =  std::make_shared<UEngineTexture>();
-	PushRes<UEngineTexture>(NewRes, _Name, _Path);
+	PushRes<UEngineTexture>(NewRes, _Name, _Path); // 텍스처를 관리구조에 편입
 	NewRes->ResLoad();
 
 	return NewRes;
@@ -67,6 +67,7 @@ void UEngineTexture::ResLoad()
 		}
 	}
 
+	// 파일 로드 후 셰이더 리소스 뷰 생성
 	if (S_OK != DirectX::CreateShaderResourceView(
 		UEngineCore::GetDevice().GetDevice(),
 		ImageData.GetImages(),
@@ -83,9 +84,9 @@ void UEngineTexture::ResLoad()
 	Size.Y = static_cast<float>(Metadata.height);
 }
 
+// 셰이더 타입에 따라 상수버퍼 세팅
 void UEngineTexture::Setting(EShaderType _Type, UINT _BindIndex)
 {
-	// 같은 상수버퍼를 
 	ID3D11ShaderResourceView* ArrPtr[1] = { SRV.Get() };
 
 	switch (_Type)
@@ -119,12 +120,56 @@ void UEngineTexture::ResCreate(const D3D11_TEXTURE2D_DESC& _Value)
 		return;
 	}
 
+	if (Desc.BindFlags & D3D11_BIND_SHADER_RESOURCE)
+	{
+		CreateShaderResourceView();
+	}
+
+	if (Desc.BindFlags & D3D11_BIND_RENDER_TARGET)
+	{
+		CreateRenderTargetView();
+	}
+
 	if (Desc.BindFlags & D3D11_BIND_DEPTH_STENCIL)
 	{
-		if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateDepthStencilView(Texture2D.Get(), nullptr, &DSV))
-		{
-			MSGASSERT("뎁스 스텐실 뷰(DSV) 객체 생성에 실패했습니다.");
-			return;
-		}
+		CreateDepthStencilView();
+	}
+}
+
+void UEngineTexture::ResCreate(Microsoft::WRL::ComPtr<ID3D11Texture2D> _Texture2D)
+{
+	Texture2D = _Texture2D;
+	
+	// 텍스처 크기 가져오기
+	Texture2D->GetDesc(&Desc);
+	Size.X = static_cast<float>(Desc.Width);
+	Size.Y = static_cast<float>(Desc.Height);
+
+	CreateRenderTargetView();
+}
+
+void UEngineTexture::CreateRenderTargetView()
+{
+	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateRenderTargetView(Texture2D.Get(), nullptr, &RTV))
+	{
+		MSGASSERT("텍스처의 렌더 타겟 뷰 생성에 실패했습니다.");
+		return;
+	}
+}
+
+void UEngineTexture::CreateShaderResourceView()
+{
+	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateShaderResourceView(Texture2D.Get(), nullptr, &SRV))
+	{
+		MSGASSERT("깊이버퍼 생성에 실패했습니다..");
+		return;
+	}
+}
+void UEngineTexture::CreateDepthStencilView()
+{
+	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateDepthStencilView(Texture2D.Get(), nullptr, &DSV))
+	{
+		MSGASSERT("깊이버퍼 생성에 실패했습니다..");
+		return;
 	}
 }

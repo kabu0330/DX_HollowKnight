@@ -1,28 +1,7 @@
 #include "PreCompile.h"
 #include "ContentsResource.h"
 
-UContentsResource::UContentsResource()
-{
-}
-
-UContentsResource::~UContentsResource()
-{
-}
-
-void UContentsResource::LoadContentsResource(std::string_view _Path)
-{
-	std::string Path = _Path.data();
-	UEngineDirectory Dir;
-	if (false == Dir.MoveParentToDirectory("ContentsResources"))
-	{
-		MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-		return;
-	}
-	Dir.Append(Path);
-	UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-}
-
-void UContentsResource::LoadResourceDirectory()
+void UContentsResource::LoadResource()
 {
 	{
 		UEngineDirectory Dir;
@@ -54,33 +33,11 @@ void UContentsResource::LoadResourceDirectory()
 		}
 
 	}
-	// Shader
-	{
-		UEngineDirectory CurDir;
-		CurDir.MoveParentToDirectory("ContentsShader");
+}
 
-		std::vector<UEngineFile> ShaderFiles = CurDir.GetAllFile(true, { ".fx", ".hlsl" });
-
-		for (size_t i = 0; i < ShaderFiles.size(); i++)
-		{
-			UEngineShader::ReflectionCompile(ShaderFiles[i]);
-		}
-	}
-
-	{
-		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("MyMaterial");
-		Mat->SetVertexShader("ContentsShader.fx");
-		Mat->SetPixelShader("ContentsShader.fx");
-	}
-
-	{
-		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("MyCollisionDebugMaterial");
-		Mat->SetVertexShader("EngineDebugCollisionShader.fx");
-		Mat->SetPixelShader("EngineDebugCollisionShader.fx");
-		// 언제나 화면에 나오는 누구도 이녀석의 앞을 가릴수 없어.
-		Mat->SetDepthStencilState("CollisionDebugDepth");
-		Mat->SetRasterizerState("CollisionDebugRas");
-	}
+void UContentsResource::LoadResourceDirectory()
+{
+	LoadResource(); // 최초 1회 리소스 폴더를 로드해야 한다.
 
 	LoadContentsResource("MapObjectResources");
 
@@ -119,6 +76,19 @@ void UContentsResource::LoadResourceDirectory()
 	LoadContentsResource("Image/Effect/Knight/FocusEffectEnd");
 }
 
+void UContentsResource::LoadContentsResource(std::string_view _Path)
+{
+	std::string Path = _Path.data();
+	UEngineDirectory Dir;
+	if (false == Dir.MoveParentToDirectory("ContentsResources"))
+	{
+		MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+		return;
+	}
+	Dir.Append(Path);
+	UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
+}
+
 void UContentsResource::LoadFolder()
 {
 	//UEngineDirectory TitleMain;
@@ -129,4 +99,43 @@ void UContentsResource::LoadFolder()
 void UContentsResource::LoadSprite()
 {
 	UEngineSprite::CreateSpriteToMeta("Knight_Idle.png", ".smeta");
+}
+
+void UContentsResource::LoadShaderResource()
+{
+	// Shader
+	{
+		UEngineDirectory CurDir;
+		CurDir.MoveParentToDirectory("ContentsShader");
+
+		std::vector<UEngineFile> ShaderFiles = CurDir.GetAllFile(true, { ".fx", ".hlsl" });
+
+		for (size_t i = 0; i < ShaderFiles.size(); i++)
+		{
+			UEngineShader::ReflectionCompile(ShaderFiles[i]);
+		}
+	}
+
+	{
+		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("MyMaterial");
+		Mat->SetVertexShader("ContentsShader.fx");
+		Mat->SetPixelShader("ContentsShader.fx");
+	}
+
+	{
+		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("MyCollisionDebugMaterial");
+		Mat->SetVertexShader("EngineDebugCollisionShader.fx");
+		Mat->SetPixelShader("EngineDebugCollisionShader.fx");
+		// 언제나 화면에 나오는 누구도 이녀석의 앞을 가릴수 없어.
+		Mat->SetDepthStencilState("CollisionDebugDepth");
+		Mat->SetRasterizerState("CollisionDebugRas");
+	}
+}
+
+UContentsResource::UContentsResource()
+{
+}
+
+UContentsResource::~UContentsResource()
+{
 }

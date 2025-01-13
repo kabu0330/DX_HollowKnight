@@ -3,7 +3,7 @@
 #include <EngineBase/EnginePath.h>
 #include <EngineBase/EngineString.h>
 
-// 설명 : 
+// 설명 : 텍스처 관리
 class UEngineResources : public UObject
 {
 public:

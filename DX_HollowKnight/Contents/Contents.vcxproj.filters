@@ -8,10 +8,10 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="TitleGameMode.h">
-      <Filter>ContentsLevelSetting\Level</Filter>
+      <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="PlayGameMode.h">
-      <Filter>ContentsLevelSetting\Level</Filter>
+      <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="TitleLogo.h">
       <Filter>Title</Filter>
@@ -38,10 +38,10 @@
       <Filter>Global\Unit</Filter>
     </ClInclude>
     <ClInclude Include="ContentsEditorGUI.h">
-      <Filter>ContentsLevelSetting\GUI</Filter>
+      <Filter>ContentsSetting\GUI</Filter>
     </ClInclude>
     <ClInclude Include="MapEditorGameMode.h">
-      <Filter>ContentsLevelSetting\Level</Filter>
+      <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="MapObject.h">
       <Filter>Play</Filter>
@@ -56,25 +56,25 @@
       <Filter>Test</Filter>
     </ClInclude>
     <ClInclude Include="DebugWindowGUI.h">
-      <Filter>ContentsLevelSetting\GUI</Filter>
+      <Filter>ContentsSetting\GUI</Filter>
     </ClInclude>
     <ClInclude Include="MapEditorGUI.h">
-      <Filter>ContentsLevelSetting\GUI</Filter>
+      <Filter>ContentsSetting\GUI</Filter>
     </ClInclude>
     <ClInclude Include="Monster.h">
       <Filter>Play</Filter>
     </ClInclude>
     <ClInclude Include="ContentsResource.h">
-      <Filter>ContentsLevelSetting\Resource</Filter>
+      <Filter>ContentsSetting\Resource</Filter>
     </ClInclude>
     <ClInclude Include="CollisionManager.h">
-      <Filter>ContentsLevelSetting\Setting</Filter>
+      <Filter>Play\Setting</Filter>
     </ClInclude>
     <ClInclude Include="RoomManager.h">
-      <Filter>ContentsLevelSetting\Setting</Filter>
+      <Filter>Play\Setting</Filter>
     </ClInclude>
     <ClInclude Include="ContentsRenderer.h">
-      <Filter>ContentsLevelSetting\Render</Filter>
+      <Filter>ContentsSetting\Render</Filter>
     </ClInclude>
     <ClInclude Include="Skill.h">
       <Filter>Global</Filter>
@@ -91,10 +91,10 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="PlayGameMode.cpp">
-      <Filter>ContentsLevelSetting\Level</Filter>
+      <Filter>Level</Filter>
     </ClCompile>
     <ClCompile Include="TitleGameMode.cpp">
-      <Filter>ContentsLevelSetting\Level</Filter>
+      <Filter>Level</Filter>
     </ClCompile>
     <ClCompile Include="TitleLogo.cpp">
       <Filter>Title</Filter>
@@ -121,10 +121,10 @@
       <Filter>Global\Unit</Filter>
     </ClCompile>
     <ClCompile Include="ContentsEditorGUI.cpp">
-      <Filter>ContentsLevelSetting\GUI</Filter>
+      <Filter>ContentsSetting\GUI</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorGameMode.cpp">
-      <Filter>ContentsLevelSetting\Level</Filter>
+      <Filter>Level</Filter>
     </ClCompile>
     <ClCompile Include="MapObject.cpp">
       <Filter>Play</Filter>
@@ -139,22 +139,22 @@
       <Filter>Test</Filter>
     </ClCompile>
     <ClCompile Include="DebugWindowGUI.cpp">
-      <Filter>ContentsLevelSetting\GUI</Filter>
+      <Filter>ContentsSetting\GUI</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorGUI.cpp">
-      <Filter>ContentsLevelSetting\GUI</Filter>
+      <Filter>ContentsSetting\GUI</Filter>
     </ClCompile>
     <ClCompile Include="Monster.cpp">
       <Filter>Play</Filter>
     </ClCompile>
     <ClCompile Include="ContentsResource.cpp">
-      <Filter>ContentsLevelSetting\Resource</Filter>
+      <Filter>ContentsSetting\Resource</Filter>
     </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
-      <Filter>ContentsLevelSetting\Setting</Filter>
+      <Filter>Play\Setting</Filter>
     </ClCompile>
     <ClCompile Include="RoomManager.cpp">
-      <Filter>ContentsLevelSetting\Setting</Filter>
+      <Filter>Play\Setting</Filter>
     </ClCompile>
     <ClCompile Include="Knight_AnimSetting.cpp">
       <Filter>Global\Knight</Filter>
@@ -163,7 +163,7 @@
       <Filter>Global\Knight</Filter>
     </ClCompile>
     <ClCompile Include="ContentsRenderer.cpp">
-      <Filter>ContentsLevelSetting\Render</Filter>
+      <Filter>ContentsSetting\Render</Filter>
     </ClCompile>
     <ClCompile Include="Skill.cpp">
       <Filter>Global</Filter>
@@ -197,23 +197,23 @@
     <Filter Include="Test">
       <UniqueIdentifier>{06b144dd-98f6-449c-ada2-5305d26e33fd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ContentsLevelSetting">
-      <UniqueIdentifier>{705f4313-018d-4c2b-84c9-0b0201018210}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ContentsLevelSetting\Level">
+    <Filter Include="Level">
       <UniqueIdentifier>{58d3821e-f186-4e77-a861-8f16b9ad13ed}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ContentsLevelSetting\Setting">
-      <UniqueIdentifier>{cbf9cc41-8d7d-4084-959d-3decaa2e300c}</UniqueIdentifier>
+    <Filter Include="ContentsSetting">
+      <UniqueIdentifier>{705f4313-018d-4c2b-84c9-0b0201018210}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ContentsLevelSetting\Resource">
+    <Filter Include="ContentsSetting\Resource">
       <UniqueIdentifier>{318effba-c84a-4d4f-8a42-98637e2f0fa4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ContentsLevelSetting\GUI">
+    <Filter Include="ContentsSetting\GUI">
       <UniqueIdentifier>{8d190253-6f67-4848-947a-2155a14ebc95}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ContentsLevelSetting\Render">
+    <Filter Include="ContentsSetting\Render">
       <UniqueIdentifier>{487692e4-6b76-4236-8869-624e3b36942f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Play\Setting">
+      <UniqueIdentifier>{cbf9cc41-8d7d-4084-959d-3decaa2e300c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

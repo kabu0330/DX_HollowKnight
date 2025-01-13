@@ -45,7 +45,7 @@ private:
 	UEngineTexture* Texture = nullptr;
 	ImTextureID TextureSRV = 0;
 
-	int ZValue = 3900;
+	int ZValue = 3800;
 	int XValue = 0;
 	int YValue = 0;
 

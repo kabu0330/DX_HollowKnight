@@ -191,6 +191,7 @@
     <ClInclude Include="EngineMaterial.h" />
     <ClInclude Include="EnginePixelShader.h" />
     <ClInclude Include="EngineRasterizerState.h" />
+    <ClInclude Include="EngineRenderTarget.h" />
     <ClInclude Include="EngineResources.h" />
     <ClInclude Include="EngineSampler.h" />
     <ClInclude Include="EngineShader.h" />
@@ -201,6 +202,7 @@
     <ClInclude Include="EngineVertexBuffer.h" />
     <ClInclude Include="EngineVertexShader.h" />
     <ClInclude Include="GameMode.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="IContentsCore.h" />
     <ClInclude Include="imconfig.h" />
     <ClInclude Include="imgui.h" />
@@ -220,6 +222,8 @@
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="ThirdParty\DirectxTex\Inc\DirectXTex.h" />
     <ClInclude Include="TimeEventComponent.h" />
+    <ClInclude Include="TransformObject.h" />
+    <ClInclude Include="Widget.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
@@ -246,6 +250,7 @@
     <ClCompile Include="EngineMaterial.cpp" />
     <ClCompile Include="EnginePixelShader.cpp" />
     <ClCompile Include="EngineRasterizerState.cpp" />
+    <ClCompile Include="EngineRenderTarget.cpp" />
     <ClCompile Include="EngineResources.cpp" />
     <ClCompile Include="EngineSampler.cpp" />
     <ClCompile Include="EngineShader.cpp" />
@@ -256,6 +261,7 @@
     <ClCompile Include="EngineVertexBuffer.cpp" />
     <ClCompile Include="EngineVertexShader.cpp" />
     <ClCompile Include="GameMode.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
     <ClCompile Include="imgui_impl_dx11.cpp" />
@@ -280,6 +286,8 @@
     <ClCompile Include="SceneComponent.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="TimeEventComponent.cpp" />
+    <ClCompile Include="TransformObject.cpp" />
+    <ClCompile Include="Widget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="ThirdParty\DirectxTex\Debug\DirectXTex_Debug.lib">

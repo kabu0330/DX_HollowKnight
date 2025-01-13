@@ -151,6 +151,10 @@
     <ClInclude Include="TimeEventComponent.h">
       <Filter>04_Object\Component</Filter>
     </ClInclude>
+    <ClInclude Include="EngineRenderTarget.h" />
+    <ClInclude Include="HUD.h" />
+    <ClInclude Include="Widget.h" />
+    <ClInclude Include="TransformObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -291,6 +295,10 @@
     <ClCompile Include="TimeEventComponent.cpp">
       <Filter>04_Object\Component</Filter>
     </ClCompile>
+    <ClCompile Include="EngineRenderTarget.cpp" />
+    <ClCompile Include="HUD.cpp" />
+    <ClCompile Include="Widget.cpp" />
+    <ClCompile Include="TransformObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">

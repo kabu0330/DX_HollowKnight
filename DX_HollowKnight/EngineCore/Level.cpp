@@ -7,6 +7,7 @@
 #include "EngineCamera.h"
 #include "CameraActor.h"
 #include "EngineGUI.h"
+#include "EngineRenderTarget.h"
 
 std::shared_ptr<class ACameraActor> ULevel::SpawnCamera(int _Order)
 {
@@ -26,7 +27,14 @@ std::shared_ptr<class ACameraActor> ULevel::SpawnCamera(int _Order)
 
 ULevel::ULevel()
 {
-	SpawnCamera(0); // 레벨 생성 시, 기본적으로 0번 카메라는 만든다.
+	SpawnCamera(EEngineCameraType::MainCamera); // 메인카메라
+
+	SpawnCamera(EEngineCameraType::UICamera); // UI 카메라
+
+	// 화면에 그려질 최종 렌더타겟을 만든다.
+	LastRenderTarget = std::make_shared<UEngineRenderTarget>();
+	LastRenderTarget->CreateTarget(UEngineCore::GetScreenScale());
+	LastRenderTarget->CreateDepth();
 }
 
 ULevel::~ULevel()
@@ -112,11 +120,29 @@ void ULevel::Render(float _DeltaTime)
 {
 	UEngineCore::GetDevice().RenderStart(); // 백버퍼 초기화 및 OM단계에서 사용할 RTV와 DSV 설정
 
+	LastRenderTarget->Clear(); // 최종 출력 화면도 화면 한 번 지워
+
 	for (std::pair<const int, std::shared_ptr<ACameraActor>>& Camera : Cameras)
 	{
+		if (Camera.first == static_cast<int>(EEngineCameraType::UICamera))
+		{
+			continue;
+		}
+
 		Camera.second->Tick(_DeltaTime); // View 행렬과 Projection 행렬 계산
 		Camera.second->GetCameraComponent()->Render(_DeltaTime); 
+
+		// 특정 카메라만 포스트 이펙트
+		// Camera.second->PostEffect();
+
+		Camera.second->GetCameraComponent()->CameraTarget->MergeTo(LastRenderTarget); // 렌더링 파이프라인으로
 	}
+
+	// 여기서 하면 화면 전체 포스트 이펙트 적용
+	// LastRenderTarget->PostEffect(); 
+
+	std::shared_ptr<UEngineRenderTarget> BackBuffer = UEngineCore::GetDevice().GetBackBufferTarget();
+	LastRenderTarget->MergeTo(BackBuffer);
 
 	{
 		std::shared_ptr<class ACameraActor> Camera = GetMainCamera();
@@ -297,8 +323,11 @@ void ULevel::Release(float _DeltaTime)
 	}
 }
 
-void ULevel::InitLevel(AGameMode* _GameMode, APawn* _Pawn)
+void ULevel::InitLevel(AGameMode* _GameMode, APawn* _Pawn, AHUD* _HUD)
 {
 	GameMode = _GameMode;
+
 	MainPawn = _Pawn;
+
+	HUD = _HUD;
 }

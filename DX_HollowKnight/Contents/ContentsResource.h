@@ -19,10 +19,10 @@ public:
 	static void LoadResourceDirectory();
 	static void LoadFolder();
 	static void LoadSprite();
-
+	static void LoadShaderResource();
 protected:
 
 private:
-
+	static void LoadResource();
 };
 

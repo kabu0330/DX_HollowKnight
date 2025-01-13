@@ -4,9 +4,15 @@
 
 #include "ThirdParty/DirectxTex/Inc/DirectXTex.h"
 
-// 설명 :
+// 설명 : 텍스처의 
+// 1. 상수버퍼 세팅, 
+// 2.SRV 생성, 
+// 3. DSV 생성
+// 4. 렌더 타겟 뷰 생성
 class UEngineTexture : public UEngineResources
 {
+	friend class UEngineRenderTarget;
+
 public:
 	// constrcuter destructer
 	ENGINEAPI UEngineTexture();
@@ -53,14 +59,20 @@ public:
 
 	ENGINEAPI void ResCreate(const D3D11_TEXTURE2D_DESC& _Value);
 
+	ENGINEAPI void ResCreate(Microsoft::WRL::ComPtr<ID3D11Texture2D> _Texture2D);
+
+	ENGINEAPI void CreateRenderTargetView();
+	ENGINEAPI void CreateShaderResourceView();
+	ENGINEAPI void CreateDepthStencilView();
+
 protected:
 
 private:
 	ENGINEAPI void ResLoad();
 
-	FVector Size;
-	DirectX::TexMetadata Metadata;
-	DirectX::ScratchImage ImageData;
+	FVector Size = FVector::ZERO;
+	DirectX::TexMetadata Metadata = DirectX::TexMetadata();
+	DirectX::ScratchImage ImageData = DirectX::ScratchImage();
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> Texture2D = nullptr; // 로드한 텍스처
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> SRV = nullptr; // 텍스처를 쉐이더 세팅할수 있는권한
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RTV = nullptr; // 텍스처를 쉐이더 세팅할수 있는권한

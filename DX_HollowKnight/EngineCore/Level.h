@@ -147,6 +147,8 @@ public:
 protected:
 
 private:
+	class AHUD* HUD = nullptr;
+
 	class AGameMode* GameMode = nullptr;
 	class APawn* MainPawn = nullptr;
 
@@ -157,6 +159,9 @@ private:
 
 	std::map<int, std::shared_ptr<class ACameraActor>> Cameras;
 
+	// 모든 카메라(Play 화면 + UI 등)가 바라본 이미지를 섞은 타겟 => 백버퍼로 넘길 최종 타겟
+	std::shared_ptr<class UEngineRenderTarget> LastRenderTarget;
+
 	std::map<std::string, std::list<std::shared_ptr<class UCollision>>> Collisions;
 
 	// 이벤트가 존재하는 애들만 충돌 체크하려고.
@@ -164,7 +169,8 @@ private:
 
 	std::map<std::string, std::list<std::string>> CollisionLinks;
 
+	std::map<int, std::list<std::shared_ptr<class UWidget>>> Widgets;
 
-	ENGINEAPI void InitLevel(AGameMode* _GameMode, APawn* _Pawn);
+	ENGINEAPI void InitLevel(AGameMode* _GameMode, APawn* _Pawn, AHUD* _HUD);
 };
 

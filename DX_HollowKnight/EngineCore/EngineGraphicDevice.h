@@ -45,9 +45,9 @@ public:
 		return Context.Get();
 	}
 
-	ENGINEAPI ID3D11RenderTargetView* GetRTV()
+	ENGINEAPI std::shared_ptr<class UEngineRenderTarget> GetBackBufferTarget()
 	{
-		return RTV.Get();
+		return BackBufferTarget;
 	}
 
 protected:
@@ -59,10 +59,13 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> Context = nullptr;
 
 	Microsoft::WRL::ComPtr<IDXGISwapChain> SwapChain = nullptr;
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> DXBackBufferTexture = nullptr;
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RTV = nullptr;
 
-	std::shared_ptr<class UEngineTexture> DepthTex;
+	// πÈπˆ∆€ ≈∏∞Ÿ = πÈπˆ∆€ ≈ÿΩ∫√≥ + ±Ì¿Ã ≈ÿΩ∫√≥ + ∑ª¥ı ≈∏∞Ÿ ∫‰ 
+	std::shared_ptr<class UEngineRenderTarget> BackBufferTarget;
+	//Microsoft::WRL::ComPtr<ID3D11Texture2D> DXBackBufferTexture = nullptr;
+	//Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RTV = nullptr;
+	//std::shared_ptr<class UEngineTexture> DepthTex;
+
 	
 	ENGINEAPI void DefaultResourcesInit();
 

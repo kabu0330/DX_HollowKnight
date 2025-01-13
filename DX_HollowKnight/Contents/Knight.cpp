@@ -28,21 +28,18 @@ AKnight::AKnight()
 	JumpForce = InitJumpForce;
 	bCanRotation = true;
 
-	//SetActorLocation({ 1000.0f, -2105.0f });
+	//SetActorLocation({ 1100.0f, -3183.0f });
 
 	// Debug
 	BodyRenderer->BillboardOn();
-	DebugNonGravity = true;
-	if (true == DebugNonGravity)
-	{
-		Velocity = 800.0f;	
-		InitVelocity = Velocity;
-		DashSpeed = Velocity * 3.0f;
-	}
+	//DebugNonGravity = true;
+	//if (true == DebugNonGravity)
+	//{
+	//	Velocity = 800.0f;	
+	//	InitVelocity = Velocity;
+	//	DashSpeed = Velocity * 3.0f;
+	//}
 
-
-	//FVector BodyScale = BodyRenderer->GetRelativeScale3D();
-	//BodyRenderer->SetRelativeScale3D(BodyScale);
 }
 
 void AKnight::BeginPlay()
@@ -50,8 +47,7 @@ void AKnight::BeginPlay()
 	AActor::BeginPlay();
 	SetFSM();
 	//BodyRenderer->ColorData.MulColor += {0.0f, 1.0f, 0.0f, 1.0f};
-	FVector WorldScale = BodyRenderer->GetWorldScale3D();
-	FVector LocalScale = BodyRenderer->GetRelativeScale3D();
+
 
 	int a = 0;
 }
@@ -75,38 +71,17 @@ void AKnight::Tick(float _DeltaTime)
 
 }
 
-void AKnight::CheckGround(FVector _Gravity)
-{
-	if (true == DebugNonGravity)
-	{
-		return;
-	}
-	std::shared_ptr<ARoom> CurRoom = ARoom::GetCurRoom();
-	if (nullptr == CurRoom)
-	{
-		return;
-	}
-
-	CurRoom->CheckGround(_Gravity);
-}
-
-void AKnight::Gravity(float _DeltaTime)
-{
-	if (true == DebugNonGravity)
-	{
-		return;
-	}
-
-	if (false == bIsOnGround)
-	{
-		GravityForce += FVector::DOWN * GravityValue * _DeltaTime;
-		AddRelativeLocation(GravityForce * _DeltaTime);
-	}
-	else
-	{
-		GravityForce = FVector::ZERO;
-	}
-}
+//void AKnight::CheckGround(FVector _Gravity)
+//{
+//
+//	std::shared_ptr<ARoom> CurRoom = ARoom::GetCurRoom();
+//	if (nullptr == CurRoom)
+//	{
+//		return;
+//	}
+//
+//	CurRoom->CheckGround(_Gravity);
+//}
 
 void AKnight::Move(float _DeltaTime)
 {
@@ -147,11 +122,6 @@ void AKnight::Move(float _DeltaTime)
 		AddRelativeLocation(FVector{ 0.0f, -Velocity * _DeltaTime, 0.0f });
 	}
 
-	// 미래의 위치를 파악해서 이동을 취소시킬 방법을 생각해보기
-	if (true == DebugNonGravity)
-	{
-		return;
-	}
 
 	while (true)
 	{
@@ -161,7 +131,7 @@ void AKnight::Move(float _DeltaTime)
 		}
 
 		FVector Pos = { GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y };
-		FVector Result = { GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y + (BodyRenderer->GetRelativeScale3D().Y * 0.5f) };
+		FVector Result = { GetActorTransform().RelativeLocation.X, -GetActorTransform().RelativeLocation.Y + (BodyRenderer->GetScale().Y * 0.5f)};
 		UColor GroundColor = ARoom::GetCurRoom()->GetPixelCollisionImage().GetColor(Result);
 		UColor White = UColor{ 255, 255, 255, 255 };
 		UColor Black = UColor{ 0, 0, 0, 0 };
@@ -190,8 +160,8 @@ void AKnight::SetCameraPosition()
 	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetCamera(0);
 	FVector Pos = RootComponent->GetTransformRef().RelativeLocation;
 	FVector ScreenSize = UEngineCore::GetScreenScale();
-	//CameraPos = { Pos.X, Pos.Y + ScreenSize.Y * 0.35f };
-	CameraPos = { Pos.X, Pos.Y };
+	CameraPos = { Pos.X, Pos.Y + ScreenSize.Y * 0.25f };
+	//CameraPos = { Pos.X, Pos.Y };
 	Camera->SetActorLocation(CameraPos);
 	FVector CameraResult = GetActorLocation();
 	int a = 0;
@@ -299,22 +269,13 @@ void AKnight::CastFireball()
 	}
 }
 
-bool AKnight::IsOnGround()
-{
-	if (false == bIsOnGround)
-	{
-		return false;
-	}
-	return true;
-}
-
 bool AKnight::CanJump()
 {
 	if (false == CanAction())
 	{
 		return false;
 	}
-	if (false == IsOnGround())
+	if (false == bIsOnGround)
 	{
 		return false;
 	}
@@ -348,10 +309,6 @@ void AKnight::ChangeJumpAnimation()
 {
 	if (true == CanJump())
 	{
-		if (false == IsOnGround())
-		{
-			return;
-		}
 		if (UEngineInput::IsPress('Z'))
 		{
 			FSM.ChangeState(EKnightState::JUMP);
@@ -366,30 +323,21 @@ void AKnight::ChangeNonCombatAnimation()
 	{
 		return;
 	}
-	if (false == IsOnGround())
-	{
-		return;
-	}
 }
 
 void AKnight::ChangeLookAnimation()
 {
-	if (false == IsOnGround())
-	{
-		return;
-	}
+	//if (UEngineInput::IsPress(VK_DOWN))
+	//{
+	//	float PressTime = UEngineInput::IsPressTime(VK_DOWN);
+	//	float TriggerTime = 0.5f;
 
-	if (UEngineInput::IsPress(VK_DOWN))
-	{
-		float PressTime = UEngineInput::IsPressTime(VK_DOWN);
-		float TriggerTime = 0.5f;
-
-		if (PressTime >= TriggerTime)
-		{
-			FSM.ChangeState(EKnightState::LOOK_DOWN);
-			return;
-		}
-	}
+	//	if (PressTime >= TriggerTime)
+	//	{
+	//		FSM.ChangeState(EKnightState::LOOK_DOWN);
+	//		return;
+	//	}
+	//}
 	//if (UEngineInput::IsPress(VK_UP))
 	//{
 	//	float PressTime = UEngineInput::IsPressTime(VK_UP);

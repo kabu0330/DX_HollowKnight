@@ -7,6 +7,7 @@
 #include <EngineCore/EngineSprite.h>
 #include <EngineCore/EngineGUI.h>
 #include <EngineCore/EngineGUIWindow.h>
+#include <EngineCore/HUD.h>
 
 #include "ContentsResource.h"
 #include "TitleGameMode.h"
@@ -24,6 +25,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	UContentsResource::LoadResourceDirectory();
 	UContentsResource::LoadFolder();
 	UContentsResource::LoadSprite();
+	UContentsResource::LoadShaderResource();
 
 	CreateLevel();
 
@@ -42,9 +44,9 @@ void UContentsCore::SetWindowSize(UEngineInitData& _Data)
 
 void UContentsCore::CreateLevel()
 {
-	UEngineCore::CreateLevel<ATitleGameMode, APawn>("Title");
-	UEngineCore::CreateLevel<APlayGameMode, AKnight>("Play");
-	UEngineCore::CreateLevel<AMapEditorGameMode, APawn>("MapEditorMode");
+	UEngineCore::CreateLevel<ATitleGameMode, APawn, AHUD>("Title");
+	UEngineCore::CreateLevel<APlayGameMode, AKnight, AHUD>("Play");
+	UEngineCore::CreateLevel<AMapEditorGameMode, APawn, AHUD>("MapEditorMode");
 	//UEngineCore::CreateLevel<AMapEditorMode, APawn>("MapEditor");
 
 	//UEngineCore::OpenLevel("Title");

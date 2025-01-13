@@ -33,8 +33,9 @@ public:
 	//std::shared_ptr<ARoom> LinkRoom(ARoom* _Room);
 
 	void CheckGround(FVector _MovePos);
-	void CreateTexture(std::string_view _FileName);
-	void CreatePixelCollisionTexture(std::string_view _FileName);
+	void Gravity(AActor* _Target);
+	void CreateTexture(std::string_view _FileName, float _ScaleRatio);
+	void CreatePixelCollisionTexture(std::string_view _FileName, float _ScaleRatio);
 
 	FVector GetSize() const
 	{
@@ -48,6 +49,10 @@ public:
 protected:
 
 private:
+	inline static bool DebugNonGravity = false;
+	FVector GravityForce = FVector::ZERO;
+	float GravityValue = 1400.0f;
+
 	static std::shared_ptr<ARoom> CurRoom;
 	UEngineWinImage PixelCollisionImage;
 	FVector Size = FVector::ZERO;

@@ -37,17 +37,13 @@ public:
 	{
 		return BodyRenderer;
 	}
-	bool GetIsOnGround()
+	bool IsOnGround()
 	{
 		return bIsOnGround;
 	}
-	void SetIsOnGround(bool _Value)
+	void IsOnGroundRef(bool _Value)
 	{
 		bIsOnGround = _Value;
-	}
-	float GetGravityForce()
-	{
-		return GravityForce.Y;
 	}
 
 	float JumpForce = 0.0f;
@@ -95,23 +91,16 @@ private:
 
 private:
 	void DebugInput(float _DeltaTime);
-	bool DebugNonGravity = false;
 
 	bool CanAction();
 
-	FVector GravityForce = FVector::ZERO;
-	float GravityValue = 1400.0f;
 	void Move(float _DeltaTime);
-
-	void CheckGround(FVector _Gravity);
-	void Gravity(float _DeltaTime);
 
 
 	// Jump : Z키
 	bool bIsOnGround = false; // 픽셀충돌로 true / false 검사
 	bool bCanJump = true;
 	float InitJumpForce = 600.0f;
-	bool IsOnGround();
 	bool CanJump();
 	void Jump(float _DeltaTime);
 

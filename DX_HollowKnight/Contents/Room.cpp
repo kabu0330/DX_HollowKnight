@@ -20,8 +20,9 @@ ARoom::ARoom()
 
 	BackgroundRenderer = CreateDefaultSubObject<UContentsRenderer>();
 	BackgroundRenderer->SetupAttachment(RootComponent);
-	BackgroundRenderer->SetTexture("Dirtmouth_Back.png", true, 2.0f);
+	//BackgroundRenderer->SetTexture("Dirtmouth_Back.png", true, 2.0f);
 
+	DebugNonGravity = true;
 }
 
 ARoom::~ARoom()
@@ -82,7 +83,7 @@ ARoom* ARoom::LinkRoom(ARoom* _Room)
 
 void ARoom::CheckGround(FVector _MovePos)
 {
-	float YValue = AKnight::GetPawn()->GetRenderer()->GetRelativeScale3D().Y;
+	float YValue = AKnight::GetPawn()->GetRenderer()->GetScale().Y;
 	FVector NextPos = { APlayGameMode::KnightPos.X + _MovePos.X , APlayGameMode::KnightPos.Y + _MovePos.Y + (YValue * 0.5f)};
 	NextPos.X = floorf(NextPos.X);
 	NextPos.Y = floorf(NextPos.Y);
@@ -90,34 +91,63 @@ void ARoom::CheckGround(FVector _MovePos)
 	UColor Color = PixelCollisionImage.GetColor({ NextPos.X, -NextPos.Y });
 	UColor White = { 255, 255, 255, 255 };
 	UColor Black = { 0, 0, 0, 0 };
+
 	if (Color == White || Color == UColor(255, 255, 255, 0))
 	{
 		//UEngineDebug::OutPutString("White");
-		AKnight::GetPawn()->SetIsOnGround(false);
+		AKnight::GetPawn()->IsOnGroundRef(false);
 	}
 	else if (Color == Black)
 	{
 		//UEngineDebug::OutPutString("Black");
 		// 흰색 아니면 다 벽과 바닥으로 보겠다.
-		AKnight::GetPawn()->SetIsOnGround(true);
+		AKnight::GetPawn()->IsOnGroundRef(true);
 	}
 
 	int a = 0;
 }
 
-void ARoom::CreateTexture(std::string_view _FileName)
+void ARoom::Gravity(AActor* _Target)
+{
+	if (true == DebugNonGravity)
+	{
+		return;
+	}
+
+	AKnight* Target = dynamic_cast<AKnight*>(_Target);
+	if (nullptr == Target)
+	{
+		return;
+	}
+
+	if (false == Target->IsOnGround())
+	{
+		float DeltaTime = UEngineCore::GetDeltaTime();
+		GravityForce += FVector::DOWN * GravityValue * DeltaTime;
+		AddRelativeLocation(GravityForce * DeltaTime);
+	}
+	else
+	{
+		GravityForce = FVector::ZERO;
+	}
+}
+
+void ARoom::CreateTexture(std::string_view _FileName, float _ScaleRatio)
 {
 	float ZSort = static_cast<float>(EZOrder::BACKGROUND);
 
-	PixelCollisionTexture->SetTexture(_FileName, true, 1.0f);
-	PixelCollisionTexture->SetWorldLocation({ 0.0f, 0.0f, ZSort });
+	BackgroundRenderer->SetTexture(_FileName, true, _ScaleRatio);
+	BackgroundRenderer->SetRelativeLocation({ Size.X / 2.0f * _ScaleRatio, -Size.Y / 2.0f * _ScaleRatio, ZSort });
+	//BackgroundRenderer->SetWorldLocation({ 0.0f, 0.0f, ZSort });
+	//BackgroundRenderer->SetActive(false);
 }
 
-void ARoom::CreatePixelCollisionTexture(std::string_view _FileName)
+void ARoom::CreatePixelCollisionTexture(std::string_view _FileName, float _ScaleRatio)
 {
 	float ZSort = static_cast<float>(EZOrder::PIXELCOLLISION);
 
-	PixelCollisionTexture->SetTexture(_FileName, true, 1.0f);
-	PixelCollisionTexture->SetWorldLocation({ 0.0f, 0.0f, ZSort });
+	PixelCollisionTexture->SetTexture(_FileName, true, _ScaleRatio);
+	PixelCollisionTexture->SetRelativeLocation({ Size.X / 2.0f * _ScaleRatio, -Size.Y / 2.0f * _ScaleRatio, ZSort });
+	//PixelCollisionTexture->SetWorldLocation({ 0.0f, 0.0f, ZSort });
 }
 

@@ -75,6 +75,11 @@ private:
 	std::map<int, std::list<std::shared_ptr<class URenderer>>> Renderers;
 	std::map<int, bool> RendererZSort;
 
+	// 렌더 타겟을 카메라가 가진다.
+	std::shared_ptr<class UEngineRenderTarget> CameraTarget;
+	// std::shared_ptr<class UEngineRenderTarget> LightTarget;
+	// std::shared_ptr<class UEngineRenderTarget> ShadowTarget;
+
 	void ChangeRenderGroup(int _PrevGroupOrder, std::shared_ptr<URenderer> _Renderer);
 };
 

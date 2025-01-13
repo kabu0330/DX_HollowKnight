@@ -38,12 +38,12 @@ AMapEditorGameMode::AMapEditorGameMode()
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
-	BackTexture = CreateDefaultSubObject<USpriteRenderer>();
-	BackTexture->SetupAttachment(RootComponent);
-	float ZSort = 3999.0f;
-	BackTexture->SetWorldLocation({ 0.0f, 0.0f, ZSort });
-	BackTexture->SetTexture("dartmount_sample.bmp", true);
-	BackTexture->ColorData.MulColor *= {1.0f, 1.0f, 1.0f, 0.0f};
+	//BackTexture = CreateDefaultSubObject<USpriteRenderer>();
+	//BackTexture->SetupAttachment(RootComponent);
+	//float ZSort = 3999.0f;
+	//BackTexture->SetWorldLocation({ 0.0f, 0.0f, ZSort });
+	//BackTexture->SetTexture("dartmount_sample.bmp", true);
+	//BackTexture->ColorData.MulColor *= {1.0f, 1.0f, 1.0f, 0.0f};
 }
 
 AMapEditorGameMode::~AMapEditorGameMode()

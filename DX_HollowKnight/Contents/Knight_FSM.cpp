@@ -6,8 +6,6 @@
 void AKnight::SetIdle(float _DeltaTime)
 {
 	Move(_DeltaTime);
-	CheckGround(GravityForce * _DeltaTime);
-	Gravity(_DeltaTime);
 
 	bCanRotation = true;
 
@@ -32,8 +30,6 @@ void AKnight::SetIdle(float _DeltaTime)
 void AKnight::SetRun(float _DeltaTime)
 {
 	Move(_DeltaTime);
-	CheckGround(GravityForce * _DeltaTime);
-	Gravity(_DeltaTime);
 
 	bCanRotation = true;
 
@@ -52,8 +48,6 @@ void AKnight::SetRun(float _DeltaTime)
 void AKnight::SetIdleToRun(float _DeltaTime)
 {
 	Move(_DeltaTime);
-	CheckGround(GravityForce * _DeltaTime);
-	Gravity(_DeltaTime);
 
 	bCanRotation = true;
 
@@ -68,8 +62,6 @@ void AKnight::SetIdleToRun(float _DeltaTime)
 void AKnight::SetRunToIdle(float _DeltaTime)
 {
 	Move(_DeltaTime);
-	CheckGround(GravityForce * _DeltaTime);
-	Gravity(_DeltaTime);
 
 	bCanRotation = true;
 	bIsDashing = false;
@@ -94,8 +86,7 @@ void AKnight::SetJump(float _DeltaTime)
 	Jump(_DeltaTime);
 
 	Move(_DeltaTime);
-	CheckGround(GravityForce * _DeltaTime);
-	Gravity(_DeltaTime);
+
 
 	bCanRotation = true;
 
@@ -115,8 +106,6 @@ void AKnight::SetJump(float _DeltaTime)
 void AKnight::SetAirborn(float _DeltaTime)
 {
 	Move(_DeltaTime);
-	CheckGround(GravityForce * _DeltaTime);
-	Gravity(_DeltaTime);
 
 	bCanRotation = true;
 
@@ -132,8 +121,6 @@ void AKnight::SetAirborn(float _DeltaTime)
 void AKnight::SetLand(float _DeltaTime)
 {
 	Move(_DeltaTime);
-	CheckGround(GravityForce * _DeltaTime);
-	Gravity(_DeltaTime);
 
 	float InitJumpForce = 600.0f;
 	JumpForce = InitJumpForce;
@@ -143,8 +130,6 @@ void AKnight::SetLand(float _DeltaTime)
 
 void AKnight::SetHardLand(float _DeltaTime)
 {
-	CheckGround(GravityForce * _DeltaTime);
-	Gravity(_DeltaTime);
 
 	float InitJumpForce = 600.0f;
 	JumpForce = InitJumpForce;
@@ -166,30 +151,24 @@ void AKnight::SetDash(float _DeltaTime)
 		AddRelativeLocation(FVector{ Velocity * _DeltaTime, 0.0f, 0.0f });
 	}
 
-	if (true == DebugNonGravity)
-	{
-		ChangeNextAnimation(EKnightState::RUN_TO_IDLE);
-		return;
-	}
+	//if (true == IsOnGround())
+	//{
+	//	ChangeNextAnimation(EKnightState::RUN_TO_IDLE);
+	//	return;
+	//}
+	//else
+	//{
+	//	ChangeNextAnimation(EKnightState::AIRBORN);
+	//	return;
+	//}
 
-	if (true == IsOnGround())
-	{
-		ChangeNextAnimation(EKnightState::RUN_TO_IDLE);
-		return;
-	}
-	else
-	{
-		ChangeNextAnimation(EKnightState::AIRBORN);
-		return;
-	}
+	ChangeNextAnimation(EKnightState::RUN_TO_IDLE);
 
 }
 
 void AKnight::SetSlash(float _DeltaTime)
 {
 	Move(_DeltaTime);
-	CheckGround(GravityForce * _DeltaTime);
-	Gravity(_DeltaTime);
 
 	CreateSlashEffect();
 	ChangePrevAnimation();
@@ -198,8 +177,6 @@ void AKnight::SetSlash(float _DeltaTime)
 void AKnight::SetUpSlash(float _DeltaTime)
 {
 	Move(_DeltaTime);
-	CheckGround(GravityForce * _DeltaTime);
-	Gravity(_DeltaTime);
 
 	CreateUpSlashEffect();
 	ChangePrevAnimation();
@@ -208,8 +185,6 @@ void AKnight::SetUpSlash(float _DeltaTime)
 void AKnight::SetDownSlash(float _DeltaTime)
 {
 	Move(_DeltaTime);
-	CheckGround(GravityForce * _DeltaTime);
-	Gravity(_DeltaTime);
 
 	CreateDownSlashEffect();
 	ChangePrevAnimation();
