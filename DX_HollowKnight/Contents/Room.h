@@ -50,11 +50,12 @@ public:
 	}
 
 	// 중력과 벽
-	void CheckPixelCollisionWithGravity(AActor* _Actor, class UContentsRenderer* _Renderer, FVector _Gravity);
-	void CheckPixelCollisionWithWall(AActor* _Actor, class UContentsRenderer* _Renderer, FVector _Gravity);
+	void CheckPixelCollisionWithGravity(AActor* _Actor, class UContentsRenderer* _Renderer);
+	void CheckPixelCollisionWithWall(AActor* _Actor, class UContentsRenderer* _Renderer, float _Speed, bool _Left);
 
 protected:
 	void Gravity(AActor* _Actor, float _DeltaTime);
+	void BlockByWall(AActor* _Actor, float _Speed, float _DeltaTime);
 
 private:
 	inline static bool bActiveGravity = false;

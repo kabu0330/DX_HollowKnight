@@ -41,9 +41,17 @@ public:
 	{
 		bIsOnGround = _Value;
 	}
-	bool IsOnGround()
+	bool IsOnGround() const
 	{
 		return bIsOnGround;
+	}
+	void SetWallHere(bool _Value)
+	{
+		bIsWallHere = _Value;
+	}
+	bool IsWallHere() const
+	{
+		return bIsWallHere;
 	}
 
 	float JumpForce = 0.0f;
@@ -53,30 +61,31 @@ public:
 		return bIsLeft;
 	}
 
-	FVector GravityForce = FVector::ZERO;
+	FVector GetPrevPos() const
+	{
+		return PrevPos;
+	}
 
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
+	void ActiveGravity();
+	void ActiveWallCollsion();
+
+
 private:
 	static AKnight* MainPawn;
 	FVector CameraPos = { 0.0f, 0.0f, 0.0f };
+	FVector PrevPos = FVector::ZERO;
 
-	// 중력적용
-	void ActiveGravity(float _DeltaTime)
-	{
-		CheckGround(GravityForce * _DeltaTime);
-		Gravity(_DeltaTime);
-	}
-	void CheckGround(FVector _Gravity);
-	void Gravity(float _DeltaTime);
 
 	// Renderer
 	std::shared_ptr<class UContentsRenderer> BodyRenderer;
 	void CreateRenderer();
 
 	// Collision
+	bool bIsWallHere = false;
 	std::shared_ptr<class UCollision> BodyCollision;
 	void CreateCollision();
 

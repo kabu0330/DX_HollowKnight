@@ -30,7 +30,7 @@ AKnight::AKnight()
 	JumpForce = InitJumpForce;
 	bCanRotation = true;
 
-	//SetActorLocation({ 1100.0f, -3183.0f });
+	SetActorLocation({ 1100.0f, -3000.0f });
 
 	// Debug
 	//BodyRenderer->BillboardOn();
@@ -58,13 +58,7 @@ void AKnight::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-	ARoom* Room = ARoom::GetCurRoom();
-	if (nullptr != Room)
-	{
-		Room->CheckPixelCollisionWithGravity(this, BodyRenderer.get(), GravityForce);
-	}
-
-
+	ActiveWallCollsion();
 	SetCameraPosition();
 	FSM.Update(_DeltaTime);
 
@@ -74,50 +68,28 @@ void AKnight::Tick(float _DeltaTime)
 
 }
 
-void AKnight::CheckGround(FVector _Gravity)
+void AKnight::ActiveGravity()
 {
-	//std::shared_ptr<ARoom> CurRoom = ARoom::GetCurRoom();
-	//if (nullptr == CurRoom)
-	//{
-	//	return;
-	//}
-
-	//// 렌더러 크기 기반으로 발 위치 계산
-	//FVector ActorPos = GetActorLocation();
-	//float HalfRendererHeight = BodyRenderer->GetScale().Y * 0.5f;
-
-	//// 발 위치를 정확히 계산
-	//FVector CollisionPoint = { ActorPos.X, ActorPos.Y + HalfRendererHeight + _Gravity.Y };
-	//CollisionPoint.X = floorf(CollisionPoint.X);
-	//CollisionPoint.Y = floorf(CollisionPoint.Y);
-
-	//UColor GroundColor = CurRoom->GetPixelCollisionImage().GetColor({ CollisionPoint.X, -CollisionPoint.Y });
-
-	//if (GroundColor == UColor::BLACK) {
-	//	// 위치를 지면에 맞춤
-	//	SetActorLocation(FVector(ActorPos.X, ActorPos.Y - HalfRendererHeight, ActorPos.Z));
-	//	GravityForce = FVector::ZERO;
-	//}
-	//CurRoom->CheckPixelCollision(this, BodyRenderer.get(), _Gravity);
-	//CurRoom->CheckGround(this, _Gravity);
+	ARoom* Room = ARoom::GetCurRoom();
+	if (nullptr != Room)
+	{
+		Room->CheckPixelCollisionWithGravity(this, BodyRenderer.get());
+	}
 }
 
-void AKnight::Gravity(float _DeltaTime)
+void AKnight::ActiveWallCollsion()
 {
-	//if (false == bIsOnGround)
-	//{
-	//	float GravityValue = 1000.0f;
-	//	GravityForce += FVector::DOWN * GravityValue * _DeltaTime;
-	//	AddRelativeLocation(GravityForce * _DeltaTime);
-	//}
-	//else
-	//{
-	//	GravityForce = FVector::ZERO;
-	//}
+	ARoom* Room = ARoom::GetCurRoom();
+	if (nullptr != Room)
+	{
+		Room->CheckPixelCollisionWithWall(this, BodyRenderer.get(), Velocity, bIsLeft);
+	}
 }
 
 void AKnight::Move(float _DeltaTime)
 {
+	PrevPos = GetActorLocation();
+
 	if (false == bIsDashing)
 	{
 		Velocity = InitVelocity;

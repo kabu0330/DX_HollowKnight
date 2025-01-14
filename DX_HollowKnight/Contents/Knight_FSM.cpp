@@ -6,8 +6,8 @@
 
 void AKnight::SetIdle(float _DeltaTime)
 {
+	ActiveGravity();
 	Move(_DeltaTime);
-	ActiveGravity(_DeltaTime);
 	bCanRotation = true;
 
 	if (UEngineInput::IsPress(VK_LEFT) || UEngineInput::IsPress(VK_RIGHT))
@@ -29,8 +29,8 @@ void AKnight::SetIdle(float _DeltaTime)
 
 void AKnight::SetRun(float _DeltaTime)
 {
+	ActiveGravity();
 	Move(_DeltaTime);
-	ActiveGravity(_DeltaTime);
 
 	bCanRotation = true;
 
@@ -48,8 +48,8 @@ void AKnight::SetRun(float _DeltaTime)
 
 void AKnight::SetIdleToRun(float _DeltaTime)
 {
+	ActiveGravity();
 	Move(_DeltaTime);
-	ActiveGravity(_DeltaTime);
 
 	bCanRotation = true;
 
@@ -63,8 +63,8 @@ void AKnight::SetIdleToRun(float _DeltaTime)
 
 void AKnight::SetRunToIdle(float _DeltaTime)
 {
+	ActiveGravity();
 	Move(_DeltaTime);
-	ActiveGravity(_DeltaTime);
 
 	bCanRotation = true;
 	bIsDashing = false;
@@ -86,6 +86,7 @@ void AKnight::SetRunToIdle(float _DeltaTime)
 
 void AKnight::SetJump(float _DeltaTime)
 {
+	ActiveGravity();
 	Jump(_DeltaTime);
 
 	Move(_DeltaTime);
@@ -97,7 +98,7 @@ void AKnight::SetJump(float _DeltaTime)
 
 	if (true == bIsOnGround)
 	{
-		FSM.ChangeState(EKnightState::LAND);
+		//FSM.ChangeState(EKnightState::LAND);
 	}
 	else
 	{
@@ -108,6 +109,7 @@ void AKnight::SetJump(float _DeltaTime)
 
 void AKnight::SetAirborn(float _DeltaTime)
 {
+	ActiveGravity();
 	Move(_DeltaTime);
 
 	bCanRotation = true;
@@ -123,6 +125,7 @@ void AKnight::SetAirborn(float _DeltaTime)
 
 void AKnight::SetLand(float _DeltaTime)
 {
+	ActiveGravity();
 	Move(_DeltaTime);
 
 	float InitJumpForce = 600.0f;

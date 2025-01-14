@@ -14,8 +14,8 @@ void AKnight::CreateRenderer()
 
 void AKnight::InitAnimation()
 {
-	float IdleFrameTime = 0.15f;
-	float RunFrameTime = 0.06f;
+	float IdleFrameTime = 0.2f;
+	float RunFrameTime = 0.1f;
 	float ChangeFrameTime = 0.05f;
 	float SlashFrameTime = 0.03f;
 

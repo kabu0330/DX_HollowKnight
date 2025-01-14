@@ -974,6 +974,8 @@ class TColor
 public:
 	static const TColor WHITE;
 	static const TColor BLACK;
+	static const TColor YELLOW;
+	static const TColor RED;
 
 	union
 	{
@@ -1013,3 +1015,9 @@ const TColor<unsigned char> TColor<unsigned char>::WHITE = TColor<unsigned char>
 
 template<>
 const TColor<unsigned char> TColor<unsigned char>::BLACK = TColor<unsigned char>(0, 0, 0, 0);
+
+template<>
+const TColor<unsigned char> TColor<unsigned char>::YELLOW = TColor<unsigned char>(255, 255, 0, 0);
+
+template<>
+const TColor<unsigned char> TColor<unsigned char>::RED = TColor<unsigned char>(255, 0, 0, 0);
