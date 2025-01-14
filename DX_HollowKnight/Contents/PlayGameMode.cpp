@@ -44,16 +44,16 @@ void APlayGameMode::Tick(float _DeltaTime)
 
 void APlayGameMode::LevelChangeStart()
 {
-	//{
-	//	std::shared_ptr<UDebugWindowGUI> Window = UEngineGUI::FindGUIWindow<UDebugWindowGUI>("DebugWindow");
+	{
+		std::shared_ptr<UDebugWindowGUI> Window = UEngineGUI::FindGUIWindow<UDebugWindowGUI>("DebugWindow");
 
-	//	if (nullptr == Window)
-	//	{
-	//		Window = UEngineGUI::CreateGUIWindow<UDebugWindowGUI>("DebugWindow");
-	//	}
+		if (nullptr == Window)
+		{
+			Window = UEngineGUI::CreateGUIWindow<UDebugWindowGUI>("DebugWindow");
+		}
 
-	//	Window->SetActive(true);
-	//}
+		Window->SetActive(true);
+	}
 }
 
 void APlayGameMode::CheckInfo()

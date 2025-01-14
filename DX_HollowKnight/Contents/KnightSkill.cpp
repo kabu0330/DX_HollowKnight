@@ -32,7 +32,6 @@ void AKnightSkill::BeginPlay()
 {
 	ASkill::BeginPlay();
 
-
 }
 
 void AKnightSkill::Tick(float _DeltaTime)

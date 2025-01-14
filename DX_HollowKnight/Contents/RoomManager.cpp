@@ -21,7 +21,7 @@ void URoomManager::CreateAndLinkRoom(AGameMode* _GameMode)
 	std::string ForgottenCrossroadsStr3 = "ForgottenCrossroads3";
 	FVector ForgottenCrossroadsSize = { 12838, 14928 };
 	// ¸Ê ¼¼ÆÃ
-	//std::shared_ptr<ARoom> Dirtmouth = CreateRoom(DirtmouthStr, DirtmouthStr + Background, DirtmouthStr + PixelCollision, { 14172, 3806 });
+	ARoom* Dirtmouth = CreateRoom(DirtmouthStr, DirtmouthStr + Background, DirtmouthStr + PixelCollision, { 13652, 3666 });
 	//std::shared_ptr<ARoom> ForgottenCrossroads1 = CreateRoom(ForgottenCrossroadsStr1, ForgottenCrossroadsStr1 + Background, ForgottenCrossroadsStr1 + Background, ForgottenCrossroadsSize);
 	//std::shared_ptr<ARoom> ForgottenCrossroads2 = CreateRoom(ForgottenCrossroadsStr2, ForgottenCrossroadsStr2 + Background, ForgottenCrossroadsStr2 + Background, ForgottenCrossroadsSize);
 	//std::shared_ptr<ARoom> ForgottenCrossroads3 = CreateRoom(ForgottenCrossroadsStr3, ForgottenCrossroadsStr3 + Background, ForgottenCrossroadsStr3 + Background, ForgottenCrossroadsSize);
@@ -29,10 +29,10 @@ void URoomManager::CreateAndLinkRoom(AGameMode* _GameMode)
 	//Dirtmouth->InterLinkRoom(ForgottenCrossroads.get(), FVector{ -(14172.0f / 2.0f + 3806.0f / 2.0f), 0.0f });
 	//Dirtmouth->InterLinkRoom(Stage1.get(), FVector{ 1300.0f, -(2500.0f / 2.0f) - 1300.0f });
 
-	//SetInitCurRoom(Dirtmouth);
+	SetInitCurRoom(Dirtmouth);
 }
 
-std::shared_ptr<class ARoom> URoomManager::CreateRoom(std::string_view _RoomName, std::string_view _BackgroundName, std::string_view _PixelCollisionName, FVector _Size, float _ScaleRatio/* = 1.0f*/)
+ARoom* URoomManager::CreateRoom(std::string_view _RoomName, std::string_view _BackgroundName, std::string_view _PixelCollisionName, FVector _Size, float _ScaleRatio/* = 1.0f*/)
 {
 	std::string RoomName = _RoomName.data();
 	std::shared_ptr<ARoom> NewRoom = GameMode->GetWorld()->SpawnActor<ARoom>();
@@ -41,13 +41,12 @@ std::shared_ptr<class ARoom> URoomManager::CreateRoom(std::string_view _RoomName
 
 	NewRoom->CreateTexture(_BackgroundName, _ScaleRatio);
 	LoadPixelCollisionTexture(NewRoom.get(), &NewRoom->GetPixelCollisionImage(), _PixelCollisionName, _Size, _ScaleRatio);
-	return NewRoom;
+	return NewRoom.get();
 }
 
-void URoomManager::SetInitCurRoom(std::shared_ptr<class ARoom> _InitRoom)
+void URoomManager::SetInitCurRoom(ARoom* _InitRoom)
 {
-	ARoom::GetCurRoom() = _InitRoom;
-	std::string RoomName = ARoom::GetCurRoom()->GetName();
+	ARoom::SetCurRoom(_InitRoom);
 }
 
 void URoomManager::LoadPixelCollisionTexture(ARoom* _Room, UEngineWinImage* _BmpTexture, std::string_view _FileName, FVector _Size, float _ScaleRatio)

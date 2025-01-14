@@ -21,8 +21,6 @@ public:
 	//void CheckKnightPos();
 
 
-
-
 protected:
 
 private:

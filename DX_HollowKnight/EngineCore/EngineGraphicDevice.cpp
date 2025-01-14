@@ -16,8 +16,6 @@ UEngineGraphicDevice::~UEngineGraphicDevice()
 void UEngineGraphicDevice::Release()
 {
     MainAdapter = nullptr;
-    //DXBackBufferTexture = nullptr;
-    //RTV = nullptr;
     SwapChain = nullptr;
     Context = nullptr;
     Device = nullptr;

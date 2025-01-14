@@ -16,7 +16,6 @@ void AKnight::SetIdle(float _DeltaTime)
 		return;
 	}
 
-
 	ChangeJumpAnimation();  // 점프
 	ChangeDash(); // 대시
 

@@ -19,8 +19,8 @@ AKnight::AKnight()
 {
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
-	//CreateRenderer();
-	//CreateCollision();
+	CreateRenderer();
+	CreateCollision();
 
 	MainPawn = this;
 
@@ -47,7 +47,7 @@ AKnight::AKnight()
 void AKnight::BeginPlay()
 {
 	AActor::BeginPlay();
-	//SetFSM();
+	SetFSM();
 	//BodyRenderer->ColorData.MulColor += {0.0f, 1.0f, 0.0f, 1.0f};
 
 
@@ -58,9 +58,15 @@ void AKnight::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
+	ARoom* Room = ARoom::GetCurRoom();
+	if (nullptr != Room)
+	{
+		Room->CheckPixelCollisionWithGravity(this, BodyRenderer.get(), GravityForce);
+	}
+
 
 	SetCameraPosition();
-	//FSM.Update(_DeltaTime);
+	FSM.Update(_DeltaTime);
 
 	TimeElapsed(_DeltaTime);
 
@@ -491,5 +497,6 @@ void AKnight::CheckDirection()
 
 AKnight::~AKnight()
 {
-	//MainPawn = nullptr;
+	BodyRenderer = nullptr;
+	BodyCollision = nullptr;
 }

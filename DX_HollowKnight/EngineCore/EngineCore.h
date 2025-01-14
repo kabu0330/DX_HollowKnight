@@ -8,7 +8,6 @@
 #include "Level.h"
 #include <memory>
 
-
 // 설명 : 게임 루프를 돌릴 핵심 클래스
 class UEngineCore
 {
@@ -49,15 +48,15 @@ public:
 protected:
 
 private:
-	UEngineWindow MainWindow;
+	UEngineWindow MainWindow = UEngineWindow();
 
-	UEngineGraphicDevice Device;
+	UEngineGraphicDevice Device = UEngineGraphicDevice();
 
-	HMODULE ContentsDLL;
-	std::shared_ptr<IContentsCore> Core;
-	UEngineInitData Data;
+	HMODULE ContentsDLL = nullptr;
+	std::shared_ptr<IContentsCore> Core = nullptr;
+	UEngineInitData Data = UEngineInitData();
 
-	UEngineTimer Timer;
+	UEngineTimer Timer = UEngineTimer();
 
 	static void WindowInit(HINSTANCE _Instance);
 	static void LoadContents(std::string_view _DllName);

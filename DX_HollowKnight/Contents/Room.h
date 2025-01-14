@@ -22,9 +22,13 @@ public:
 	{
 		return PixelCollisionImage;
 	}
-	static std::shared_ptr<ARoom>& GetCurRoom()
+	static ARoom* GetCurRoom()
 	{
 		return CurRoom;
+	}
+	static void SetCurRoom(ARoom* _Room)
+	{
+		CurRoom = _Room;
 	}
 	
 	bool IsLinking(ARoom* _Room);
@@ -45,16 +49,19 @@ public:
 		Size = _Size;
 	}
 
-	void CheckPixelCollision(AActor* _Actor, class UContentsRenderer* _Renderer, FVector _Gravity);
-	void CheckGround(AActor* _Actor, FVector _Gravity);
+	// 중력과 벽
+	void CheckPixelCollisionWithGravity(AActor* _Actor, class UContentsRenderer* _Renderer, FVector _Gravity);
+	void CheckPixelCollisionWithWall(AActor* _Actor, class UContentsRenderer* _Renderer, FVector _Gravity);
+
 protected:
+	void Gravity(AActor* _Actor, float _DeltaTime);
 
 private:
 	inline static bool bActiveGravity = false;
 	float GravityValue = 0.0f;
 	FVector GravityForce = FVector::ZERO;
 
-	static std::shared_ptr<ARoom> CurRoom;
+	inline static ARoom* CurRoom = nullptr;
 	UEngineWinImage PixelCollisionImage;
 	FVector Size = FVector::ZERO;
 	FVector Pos = FVector::ZERO;
